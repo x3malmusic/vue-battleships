@@ -1,0 +1,29 @@
+@import "./_variables";
+@import "./_breakpoints";
+@import "./_animations";
+@import "./fonts.scss";
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  font-family: Montserrat, sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  background-color: $color_bg;
+  overflow-x: hidden;
+}
+
+h1 {
+  font-family: Bangers, sans-serif;
+  font-size: $fs_h1;
+  margin: 3rem;
+  color: $color_main;
+  letter-spacing: 8px;
+}
+
+button {
+  font-size: $fs_button;
+}

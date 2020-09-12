@@ -1,0 +1,45 @@
+.ships {
+  display: flex;
+  padding: 1rem;
+
+  .cell {
+    width: $cell_size;
+    height: $cell_size;
+    border: 1px solid $color_board_cell_border;
+  }
+
+  .ship {
+    display: flex;
+    transition: opacity ease-in .1s;
+
+    &:hover {
+      opacity: .6;
+    }
+  }
+
+  .current-ship {
+    border: 1px solid yellow;
+  }
+
+  .deck-1, .deck-2, .deck-3, .deck-4 {
+    display: flex;
+    flex-direction: column;
+    margin-right: 1rem;
+  }
+
+  .deck-1 .ship {
+    background: blue;
+  }
+
+  .deck-2 .ship {
+    background: crimson;
+  }
+
+  .deck-3 .ship {
+    background: lightgray;
+  }
+
+  .deck-4 .ship {
+    background: green;
+  }
+}

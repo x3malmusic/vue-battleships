@@ -1,0 +1,20 @@
+.board {
+  display: flex;
+
+  .battleship-grid {
+    margin: 2vmin;
+    display: grid;
+    background: $color_board_bg;
+    grid-template-rows: repeat(10, $cell_size);
+    grid-template-columns: repeat(10, $cell_size);
+
+    div {
+      border: 1px solid $color_board_cell_border;
+
+      &:hover {
+        background: $color_board_cell_hover;
+        cursor: pointer;
+      }
+    }
+  }
+}

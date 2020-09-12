@@ -1,0 +1,10 @@
+{
+  "en": {
+    "single": "Single Player",
+    "multi": "MultiPlayer"
+  },
+  "ru" :  {
+    "single": "Один Игрок",
+    "multi": "Игра по Сети"
+  }
+}

@@ -1,0 +1,40 @@
+.btn {
+  outline: none;
+  border-radius: $br_button;
+  box-sizing: border-box;
+  padding: 15px;
+  font-size: $fs_button;
+  cursor: pointer;
+  transition: all .1s ease-in;
+
+  &-main {
+    background-color: $color_button;
+    border: none;
+    color: white;
+
+    &:hover {
+      background-color: $color_button_hover;
+    }
+
+    &:active {
+      background-color: $color_button_active;
+      transform: scale(1.03);
+    }
+  }
+
+  &-bordered {
+    background-color: transparent;
+    color: $color_button;
+    border: 1px solid $color_button;
+
+    &:hover {
+      background-color: $color_button;
+      color: white;
+    }
+
+    &:active {
+      background-color: $color_button_active;
+      transform: scale(1.03);
+    }
+  }
+}
