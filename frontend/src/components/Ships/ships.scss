@@ -1,45 +1,49 @@
 .ships {
-  display: flex;
   padding: 1rem;
+  text-align: center;
 
-  .cell {
-    width: $cell_size;
-    height: $cell_size;
-    border: 1px solid $color_board_cell_border;
+  button {
+    margin-bottom: 1rem;
   }
 
-  .ship {
+  &-wrapper {
     display: flex;
-    transition: opacity ease-in .1s;
 
-    &:hover {
-      opacity: .6;
+    .cell {
+      width: $cell_size;
+      height: $cell_size;
+      border: 1px solid $color_board_cell_border;
+    }
+
+    .current-ship {
+      border: 2px solid yellow;
+    }
+
+    .deck-1, .deck-2, .deck-3, .deck-4 {
+      display: flex;
+      margin-right: 1rem;
+      transition: opacity ease-in .1s;
+
+      &:hover {
+        opacity: .6;
+      }
+    }
+
+    .deck-1 .cell {
+      background: blue;
+    }
+
+    .deck-2 .cell {
+      background: crimson;
+    }
+
+    .deck-3 .cell {
+      background: lightgray;
+    }
+
+    .deck-4 .cell {
+      background: green;
     }
   }
 
-  .current-ship {
-    border: 1px solid yellow;
-  }
-
-  .deck-1, .deck-2, .deck-3, .deck-4 {
-    display: flex;
-    flex-direction: column;
-    margin-right: 1rem;
-  }
-
-  .deck-1 .ship {
-    background: blue;
-  }
-
-  .deck-2 .ship {
-    background: crimson;
-  }
-
-  .deck-3 .ship {
-    background: lightgray;
-  }
-
-  .deck-4 .ship {
-    background: green;
-  }
 }

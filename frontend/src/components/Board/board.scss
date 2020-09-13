@@ -12,9 +12,12 @@
       border: 1px solid $color_board_cell_border;
 
       &:hover {
-        background: $color_board_cell_hover;
         cursor: pointer;
       }
+    }
+
+    .possible-ship {
+      background: $color_board_cell_hover;
     }
   }
 }

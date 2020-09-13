@@ -1,17 +1,18 @@
 <template>
   <div class="ships">
-    <div
-      v-for="ship in ships"
-      :key="ship.name"
-      :class="ship.name + chosenShip(ship.name)"
-    >
-      <div class="ship">
+    <app-button @click="setDirection(!direction)">Rotate ships</app-button>
+    <div class="ships-wrapper">
+      <div
+        v-for="ship in ships"
+        :key="ship.name"
+        :class="ship.name + chosenShip(ship.name)"
+      >
         <div
           v-for="deck in ship.size"
           class="cell"
           :key="ship.name + deck"
           :id="ship.name"
-          @click="chooseShip"
+          @click="chooseCurrentShip(ship)"
         ></div>
       </div>
     </div>
@@ -19,23 +20,26 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
+import AppButton from "../Button/AppButton";
+
 export default {
   name: "Ships",
-  data: () => ({
-    ships: [
-      { name: "deck-4", size: 4 },
-      { name: "deck-3", size: 3 },
-      { name: "deck-2", size: 2 },
-      { name: "deck-1", size: 1 },
-    ],
-    currentShip: "deck-4",
-  }),
+  components: {
+    AppButton,
+  },
+  computed: {
+    ...mapState(["ships", "currentShip", "direction"]),
+  },
   methods: {
-    chooseShip(e) {
-      this.currentShip = e.target.id;
+    ...mapMutations(["setCurrentShip", "setDirection"]),
+
+    chooseCurrentShip({ name, size }) {
+      this.setCurrentShip({ name, size });
     },
+
     chosenShip(ship) {
-      return ship === this.currentShip ? " current-ship" : "";
+      return ship === this.currentShip.name ? " current-ship" : "";
     },
   },
 };

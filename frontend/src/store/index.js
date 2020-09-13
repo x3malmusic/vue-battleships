@@ -12,7 +12,8 @@ export default new Vuex.Store({
       { name: "deck-2", size: 2 },
       { name: "deck-1", size: 1 },
     ],
-    currentShip: "deck-4",
+    currentShip: { name: "deck-4", size: 4 },
+    direction: true,
   },
   mutations: {
     ...mutations,
