@@ -3,10 +3,10 @@
     <div class="battleship-grid user">
       <div
         v-for="i in 100"
-        class="board-cell"
         :id="i"
         :ref="`user${i}`"
         @mouseover="setPossibleShipHere"
+        @click="placeShip"
       ></div>
     </div>
     <div class="battleship-grid computer">
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "Board",
@@ -24,8 +24,9 @@ export default {
     ...mapState(["currentShip", "direction"]),
   },
   methods: {
+    ...mapMutations(["changeShipCount"]),
+
     setPossibleShipHere(e) {
-      // console.log(e.target.id);
       const shipPosition = parseInt(e.target.id);
 
       const cannotPlaceShip = this.checkIfCanPlaceShip(
@@ -46,6 +47,18 @@ export default {
       for (let i = 0; i < this.currentShip.size; i++) {
         let id = shipPosition + i * step;
         this.$refs[`user${id}`][0].className += " possible-ship";
+      }
+    },
+
+    placeShip(e) {
+      if (this.currentShip.count === 0) return;
+      this.changeShipCount(this.currentShip);
+      const shipPosition = parseInt(e.target.id);
+      const step = this.direction ? 1 : 10;
+      this.clearClassList();
+      for (let i = 0; i < this.currentShip.size; i++) {
+        let id = shipPosition + i * step;
+        this.$refs[`user${id}`][0].className += ` ${this.currentShip.name}`;
       }
     },
 

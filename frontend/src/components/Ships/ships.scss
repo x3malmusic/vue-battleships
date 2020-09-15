@@ -1,6 +1,5 @@
 .ships {
   padding: 1rem;
-  text-align: center;
 
   button {
     margin-bottom: 1rem;
@@ -8,6 +7,25 @@
 
   &-wrapper {
     display: flex;
+    flex-direction: column;
+
+    .direction {
+      margin-bottom: 1rem;
+    }
+
+    &-left {
+      flex-basis: 4rem;
+    }
+
+    .ship {
+      display: flex;
+    }
+
+    .ship-wrapper {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
 
     .cell {
       width: $cell_size;
@@ -21,7 +39,6 @@
 
     .deck-1, .deck-2, .deck-3, .deck-4 {
       display: flex;
-      margin-right: 1rem;
       transition: opacity ease-in .1s;
 
       &:hover {

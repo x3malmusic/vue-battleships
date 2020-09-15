@@ -8,6 +8,22 @@
     grid-template-rows: repeat(10, $cell_size);
     grid-template-columns: repeat(10, $cell_size);
 
+    .deck-1 {
+      background: blue;
+    }
+
+    .deck-2 {
+      background: crimson;
+    }
+
+    .deck-3 {
+      background: lightgray;
+    }
+
+    .deck-4 {
+      background: green;
+    }
+
     div {
       border: 1px solid $color_board_cell_border;
 
@@ -19,5 +35,6 @@
     .possible-ship {
       background: $color_board_cell_hover;
     }
+
   }
 }

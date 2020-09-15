@@ -7,12 +7,12 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     ships: [
-      { name: "deck-4", size: 4 },
-      { name: "deck-3", size: 3 },
-      { name: "deck-2", size: 2 },
-      { name: "deck-1", size: 1 },
+      { name: "deck-4", size: 4, count: 1 },
+      { name: "deck-3", size: 3, count: 2 },
+      { name: "deck-2", size: 2, count: 3 },
+      { name: "deck-1", size: 1, count: 4 },
     ],
-    currentShip: { name: "deck-4", size: 4 },
+    currentShip: { name: "deck-4", size: 4, count: 1 },
     direction: true,
   },
   mutations: {
