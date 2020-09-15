@@ -16,15 +16,16 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapGetters } from "vuex";
 
 export default {
   name: "Board",
   computed: {
     ...mapState(["currentShip", "direction"]),
+    ...mapGetters(["getNextShip"]),
   },
   methods: {
-    ...mapMutations(["changeShipCount"]),
+    ...mapMutations(["changeShipCount", "setCurrentShip"]),
 
     setPossibleShipHere(e) {
       const shipPosition = parseInt(e.target.id);
@@ -59,6 +60,9 @@ export default {
       for (let i = 0; i < this.currentShip.size; i++) {
         let id = shipPosition + i * step;
         this.$refs[`user${id}`][0].className += ` ${this.currentShip.name}`;
+      }
+      if (this.currentShip.count === 0 && this.getNextShip) {
+        this.setCurrentShip(this.getNextShip);
       }
     },
 

@@ -20,4 +20,9 @@ export default new Vuex.Store({
   },
   actions: {},
   modules: {},
+  getters: {
+    getNextShip: (state) => {
+      return state.ships.filter((ship) => ship.count !== 0)[0];
+    },
+  },
 });
