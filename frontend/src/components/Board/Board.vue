@@ -5,12 +5,13 @@
         v-for="i in 100"
         :id="i"
         :ref="`user${i}`"
-        @mouseover="setPossibleShipHere"
+        @mouseover="canYouPlacePossibleShipHere"
+        @mouseleave="deletePossibleShip"
         @click="placeShip"
-      ></div>
+      />
     </div>
     <div class="battleship-grid computer">
-      <div v-for="i in 100" class="board-cell"></div>
+      <div v-for="i in 100" class="board-cell" />
     </div>
   </div>
 </template>
@@ -20,88 +21,56 @@ import { mapState, mapMutations, mapGetters } from "vuex";
 
 export default {
   name: "Board",
+  data: () => ({
+    cannotPlaceShip: true,
+    occupiedCells: [],
+  }),
   computed: {
-    ...mapState(["currentShip", "direction"]),
+    ...mapState(["currentShip", "horizontal"]),
     ...mapGetters(["getNextShip"]),
   },
   methods: {
     ...mapMutations(["changeShipCount", "setCurrentShip"]),
 
-    setPossibleShipHere(e) {
+    canYouPlacePossibleShipHere(e) {
       const shipPosition = parseInt(e.target.id);
 
-      const cannotPlaceShip = this.checkIfCanPlaceShip(
+      this.cannotPlaceShip = this.$_checkIfCanPlaceShip(
         shipPosition,
         this.currentShip,
-        this.direction
+        this.horizontal
       );
 
-      if (!cannotPlaceShip) {
-        if (this.direction) {
-          this.placePossibleShip(shipPosition);
-        } else this.placePossibleShip(shipPosition, 10);
-      }
+      if (this.cannotPlaceShip) return;
+      else
+        this.drawShip(shipPosition, this.horizontal, " possible-ship", false);
     },
 
-    placePossibleShip(shipPosition, step = 1) {
-      this.clearClassList();
-      for (let i = 0; i < this.currentShip.size; i++) {
-        let id = shipPosition + i * step;
-        this.$refs[`user${id}`][0].className += " possible-ship";
-      }
+    drawShip(shipPosition, horizontal, className, shipIsReal) {
+      this.deletePossibleShip();
+      this.$_drawShip(shipPosition, horizontal, className, shipIsReal);
     },
 
     placeShip(e) {
+      if (this.cannotPlaceShip) return;
+
+      //no ships left, ready to play
       if (this.currentShip.count === 0) return;
+
       this.changeShipCount(this.currentShip);
       const shipPosition = parseInt(e.target.id);
-      const step = this.direction ? 1 : 10;
-      this.clearClassList();
-      for (let i = 0; i < this.currentShip.size; i++) {
-        let id = shipPosition + i * step;
-        this.$refs[`user${id}`][0].className += ` ${this.currentShip.name}`;
-      }
+      this.drawShip(
+        shipPosition,
+        this.horizontal,
+        ` ${this.currentShip.name}`,
+        true
+      );
       if (this.currentShip.count === 0 && this.getNextShip) {
         this.setCurrentShip(this.getNextShip);
       }
     },
 
-    checkValidPosition(positions, step, shipPosition) {
-      for (let i = 0; i < 10; i++) {
-        let validPosition = positions.some(
-          (pos) => pos + i * step === shipPosition
-        );
-        if (validPosition) {
-          return true;
-        }
-      }
-      return false;
-    },
-
-    allowedPositions(possiblePositions, shipSize) {
-      return possiblePositions.slice(0, shipSize - 1);
-    },
-
-    checkIfCanPlaceShip(shipPosition, ship, horizontal = true) {
-      if (ship.size === 1) return;
-      const horizontalPos = [10, 9, 8];
-      const verticalPos = [91, 81, 71];
-
-      if (horizontal) {
-        return this.checkValidPosition(
-          this.allowedPositions(horizontalPos, ship.size),
-          10,
-          shipPosition
-        );
-      } else
-        return this.checkValidPosition(
-          this.allowedPositions(verticalPos, ship.size),
-          1,
-          shipPosition
-        );
-    },
-
-    clearClassList() {
+    deletePossibleShip() {
       for (let i = 1; i < 101; i++) {
         let possibleShip = this.$refs[`user${i}`][0];
 

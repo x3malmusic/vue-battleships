@@ -1,6 +1,6 @@
 <template>
   <div class="ships">
-    <app-button @click="setDirection(!direction)">Rotate ships</app-button>
+    <app-button @click="setDirection(!horizontal)">Rotate ships</app-button>
     <div class="ships-wrapper">
       <div class="direction">Current Direction: {{ currentDirection }}</div>
       <div v-for="ship in ships" :key="ship.name" class="ship-wrapper">
@@ -29,7 +29,7 @@ export default {
     AppButton,
   },
   computed: {
-    ...mapState(["ships", "currentShip", "direction"]),
+    ...mapState(["ships", "currentShip", "horizontal"]),
 
     currentDirection() {
       return this.direction ? "Horizontal" : "Vertical";

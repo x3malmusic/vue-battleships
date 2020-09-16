@@ -8,6 +8,10 @@
     grid-template-rows: repeat(10, $cell_size);
     grid-template-columns: repeat(10, $cell_size);
 
+    .check {
+      background: gray;
+    }
+
     .deck-1 {
       background: blue;
     }

@@ -3,8 +3,8 @@ export default {
     state.currentShip = ship;
   },
 
-  setDirection(state, direction) {
-    state.direction = direction;
+  setDirection(state, horizontal) {
+    state.horizontal = horizontal;
   },
 
   changeShipCount(state, ship) {
@@ -19,5 +19,9 @@ export default {
       }
       return stateShip;
     });
+  },
+
+  setOccupiedCells(state, cells) {
+    state.occupiedCells = [...new Set([...state.occupiedCells, ...cells])];
   },
 };
