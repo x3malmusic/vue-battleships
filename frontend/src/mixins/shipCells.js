@@ -2,16 +2,27 @@ export default {
   methods: {
     $_drawShip(shipPosition, horizontal, className, shipIsReal = false) {
       const step = horizontal ? 1 : 10;
+      const drawedShip = [];
+      this.$_deletePossibleShip();
+
+      if (
+        shipIsReal &&
+        this.$_checkOccupiedCells(this.$store.state.possibleShip)
+      )
+        return;
+
       for (let i = 0; i < this.currentShip.size; i++) {
         let id = shipPosition + i * step;
+        drawedShip.push(id);
         if (shipIsReal) {
-          // add drawed ships here
-
           const occupiedCells = [...this.$_occupyCells(id)];
           this.$store.commit("setOccupiedCells", occupiedCells);
         }
         this.$refs[`user${id}`][0].className += className;
       }
+      this.$store.commit("setPossibleShip", drawedShip);
+      if (this.$_checkOccupiedCells(this.$store.state.possibleShip))
+        this.$_deletePossibleShip();
     },
 
     $_conditions(atRightEdge, cell) {
@@ -48,9 +59,26 @@ export default {
       return [...resultCells];
     },
 
-    $_checkOccupiedCells(shipPosition) {
+    $_checkOccupiedCells(possibleShip) {
       //find in the store
-      return this.occupiedCells.some((cell) => cell === shipPosition);
+      for (let i = 0; i < possibleShip.length; i++) {
+        const found = this.$store.state.occupiedCells.some(
+          (cell) => cell === possibleShip[i]
+        );
+        if (found) return true;
+      }
+      return false;
+    },
+
+    $_deletePossibleShip() {
+      for (let i = 1; i < 101; i++) {
+        let possibleShip = this.$refs[`user${i}`][0];
+
+        possibleShip.className = possibleShip.className
+          .split(" ")
+          .filter((c) => c !== "possible-ship")
+          .join(" ");
+      }
     },
   },
 };

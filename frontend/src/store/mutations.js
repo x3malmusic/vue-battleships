@@ -24,4 +24,13 @@ export default {
   setOccupiedCells(state, cells) {
     state.occupiedCells = [...new Set([...state.occupiedCells, ...cells])];
   },
+
+  setPossibleShip(state, possibleShip) {
+    state.possibleShip = possibleShip;
+  },
+
+  setPlayerShips(state, ship) {
+    const newShip = { [ship.name]: [...ship.positions] };
+    state.playerShips = { ...state.playerShips, newShip };
+  },
 };

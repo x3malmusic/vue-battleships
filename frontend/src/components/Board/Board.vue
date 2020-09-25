@@ -43,12 +43,7 @@ export default {
 
       if (this.cannotPlaceShip) return;
       else
-        this.drawShip(shipPosition, this.horizontal, " possible-ship", false);
-    },
-
-    drawShip(shipPosition, horizontal, className, shipIsReal) {
-      this.deletePossibleShip();
-      this.$_drawShip(shipPosition, horizontal, className, shipIsReal);
+        this.$_drawShip(shipPosition, this.horizontal, " possible-ship", false);
     },
 
     placeShip(e) {
@@ -59,7 +54,7 @@ export default {
 
       this.changeShipCount(this.currentShip);
       const shipPosition = parseInt(e.target.id);
-      this.drawShip(
+      this.$_drawShip(
         shipPosition,
         this.horizontal,
         ` ${this.currentShip.name}`,

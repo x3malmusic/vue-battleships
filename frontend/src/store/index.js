@@ -15,6 +15,8 @@ export default new Vuex.Store({
     currentShip: { name: "deck-4", size: 4, count: 1 },
     horizontal: true,
     occupiedCells: [],
+    possibleShip: [],
+    playerShips: {}
 
   },
   mutations: {
