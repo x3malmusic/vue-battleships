@@ -1,44 +1,33 @@
 export default {
   methods: {
-    $_checkIfCanPlaceShip(shipPosition, ship, horizontal) {
-      // if (this.$_checkOccupiedCells(this.$store.state.possibleShip))
-      //   return true;
-      if (ship.size === 1) return false;
+    $_checkIfCanPlaceShip(shipPosition, notAllowedPositions) {
+      return notAllowedPositions.some((pos) => pos === shipPosition);
+    },
 
+    $_calculateNotAllowedPositions(horizontal, shipSize) {
       const horizontalPos = [10, 9, 8];
       const verticalPos = [91, 81, 71];
 
       const positions = horizontal ? horizontalPos : verticalPos;
       const step = horizontal ? 10 : 1;
 
-      if (
-        this.$_checkPosition(
-          this.$_allowedPositions(positions, ship.size),
-          step,
-          shipPosition
-        )
-      )
-        return true;
-
-      return false;
+      return this.$_notAllowedPositions(positions, step, shipSize);
     },
 
-    $_checkPosition(positions, step, shipPosition) {
+    $_notAllowedPositions(positionMultiply, step, shipSize) {
+      const resultPositions = [];
+      if (shipSize === 1) return resultPositions;
+
+      const newPossiblePositions = positionMultiply.slice(0, shipSize - 1);
 
       for (let i = 0; i < 10; i++) {
-        let notAllowedPosition = positions.some(
-          (pos) => pos + i * step === shipPosition
-        );
-        if (notAllowedPosition) {
-          //cannot place ship here
-          return true;
+        for (let x = 0; x < shipSize - 1; x++) {
+          let id = newPossiblePositions[x] + i * step;
+          resultPositions.push(id);
         }
       }
-      return false;
-    },
 
-    $_allowedPositions(possiblePositions, shipSize) {
-      return possiblePositions.slice(0, shipSize - 1);
+      return resultPositions;
     },
   },
 };

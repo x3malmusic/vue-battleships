@@ -1,6 +1,6 @@
 <template>
   <div class="ships">
-    <app-button @click="setDirection(!horizontal)">Rotate ships</app-button>
+    <app-button @click="chooseDirection">Rotate ships</app-button>
     <div class="ships-wrapper">
       <div class="direction">Current Direction: {{ currentDirection }}</div>
       <div v-for="ship in ships" :key="ship.name" class="ship-wrapper">
@@ -32,15 +32,42 @@ export default {
     ...mapState(["ships", "currentShip", "horizontal"]),
 
     currentDirection() {
-      return this.direction ? "Horizontal" : "Vertical";
+      return this.horizontal ? "Horizontal" : "Vertical";
+    },
+  },
+  watch: {
+    currentShip() {
+      this.reCalculateNotAllowedPositions();
     },
   },
   methods: {
-    ...mapMutations(["setCurrentShip", "setDirection"]),
+    ...mapMutations([
+      "setCurrentShip",
+      "setDirection",
+      "setNotAllowedPositions",
+    ]),
 
     chosenShip(ship) {
       return ship === this.currentShip.name ? " current-ship" : "";
     },
+
+    chooseDirection() {
+      this.setDirection(!this.horizontal);
+      this.reCalculateNotAllowedPositions();
+    },
+
+    reCalculateNotAllowedPositions() {
+      this.setNotAllowedPositions(
+        this.$_calculateNotAllowedPositions(
+          this.horizontal,
+          this.currentShip.size
+        )
+      );
+    },
+  },
+
+  mounted() {
+    this.reCalculateNotAllowedPositions();
   },
 };
 </script>

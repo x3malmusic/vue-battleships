@@ -2,9 +2,10 @@
   <div class="board">
     <div class="battleship-grid user">
       <div
-        v-for="i in 100"
-        :id="i"
-        :ref="`user${i}`"
+        v-for="cell in playerCells"
+        :id="cell.id"
+        :class="cell.className"
+        :ref="`user${cell.id}`"
         @mouseover="canYouPlacePossibleShipHere"
         @mouseleave="deletePossibleShip"
         @click="placeShip"
@@ -22,59 +23,117 @@ import { mapState, mapMutations, mapGetters } from "vuex";
 export default {
   name: "Board",
   data: () => ({
+    POSSIBLE_SHIP: " possible-ship",
+    playerCells: [],
     cannotPlaceShip: true,
     occupiedCells: [],
   }),
   computed: {
-    ...mapState(["currentShip", "horizontal"]),
+    ...mapState([
+      "currentShip",
+      "horizontal",
+      "notAllowedPositions",
+      "possibleShip",
+    ]),
     ...mapGetters(["getNextShip"]),
   },
   methods: {
-    ...mapMutations(["changeShipCount", "setCurrentShip"]),
+    ...mapMutations([
+      "changeShipCount",
+      "setCurrentShip",
+      "setOccupiedCells",
+      "setPossibleShip",
+    ]),
+
+    drawPossibleShip(shipPosition, shipSize, horizontal) {
+      const step = horizontal ? 1 : 10;
+      const ship = [];
+
+      for (let i = 0; i < shipSize; i++) {
+        let id = shipPosition + i * step;
+        ship.push(id);
+      }
+
+      return ship;
+    },
 
     canYouPlacePossibleShipHere(e) {
       const shipPosition = parseInt(e.target.id);
 
-      this.cannotPlaceShip = this.$_checkIfCanPlaceShip(
+      const ship = this.drawPossibleShip(
         shipPosition,
-        this.currentShip,
+        this.currentShip.size,
         this.horizontal
       );
 
-      if (this.cannotPlaceShip) return;
-      else
-        this.$_drawShip(shipPosition, this.horizontal, " possible-ship", false);
+      this.setPossibleShip(ship);
+
+      this.cannotPlaceShip = this.$_checkIfCanPlaceShip(
+        shipPosition,
+        this.notAllowedPositions
+      );
+
+      if (
+        this.cannotPlaceShip ||
+        ship.some((id) => id > 100) ||
+        this.$_checkOccupiedCells(this.possibleShip)
+      )
+        return;
+      else this.drawShip(ship, this.horizontal, this.POSSIBLE_SHIP);
     },
 
-    placeShip(e) {
+    drawShip(ship, horizontal, className) {
+      this.deletePossibleShip();
+
+      ship.forEach((id) => {
+        this.playerCells.find((cell) => cell.id === id).className += className;
+      });
+
+      if (className !== this.POSSIBLE_SHIP) {
+        const occupiedCells = [...this.$_occupyCells(ship)];
+        this.setOccupiedCells(occupiedCells);
+      }
+    },
+
+    placeShip() {
       if (this.cannotPlaceShip) return;
+
+      if (this.$_checkOccupiedCells(this.possibleShip)) return;
 
       //no ships left, ready to play
       if (this.currentShip.count === 0) return;
 
       this.changeShipCount(this.currentShip);
-      const shipPosition = parseInt(e.target.id);
-      this.$_drawShip(
-        shipPosition,
+      this.drawShip(
+        this.possibleShip,
         this.horizontal,
-        ` ${this.currentShip.name}`,
-        true
+        ` ${this.currentShip.name}`
       );
+
+      //save player ship here!
+
       if (this.currentShip.count === 0 && this.getNextShip) {
         this.setCurrentShip(this.getNextShip);
       }
     },
 
     deletePossibleShip() {
-      for (let i = 1; i < 101; i++) {
-        let possibleShip = this.$refs[`user${i}`][0];
-
-        possibleShip.className = possibleShip.className
+      this.playerCells.forEach((cell) => {
+        cell.className = cell.className
           .split(" ")
-          .filter((c) => c !== "possible-ship")
+          .filter((name) => name !== this.POSSIBLE_SHIP.trim())
           .join(" ");
+      });
+    },
+
+    drawBoard(arr) {
+      for (let i = 1; i < 101; i++) {
+        arr.push({ className: "", id: i });
       }
     },
+  },
+  mounted() {
+    this.drawBoard(this.playerCells);
   },
 };
 </script>

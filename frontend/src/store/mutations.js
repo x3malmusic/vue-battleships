@@ -33,4 +33,8 @@ export default {
     const newShip = { [ship.name]: [...ship.positions] };
     state.playerShips = { ...state.playerShips, newShip };
   },
+
+  setNotAllowedPositions(state, positions) {
+    state.notAllowedPositions = positions;
+  },
 };

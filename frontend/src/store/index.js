@@ -13,11 +13,11 @@ export default new Vuex.Store({
       { name: "deck-1", size: 1, count: 4 },
     ],
     currentShip: { name: "deck-4", size: 4, count: 1 },
+    notAllowedPositions: [],
     horizontal: true,
     occupiedCells: [],
     possibleShip: [],
-    playerShips: {}
-
+    playerShips: {},
   },
   mutations: {
     ...mutations,
