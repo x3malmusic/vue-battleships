@@ -8,6 +8,52 @@
     grid-template-rows: repeat(10, $cell_size);
     grid-template-columns: repeat(10, $cell_size);
 
+    .hit, .miss {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:after {
+        content: '';
+        position: absolute;
+        border-radius: 100%;
+        width: 2vmin;
+        height: 2vmin;
+      }
+
+      &:before {
+        content: '';
+        position: absolute;
+        animation: hit .2s ease-out forwards;
+        border: .1vmin solid;
+        border-radius: 100%;
+        width: 2vmin;
+        height: 2vmin;
+      }
+    }
+
+    .miss {
+      &:after {
+        background-color: white;
+      }
+
+      &:before {
+        border-color: white;
+      }
+    }
+
+
+
+    .hit {
+      &:after {
+        background-color: red;
+      }
+
+      &:before {
+        border-color: red;
+      }
+    }
+
     .check {
       background: gray;
     }

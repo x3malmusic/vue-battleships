@@ -8,3 +8,20 @@
   transform: translateX(30px);
   opacity: 0;
 }
+
+@keyframes hit {
+  0% {
+    opacity: 1;
+    transform: scale(0);
+  }
+
+  99% {
+    opacity: 0;
+    transform: scale(4);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
