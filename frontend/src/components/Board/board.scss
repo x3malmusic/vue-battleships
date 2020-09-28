@@ -2,33 +2,70 @@
   display: flex;
 
   .battleship-grid {
-    margin: 2vmin;
+    margin: $dot_size;
     display: grid;
     background: $color_board_bg;
     grid-template-rows: repeat(10, $cell_size);
     grid-template-columns: repeat(10, $cell_size);
 
-    .hit, .miss {
+    div {
+      border: 1px solid $color_board_cell_border;
+      position: relative;
+    }
+
+    &.user div {
+      &:not(.deck-4):not(.deck-3):not(.deck-2):not(.deck-1):hover {
+        cursor: pointer;
+      }
+
+      &:hover {
+        cursor: not-allowed;
+      }
+    }
+
+    &.enemy div {
+      &:not(.hit):not(.miss):hover::after {
+        content: "";
+        position: absolute;
+        top: 25%;
+        left: 50%;
+        transform: translate(-50%, 0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 100%;
+        background-color: #c7d1e2;
+        width: $dot_size;
+        height: $dot_size;
+      }
+
+      &:hover {
+        cursor: not-allowed;
+      }
+
+      &:not(.hit):not(.miss):hover {
+        cursor: pointer;
+      }
+    }
+
+    .hit,
+    .miss {
       display: flex;
       justify-content: center;
       align-items: center;
 
-      &:after {
-        content: '';
+      &:after,
+      &:before {
+        content: "";
         position: absolute;
         border-radius: 100%;
-        width: 2vmin;
-        height: 2vmin;
+        width: $dot_size;
+        height: $dot_size;
       }
 
       &:before {
-        content: '';
-        position: absolute;
-        animation: hit .2s ease-out forwards;
-        border: .1vmin solid;
-        border-radius: 100%;
-        width: 2vmin;
-        height: 2vmin;
+        animation: hit 0.2s ease-out forwards;
+        border: 0.1vmin solid;
       }
     }
 
@@ -42,8 +79,6 @@
       }
     }
 
-
-
     .hit {
       &:after {
         background-color: red;
@@ -54,37 +89,12 @@
       }
     }
 
-    .check {
+    .check, .deck-1, .deck-2, .deck-3, .deck-4 {
       background: gray;
-    }
-
-    .deck-1 {
-      background: blue;
-    }
-
-    .deck-2 {
-      background: crimson;
-    }
-
-    .deck-3 {
-      background: lightgray;
-    }
-
-    .deck-4 {
-      background: green;
-    }
-
-    div {
-      border: 1px solid $color_board_cell_border;
-
-      &:hover {
-        cursor: pointer;
-      }
     }
 
     .possible-ship {
       background: $color_board_cell_hover;
     }
-
   }
 }

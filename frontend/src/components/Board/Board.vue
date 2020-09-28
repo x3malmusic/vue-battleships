@@ -5,14 +5,13 @@
         v-for="cell in playerCells"
         :id="cell.id"
         :class="cell.className"
-        :ref="`user${cell.id}`"
         @mouseover="canYouPlacePossibleShipHere"
         @mouseleave="deletePossibleShip"
         @click="placeShip"
       />
     </div>
-    <div class="battleship-grid computer">
-      <div v-for="i in 100" class="board-cell" />
+    <div class="battleship-grid enemy" ref="enemyBoard">
+      <div v-for="i in 100" @click="makeShot" />
     </div>
   </div>
 </template>
@@ -44,6 +43,10 @@ export default {
       "setOccupiedCells",
       "setPossibleShip",
     ]),
+
+    makeShot(e) {
+      e.target.className = "hit";
+    },
 
     drawPossibleShip(shipPosition, shipSize, horizontal) {
       const step = horizontal ? 1 : 10;

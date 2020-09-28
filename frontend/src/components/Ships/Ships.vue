@@ -1,5 +1,8 @@
 <template>
   <div class="ships">
+    <app-button @click="playerReady" :disabled="activateReadyButton"
+      >Ready!</app-button
+    >
     <app-button @click="chooseDirection">Rotate ships</app-button>
     <div class="ships-wrapper">
       <div class="direction">Current Direction: {{ currentDirection }}</div>
@@ -34,6 +37,10 @@ export default {
     currentDirection() {
       return this.horizontal ? "Horizontal" : "Vertical";
     },
+
+    activateReadyButton() {
+      return !!this.ships.reduce((count, ship) => (count += ship.count), 0);
+    },
   },
   watch: {
     currentShip() {
@@ -46,6 +53,10 @@ export default {
       "setDirection",
       "setNotAllowedPositions",
     ]),
+
+    playerReady() {
+      //setPlayerReady
+    },
 
     chosenShip(ship) {
       return ship === this.currentShip.name ? " current-ship" : "";
