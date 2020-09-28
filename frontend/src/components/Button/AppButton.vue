@@ -1,5 +1,10 @@
 <template>
-  <button @click="$emit('click')" :class="type" class="btn">
+  <button
+    @click="$emit('click')"
+    :class="type"
+    class="btn"
+    :disabled="disabled"
+  >
     <slot>name</slot>
   </button>
 </template>
@@ -12,6 +17,7 @@ export default {
       type: String,
       default: "btn-main",
     },
+    disabled: Boolean,
   },
 };
 </script>

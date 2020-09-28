@@ -37,4 +37,13 @@
       transform: scale(1.03);
     }
   }
+
+  &:disabled {
+    opacity: .5;
+    cursor: auto;
+
+    &:hover {
+      background-color: $color_button;
+    }
+  }
 }
