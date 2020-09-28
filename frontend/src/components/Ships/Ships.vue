@@ -1,13 +1,17 @@
 <template>
   <div class="ships">
-    <app-button @click="playerReady" :disabled="activateReadyButton"
-      >Ready!</app-button
-    >
-    <app-button @click="chooseDirection">Rotate ships</app-button>
+    <app-button @click="playerReady" :disabled="activateReadyButton">
+      {{ $t("game.readyBtn") }}
+    </app-button>
+    <app-button @click="chooseDirection">{{ $t("game.rotateBtn") }}</app-button>
     <div class="ships-wrapper">
-      <div class="direction">Current Direction: {{ currentDirection }}</div>
+      <div class="direction">
+        {{ $t("game.direction") }}: {{ currentDirection }}
+      </div>
       <div v-for="ship in ships" :key="ship.name" class="ship-wrapper">
-        <div class="ships-wrapper-left">Left: {{ ship.count }}</div>
+        <div class="ships-wrapper-left">
+          {{ $t("game.left") }}: {{ ship.count }}
+        </div>
         <div class="ship" :class="ship.name + chosenShip(ship.name)">
           <div
             v-for="deck in ship.size"
@@ -35,7 +39,9 @@ export default {
     ...mapState(["ships", "currentShip", "horizontal"]),
 
     currentDirection() {
-      return this.horizontal ? "Horizontal" : "Vertical";
+      return this.horizontal
+        ? this.$t("game.horizontal")
+        : this.$t("game.vertical");
     },
 
     activateReadyButton() {
@@ -46,16 +52,28 @@ export default {
     currentShip() {
       this.reCalculateNotAllowedPositions();
     },
+
+    ships() {
+      if (!this.activateReadyButton) {
+        this.setSystemMessage({
+          text: this.$t("game.messages.playerReady"),
+          id: Date.now().toLocaleString(),
+        });
+      }
+    },
   },
   methods: {
     ...mapMutations([
       "setCurrentShip",
       "setDirection",
       "setNotAllowedPositions",
+      "setPlayerReadyFlag",
+      "setSystemMessage",
     ]),
 
     playerReady() {
-      //setPlayerReady
+      this.setPlayerReadyFlag(true);
+      //send to backend that u're ready to play
     },
 
     chosenShip(ship) {

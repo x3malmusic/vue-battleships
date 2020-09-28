@@ -2,6 +2,7 @@
 @import "./_breakpoints";
 @import "./_animations";
 @import "./fonts.scss";
+@import "./mixins.scss";
 
 * {
   -webkit-tap-highlight-color: transparent;
@@ -18,12 +19,12 @@ body {
 
 h1 {
   font-family: Bangers, sans-serif;
-  font-size: $fs_h1;
   margin: 3rem;
   color: $color_main;
   letter-spacing: 8px;
+  @include adaptive-font($fs_h1, $fs_h1_mob);
 }
 
 button {
-  font-size: $fs_button;
+  @include adaptive-font($fs_button, $fs_button_mob);
 }

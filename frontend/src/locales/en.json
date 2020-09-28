@@ -1,2 +1,20 @@
 {
+  "main": {
+    "login": "Login",
+    "register": "Register",
+    "play": "Play Game"
+  },
+  "game": {
+    "messages": {
+      "cannotPlaceShip": "You cannot place your ship here",
+      "playerNotReady": "You cannot shoot while you have unplaced ships or another player doesnt ready",
+      "playerReady": "looks like you ready to play, hit that \"Ready!\" button and wait for another player to join"
+    },
+    "readyBtn": "Ready!",
+    "rotateBtn": "Rotate Ships",
+    "direction": "Current Direction",
+    "horizontal": "Horizontal",
+    "vertical": "Vertical",
+    "left": "Left"
+  }
 }

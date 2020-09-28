@@ -1,5 +1,3 @@
-<i18n src="./locales/lang.json"></i18n>
-
 <template>
   <div class="error-page">
     <h2>{{ $t("message") }}</h2>

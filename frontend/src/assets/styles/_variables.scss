@@ -8,15 +8,16 @@ $color_board_bg: hsl(200, 100%, 50%);
 $color_board_cell_hover: hsl(200, 100%, 70%);
 $color_board_cell_border: hsla(0, 0%, 100%, .2);
 
-
-
-
 //font size
-$fs_h1: 10rem;
+$fs_h1: 160;
 $fs_h2: 1rem;
 $fs_h3: 24px;
 $fs_main: 18px;
-$fs_button: 2rem;
+$fs_button: 32;
+
+//font size mob
+$fs_h1_mob: 40;
+$fs_button_mob: 24;
 
 //margins
 $mr_header: 81px;

@@ -1,5 +1,3 @@
-<i18n src="./locales/lang.json"></i18n>
-
 <template>
   <div class="game">
     <notification />

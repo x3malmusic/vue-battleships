@@ -33,6 +33,7 @@ export default {
       "horizontal",
       "notAllowedPositions",
       "possibleShip",
+      "playerReadyFlag",
     ]),
     ...mapGetters(["getNextShip"]),
   },
@@ -42,9 +43,17 @@ export default {
       "setCurrentShip",
       "setOccupiedCells",
       "setPossibleShip",
+      "setSystemMessage",
     ]),
 
     makeShot(e) {
+      if (!this.playerReadyFlag) {
+        this.setSystemMessage({
+          text: this.$t("game.messages.playerNotReady"),
+          id: Date.now().toLocaleString(),
+        });
+        return;
+      }
       e.target.className = "hit";
     },
 
@@ -99,9 +108,16 @@ export default {
     },
 
     placeShip() {
-      if (this.cannotPlaceShip) return;
-
-      if (this.$_checkOccupiedCells(this.possibleShip)) return;
+      if (
+        this.cannotPlaceShip ||
+        this.$_checkOccupiedCells(this.possibleShip)
+      ) {
+        this.setSystemMessage({
+          text: this.$t("game.messages.cannotPlaceShip"),
+          id: Date.now().toLocaleString(),
+        });
+        return;
+      }
 
       //no ships left, ready to play
       if (this.currentShip.count === 0) return;

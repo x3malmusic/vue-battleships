@@ -18,6 +18,8 @@ export default new Vuex.Store({
     occupiedCells: [],
     possibleShip: [],
     playerShips: {},
+    playerReadyFlag: false,
+    systemMessage: ''
   },
   mutations: {
     ...mutations,

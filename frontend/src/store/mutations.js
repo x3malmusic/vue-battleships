@@ -37,4 +37,12 @@ export default {
   setNotAllowedPositions(state, positions) {
     state.notAllowedPositions = positions;
   },
+
+  setPlayerReadyFlag(state, flag) {
+    state.playerReadyFlag = flag;
+  },
+
+  setSystemMessage(state, message) {
+    state.systemMessage = message;
+  },
 };
