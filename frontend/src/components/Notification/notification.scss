@@ -1,0 +1,51 @@
+.notification {
+  position: fixed;
+  top: 2rem;
+  right: 1rem;
+  z-index: 10;
+
+  &-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-content {
+    border-radius: 5px;
+    background-color: green;
+    padding: 1rem;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+}
+
+.notification-animation {
+  &-enter {
+    transform: translate(120px);
+    opacity: 0;
+  }
+
+  &-enter-active {
+    transition: all .6s ease;
+  }
+
+  &-enter-to {
+    opacity: 1;
+  }
+
+  &-leave {
+    opacity: 1;
+  }
+
+  &-leave-active {
+    transition: transform .6s ease, opacity .6s;
+  }
+
+  &-leave-to {
+    transform: translate(120px);
+    opacity: 0;
+  }
+
+  &-move {
+    transition: transform .6s ease
+  }
+}

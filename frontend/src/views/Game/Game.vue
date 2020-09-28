@@ -2,6 +2,7 @@
 
 <template>
   <div class="game">
+    <notification />
     <board />
     <ships />
   </div>
@@ -10,12 +11,14 @@
 <script>
 import Board from "../../components/Board/Board";
 import Ships from "../../components/Ships/Ships";
+import Notification from "../../components/Notification/Notification";
 
 export default {
   name: "Home",
   components: {
     Board,
     Ships,
+    Notification,
   },
 };
 </script>
