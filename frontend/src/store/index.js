@@ -19,13 +19,14 @@ export default new Vuex.Store({
     possibleShip: [],
     playerShips: {},
     playerReadyFlag: false,
-    systemMessage: ''
+    systemMessage: "",
+    player: {},
+    playersOnline: [],
   },
   mutations: {
     ...mutations,
   },
   actions: {},
-  modules: {},
   getters: {
     getNextShip: (state) => {
       return state.ships.filter((ship) => ship.count !== 0)[0];

@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 import FormInput from "../FormInput/FormInput";
 import AppButton from "../Button/AppButton";
 
@@ -31,11 +32,23 @@ export default {
     AppButton,
   },
   methods: {
+    ...mapMutations(["setUser", "SOCKET_updatePlayers"]),
     login() {
-      this.$router.push("/game");
+      if (this.playerName.trim() && this.password.trim()) {
+        const player = {
+          name: this.playerName,
+          password: this.password,
+        };
+
+        this.$socket.emit("login", player, (playerList) => {
+          this.setUser(player);
+          this.SOCKET_updatePlayers(playerList);
+          this.$router.push("/lobby");
+        });
+      }
     },
     register() {
-      this.$router.push("/game");
+      this.$router.push("/lobby");
     },
   },
 };

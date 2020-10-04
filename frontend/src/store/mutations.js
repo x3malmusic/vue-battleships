@@ -45,4 +45,12 @@ export default {
   setSystemMessage(state, message) {
     state.systemMessage = message;
   },
+
+  setUser(state, player) {
+    state.player = player;
+  },
+
+  SOCKET_updatePlayers(state, players) {
+    state.playersOnline = players;
+  },
 };
