@@ -1,0 +1,22 @@
+.app-form {
+  padding: 10px;
+  background-color: #e2ecfd;
+  border-radius: 4px;
+
+  .form-input {
+    margin-bottom: 10px;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .btn {
+    margin-right: 10px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

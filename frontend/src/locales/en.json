@@ -2,7 +2,10 @@
   "main": {
     "login": "Login",
     "register": "Register",
-    "play": "Play Game"
+    "play": "Play Game",
+    "name": "Enter your name",
+    "password": "Enter your password",
+    "title": "Battleships"
   },
   "game": {
     "messages": {

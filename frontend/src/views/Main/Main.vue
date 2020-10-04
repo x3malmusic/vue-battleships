@@ -1,24 +1,17 @@
 <template>
   <div class="main">
-    <h1>BattleShips</h1>
-    <div class="buttons">
-      <app-button @click="playSinglePlayer">{{ $t("main.play") }}</app-button>
-    </div>
+    <h1>{{ $t("main.title") }}</h1>
+    <app-form />
   </div>
 </template>
 
 <script>
-import AppButton from "../../components/Button/AppButton";
+import AppForm from "../../components/Form/AppForm";
 
 export default {
   name: "Main",
   components: {
-    AppButton,
-  },
-  methods: {
-    playSinglePlayer() {
-      this.$router.push("/game");
-    },
+    AppForm,
   },
 };
 </script>
