@@ -1,19 +1,25 @@
 <template>
   <div id="app">
-    <locale-changer />
-    <transition name="fade" mode="out-in">
-      <router-view />
-    </transition>
+    <notification />
+    <component :is="header" key="1" />
+    <router-view key="2" />
   </div>
 </template>
 
 <script>
-import LocaleChanger from "./components/LocaleChanger/LocaleChanger";
+import AppHeader from "./components/AppHeader/AppHeader";
+import Notification from "./components/Notification/Notification";
 
 export default {
   name: "App",
+  computed: {
+    header() {
+      if (this.$route.meta.header) return "AppHeader";
+    },
+  },
   components: {
-    LocaleChanger,
+    AppHeader,
+    Notification,
   },
 };
 </script>

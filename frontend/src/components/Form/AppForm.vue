@@ -40,9 +40,9 @@ export default {
           password: this.password,
         };
 
-        this.$socket.emit("login", player, (playerList) => {
-          this.setUser(player);
-          this.SOCKET_updatePlayers(playerList);
+        this.$socket.emit("login", player, ({ playersList, user }) => {
+          this.setUser(user);
+          this.SOCKET_updatePlayers(playersList);
           this.$router.push("/lobby");
         });
       }

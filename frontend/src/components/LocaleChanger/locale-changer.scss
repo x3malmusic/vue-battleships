@@ -1,10 +1,7 @@
 .locale-changer {
-  float: right;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 60px;
-  height: 60px;
+  left: 70px;
+  width: 50px;
+  height: 50px;
   background: $color_button;
   cursor: pointer;
   font-size: $fs_main;
@@ -63,25 +60,6 @@
     button:nth-child(3) {
       transition-delay: .2s;
     }
-
-    .btn_active:nth-child(1) {
-      transform: translate(-150%, 0);
-    }
-
-    .btn_active:nth-child(2) {
-      transform: translate(-100%, -100%);
-    }
-
-    .btn_active:nth-child(3) {
-      transform: translate(0, -150%);
-    }
-  }
-
-  @media screen and (max-width: $md) {
-    top: 15px;
-    left: 70px;
-    width: 50px;
-    height: 50px;
 
     .btn_active:nth-child(1) {
       transform: translate(120%, 0);
