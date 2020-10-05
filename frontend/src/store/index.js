@@ -31,5 +31,8 @@ export default new Vuex.Store({
     getNextShip: (state) => {
       return state.ships.filter((ship) => ship.count !== 0)[0];
     },
+    playersOnlineFiltered: (state) => {
+      return state.playersOnline.filter(player => player.name !== state.player.name)
+    }
   },
 });

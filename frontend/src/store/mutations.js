@@ -1,3 +1,5 @@
+import i18n from "../i18n";
+
 export default {
   setCurrentShip(state, ship) {
     state.currentShip = ship;
@@ -52,5 +54,21 @@ export default {
 
   SOCKET_updatePlayers(state, players) {
     state.playersOnline = players;
+  },
+
+  SOCKET_gameRequest(state, from) {
+    state.systemMessage = {
+      text: from.name + " " + i18n.t("game.messages.playerSendRequest"),
+      id: Date.now().toLocaleString(),
+    };
+  },
+
+  SOCKET_gameRequestCanceled(state, data) {
+    state.systemMessage = {
+      text: data.from.name + " " + i18n.t("game.messages.playerCancelRequest"),
+      id: Date.now().toLocaleString(),
+    };
+
+    state.playersOnline = data.playersList;
   },
 };

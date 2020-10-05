@@ -1,0 +1,56 @@
+.lobby {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+
+  .list-header {
+    margin-bottom: 10px;
+  }
+
+  .players-online-list {
+    margin: 0;
+    padding: 10px;
+    list-style-type: none;
+    height: 425px;
+    width: 400px;
+    box-sizing: border-box;
+    background-color: #757c8d;
+    border-radius: 4px;
+    overflow-y: auto;
+
+    &-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding: 10px;
+      box-sizing: border-box;
+      background-color: #c7d1e2;
+      border-radius: 4px;
+      transition: background-color .2s ease;
+      margin-bottom: 10px;
+
+      p {
+        margin: 0;
+      }
+
+      .inviteButtons {
+        display: flex;
+        gap: 10px;
+        .btn {
+          height: fit-content;
+          padding: 10px;
+          font-size: $fs_small;
+        }
+      }
+
+      &:hover {
+        background-color: #d2ddef;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
