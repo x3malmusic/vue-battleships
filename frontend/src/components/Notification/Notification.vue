@@ -23,7 +23,7 @@ export default {
     messages: [],
   }),
   computed: {
-    ...mapState(["systemMessage"]),
+    ...mapState({ systemMessage: (state) => state.ship.systemMessage }),
   },
   watch: {
     systemMessage() {

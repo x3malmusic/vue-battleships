@@ -33,6 +33,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setUser", "SOCKET_updatePlayers"]),
+
     login() {
       if (this.playerName.trim() && this.password.trim()) {
         const player = {
@@ -45,10 +46,25 @@ export default {
           this.SOCKET_updatePlayers(playersList);
           this.$router.push("/lobby");
         });
+      } else {
+        this.$_notify(this.$t("messages.namePasswordEmpty"));
       }
     },
+
     register() {
-      this.$router.push("/lobby");
+      if (this.playerName.trim() && this.password.trim()) {
+        const player = {
+          name: this.playerName,
+          password: this.password,
+        };
+        this.$socket.emit("register", player, ({ playersList, user }) => {
+          this.setUser(user);
+          this.SOCKET_updatePlayers(playersList);
+          this.$router.push("/lobby");
+        });
+      } else {
+        this.$_notify(this.$t("messages.namePasswordEmpty"));
+      }
     },
   },
 };

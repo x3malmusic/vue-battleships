@@ -27,7 +27,14 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState } from "vuex";
+import {
+  SET_CURRENT_SHIP,
+  SET_DIRECTION,
+  SET_NOT_ALLOWED_POSITIONS,
+  SET_PLAYER_READY_FLAG,
+  SET_SYSTEM_MESSAGE,
+} from "../../store/modules/ship";
 import AppButton from "../Button/AppButton";
 
 export default {
@@ -36,7 +43,11 @@ export default {
     AppButton,
   },
   computed: {
-    ...mapState(["ships", "currentShip", "horizontal"]),
+    ...mapState({
+      ships: (state) => state.ship.ships,
+      currentShip: (state) => state.ship.currentShip,
+      horizontal: (state) => state.ship.horizontal,
+    }),
 
     currentDirection() {
       return this.horizontal
@@ -55,24 +66,17 @@ export default {
 
     ships() {
       if (!this.activateReadyButton) {
-        this.setSystemMessage({
-          text: this.$t("game.messages.playerReady"),
-          id: Date.now().toLocaleString(),
-        });
+        this.$_notify(this.$t("messages.playerReady"));
       }
     },
   },
   methods: {
-    ...mapMutations([
-      "setCurrentShip",
-      "setDirection",
-      "setNotAllowedPositions",
-      "setPlayerReadyFlag",
-      "setSystemMessage",
-    ]),
+    setCurrentShip(ship) {
+      this.$store.commit(SET_CURRENT_SHIP, ship);
+    },
 
     playerReady() {
-      this.setPlayerReadyFlag(true);
+      this.$store.commit(SET_PLAYER_READY_FLAG, true);
       //send to backend that u're ready to play
     },
 
@@ -81,12 +85,13 @@ export default {
     },
 
     chooseDirection() {
-      this.setDirection(!this.horizontal);
+      this.$store.commit(SET_DIRECTION, !this.horizontal);
       this.reCalculateNotAllowedPositions();
     },
 
     reCalculateNotAllowedPositions() {
-      this.setNotAllowedPositions(
+      this.$store.commit(
+        SET_NOT_ALLOWED_POSITIONS,
         this.$_calculateNotAllowedPositions(
           this.horizontal,
           this.currentShip.size

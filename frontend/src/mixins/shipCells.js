@@ -39,12 +39,10 @@ export default {
       return [...resultCells];
     },
 
-    $_checkOccupiedCells(possibleShip) {
+    $_checkOccupiedCells(possibleShip, occupiedCells) {
       //find in the store
       for (let i = 0; i < possibleShip.length; i++) {
-        const found = this.$store.state.occupiedCells.some(
-          (cell) => cell === possibleShip[i]
-        );
+        const found = occupiedCells.some((cell) => cell === possibleShip[i]);
         if (found) return true;
       }
       return false;

@@ -70,7 +70,7 @@ export default {
     ],
   }),
   methods: {
-    ...mapMutations(["setSystemMessage", "SOCKET_updatePlayers"]),
+    ...mapMutations(["SOCKET_updatePlayers"]),
 
     hasSentInvitation(user) {
       return !user.from.some((id) => id === this.player.id);
@@ -85,10 +85,9 @@ export default {
 
       this.$socket.emit("sendInvitation", request, ({ playersList }) => {
         this.SOCKET_updatePlayers(playersList);
-        this.setSystemMessage({
-          text: user.name + " " + this.$t("game.messages.playerReceivedInvite"),
-          id: Date.now().toLocaleString(),
-        });
+        this.$_notify(
+          user.name + " " + this.$t("messages.playerReceivedInvite")
+        );
       });
     },
 
@@ -97,10 +96,7 @@ export default {
 
       this.$socket.emit("cancelInvitation", request, ({ playersList }) => {
         this.SOCKET_updatePlayers(playersList);
-        this.setSystemMessage({
-          text: this.$t("game.messages.canceled"),
-          id: Date.now().toLocaleString(),
-        });
+        this.$_notify(this.$t("messages.canceled"));
       });
     },
 

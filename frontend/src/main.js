@@ -6,12 +6,14 @@ import i18n from "./i18n";
 import VueSocketIO from "vue-socket.io";
 import checkPossibleShip from "./mixins/checkPossibleShip";
 import shipCells from "./mixins/shipCells";
+import systemMessage from "./mixins/systemMessage";
 import "./assets/styles/main.scss";
 
 Vue.config.productionTip = false;
 
 Vue.mixin(checkPossibleShip);
 Vue.mixin(shipCells);
+Vue.mixin(systemMessage);
 
 Vue.use(
   new VueSocketIO({

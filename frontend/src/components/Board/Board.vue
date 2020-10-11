@@ -5,7 +5,7 @@
         v-for="cell in playerCells"
         :id="cell.id"
         :class="cell.className"
-        @mouseover="canYouPlacePossibleShipHere"
+        @mouseover="canPlaceShip"
         @mouseleave="deletePossibleShip"
         @click="placeShip"
       />
@@ -17,7 +17,13 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from "vuex";
+import { mapState, mapGetters } from "vuex";
+import {
+  CHANGE_SHIP_COUNT,
+  SET_CURRENT_SHIP,
+  SET_OCCUPIED_CELLS,
+  SET_POSSIBLE_SHIP,
+} from "../../store/modules/ship";
 
 export default {
   name: "Board",
@@ -25,33 +31,22 @@ export default {
     POSSIBLE_SHIP: " possible-ship",
     playerCells: [],
     cannotPlaceShip: true,
-    occupiedCells: [],
   }),
   computed: {
-    ...mapState([
-      "currentShip",
-      "horizontal",
-      "notAllowedPositions",
-      "possibleShip",
-      "playerReadyFlag",
-    ]),
+    ...mapState({
+      currentShip: (state) => state.ship.currentShip,
+      horizontal: (state) => state.ship.horizontal,
+      notAllowedPositions: (state) => state.ship.notAllowedPositions,
+      possibleShip: (state) => state.ship.possibleShip,
+      playerReadyFlag: (state) => state.ship.playerReadyFlag,
+      occupiedCells: (state) => state.ship.occupiedCells,
+    }),
     ...mapGetters(["getNextShip"]),
   },
   methods: {
-    ...mapMutations([
-      "changeShipCount",
-      "setCurrentShip",
-      "setOccupiedCells",
-      "setPossibleShip",
-      "setSystemMessage",
-    ]),
-
     makeShot(e) {
       if (!this.playerReadyFlag) {
-        this.setSystemMessage({
-          text: this.$t("game.messages.playerNotReady"),
-          id: Date.now().toLocaleString(),
-        });
+        this.$_notify(this.$t("messages.playerNotReady"));
         return;
       }
       e.target.className = "hit";
@@ -69,7 +64,7 @@ export default {
       return ship;
     },
 
-    canYouPlacePossibleShipHere(e) {
+    canPlaceShip(e) {
       const shipPosition = parseInt(e.target.id);
 
       const ship = this.drawPossibleShip(
@@ -78,7 +73,7 @@ export default {
         this.horizontal
       );
 
-      this.setPossibleShip(ship);
+      this.$store.commit(SET_POSSIBLE_SHIP, ship);
 
       this.cannotPlaceShip = this.$_checkIfCanPlaceShip(
         shipPosition,
@@ -88,7 +83,7 @@ export default {
       if (
         this.cannotPlaceShip ||
         ship.some((id) => id > 100) ||
-        this.$_checkOccupiedCells(this.possibleShip)
+        this.$_checkOccupiedCells(this.possibleShip, this.occupiedCells)
       )
         return;
       else this.drawShip(ship, this.horizontal, this.POSSIBLE_SHIP);
@@ -103,26 +98,23 @@ export default {
 
       if (className !== this.POSSIBLE_SHIP) {
         const occupiedCells = [...this.$_occupyCells(ship)];
-        this.setOccupiedCells(occupiedCells);
+        this.$store.commit(SET_OCCUPIED_CELLS, occupiedCells);
       }
     },
 
     placeShip() {
       if (
         this.cannotPlaceShip ||
-        this.$_checkOccupiedCells(this.possibleShip)
+        this.$_checkOccupiedCells(this.possibleShip, this.occupiedCells)
       ) {
-        this.setSystemMessage({
-          text: this.$t("game.messages.cannotPlaceShip"),
-          id: Date.now().toLocaleString(),
-        });
+        this.$_notify(this.$t(`messages.cannotPlaceShip`));
         return;
       }
 
       //no ships left, ready to play
       if (this.currentShip.count === 0) return;
 
-      this.changeShipCount(this.currentShip);
+      this.$store.commit(CHANGE_SHIP_COUNT, this.currentShip);
       this.drawShip(
         this.possibleShip,
         this.horizontal,
@@ -132,7 +124,7 @@ export default {
       //save player ship here!
 
       if (this.currentShip.count === 0 && this.getNextShip) {
-        this.setCurrentShip(this.getNextShip);
+        this.$store.commit(SET_CURRENT_SHIP, this.getNextShip);
       }
     },
 
