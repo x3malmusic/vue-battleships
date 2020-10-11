@@ -6,6 +6,7 @@ import i18n from "./i18n";
 import VueSocketIO from "vue-socket.io";
 import checkPossibleShip from "./mixins/checkPossibleShip";
 import shipCells from "./mixins/shipCells";
+import "./assets/styles/main.scss";
 
 Vue.config.productionTip = false;
 

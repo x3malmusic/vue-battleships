@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <notification />
-    <component :is="header" key="1" />
-    <router-view key="2" />
+    <component :is="header" />
+    <router-view />
   </div>
 </template>
 
@@ -23,6 +23,5 @@ export default {
   },
 };
 </script>
-]
 
 <style lang="scss"></style>
