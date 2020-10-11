@@ -1,6 +1,7 @@
 import express from "express";
 import http from "http";
 import socketio from "socket.io";
+import { register, login } from "./controllers/auth";
 import GameManager from "./GameManager";
 
 export const app = express();
@@ -17,34 +18,47 @@ const createPlayer = (name, id, from, to) => ({
 });
 
 io.on("connection", (socket) => {
-  socket.on("login", (player, cb) => {
-    if (!player.name || !player.password) {
-      //return error
-      return;
-    } else {
-      //login
-      const user = createPlayer(player.name, socket.id, [], []);
+  socket.on("login", async (player, cb) => {
+    try {
+      const loggedUser = await login(player);
+      const user = createPlayer(loggedUser.name, socket.id, [], []);
       game.addPlayer(user);
       cb({
         playersList: game.players,
         user: {
           name: player.name,
           id: socket.id,
+          token: loggedUser.token,
         },
       });
       socket.broadcast.emit("updatePlayers", game.players);
+    } catch (e) {
+      socket.emit("ERROR", {
+        text: e.message,
+        id: Date.now().toLocaleString(),
+      });
     }
   });
 
-  socket.on("register", (player, cb) => {
-    if (!player.name || !player.password) {
-      //return error
-      return;
-    } else {
-      //register
-      game.addPlayer({ name: player.name, id: socket.id });
-      cb(game.players);
+  socket.on("register", async (player, cb) => {
+    try {
+      const registeredUser = await register(player);
+      const user = createPlayer(registeredUser.name, socket.id, [], []);
+      game.addPlayer(user);
+      cb({
+        playersList: game.players,
+        user: {
+          name: user.name,
+          id: socket.id,
+          token: registeredUser.token,
+        },
+      });
       socket.broadcast.emit("updatePlayers", game.players);
+    } catch (e) {
+      socket.emit("ERROR", {
+        text: e.message,
+        id: Date.now().toLocaleString(),
+      });
     }
   });
 

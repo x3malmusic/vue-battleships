@@ -1,8 +1,11 @@
 import { app, server } from "./socket";
 import dotenv from "dotenv";
 import cors from "cors";
+import { connectDB } from "./database";
 
 dotenv.config();
+connectDB();
+
 app.use(
   cors({
     origin: true,

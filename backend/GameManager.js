@@ -4,17 +4,11 @@ export default class GameManager {
   }
 
   addPlayer(player) {
-    if (!this.findPlayer(player.name)) {
-      this.players.push(player);
-    }
+    this.players.push(player);
   }
 
   removePlayer(id) {
     this.players = this.players.filter((player) => player.id !== id);
-  }
-
-  findPlayer(playerName) {
-    return this.players.find((player) => player.name === playerName);
   }
 
   addInvitation(request) {
