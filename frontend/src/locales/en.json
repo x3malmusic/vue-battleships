@@ -8,7 +8,8 @@
     "playerSendRequest": "is inviting you to play",
     "playerCancelRequest": "has canceled his invitation",
     "canceled": "Canceled",
-    "playerAcceptedYourGameRequest": "accepted your invitation"
+    "playerAcceptedYourGameRequest": "accepted your invitation",
+    "playerDeclinedYourGameRequest": "declined your invitation"
   },
   "main": {
     "login": "Login",

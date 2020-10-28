@@ -35,6 +35,16 @@ export default {
     state.playersOnline = data.playersList;
   },
 
+  SOCKET_gameRequestDeclined(state, data) {
+    state.ship.systemMessage = {
+      text:
+        data.from.name + " " + i18n.t("messages.playerDeclinedYourGameRequest"),
+      id: Date.now().toLocaleString(),
+    };
+
+    state.playersOnline = data.playersList;
+  },
+
   SOCKET_ERROR(state, error) {
     state.ship.systemMessage = error;
   },

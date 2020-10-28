@@ -94,6 +94,16 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("updatePlayers", game.players);
   });
 
+  socket.on("declineGameRequest", (request, cb) => {
+    game.removeInvitation(reverseRequest(request));
+    socket.to(request.to.id).emit("gameRequestDeclined", {
+      from: request.from,
+      playersList: game.players,
+    });
+    cb({ playersList: game.players });
+    socket.broadcast.emit("updatePlayers", game.players);
+  });
+
   socket.on("playerLeft", (cb) => {
     game.removePlayer(socket.id);
     socket.broadcast.emit("updatePlayers", game.players);
