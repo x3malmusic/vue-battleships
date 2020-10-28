@@ -17,6 +17,11 @@ const createPlayer = (name, id, from, to) => ({
   to,
 });
 
+const reverseRequest = (request) => ({
+  from: request.to,
+  to: request.from,
+});
+
 io.on("connection", (socket) => {
   socket.on("login", async (player, cb) => {
     try {
@@ -72,6 +77,16 @@ io.on("connection", (socket) => {
   socket.on("cancelInvitation", (request, cb) => {
     game.removeInvitation(request);
     socket.to(request.to.id).emit("gameRequestCanceled", {
+      from: request.from,
+      playersList: game.players,
+    });
+    cb({ playersList: game.players });
+    socket.broadcast.emit("updatePlayers", game.players);
+  });
+
+  socket.on("acceptGameRequest", (request, cb) => {
+    game.removeInvitation(reverseRequest(request));
+    socket.to(request.to.id).emit("gameRequestAccepted", {
       from: request.from,
       playersList: game.players,
     });

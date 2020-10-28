@@ -36,7 +36,7 @@
             >
           </div>
           <div class="inviteButtons" v-else-if="hasReceivedInvitation(player)">
-            <app-button>Accept</app-button>
+            <app-button @click="acceptGameRequest(player)">Accept</app-button>
             <app-button>Decline</app-button>
           </div>
         </li>
@@ -100,10 +100,18 @@ export default {
       });
     },
 
+    acceptGameRequest(user) {
+      const request = this.makeReqObj(user);
+
+      this.$socket.emit("acceptGameRequest", request, ({ playersList }) => {
+        this.SOCKET_updatePlayers(playersList);
+      });
+    },
+
     makeReqObj(user) {
       return {
-        from: this.player,
-        to: user,
+        from: { name: this.player.name, id: this.player.id },
+        to: { name: user.name, id: user.id },
       };
     },
   },
