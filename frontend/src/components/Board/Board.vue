@@ -28,7 +28,7 @@ import {
 export default {
   name: "Board",
   data: () => ({
-    POSSIBLE_SHIP: " possible-ship",
+    POSSIBLE_SHIP_CLASS_NAME: " possible-ship",
     playerCells: [],
     cannotPlaceShip: true,
   }),
@@ -39,9 +39,17 @@ export default {
       notAllowedPositions: (state) => state.ship.notAllowedPositions,
       possibleShip: (state) => state.ship.possibleShip,
       playerReadyFlag: (state) => state.ship.playerReadyFlag,
+      playerShipsAreSet: (state) => state.ship.playerShipsAreSet,
       occupiedCells: (state) => state.ship.occupiedCells,
+      resetShipsSwitch: (state) => state.ship.resetShipsSwitch,
     }),
     ...mapGetters(["getNextShip"]),
+  },
+  watch: {
+    resetShipsSwitch() {
+      this.playerCells = [];
+      this.drawBoard(this.playerCells);
+    },
   },
   methods: {
     makeShot(e) {
@@ -53,6 +61,8 @@ export default {
     },
 
     drawPossibleShip(shipPosition, shipSize, horizontal) {
+      // if horizontal then we draw cells one after one
+      // if not then we draw each 10-th from current
       const step = horizontal ? 1 : 10;
       const ship = [];
 
@@ -65,6 +75,10 @@ export default {
     },
 
     canPlaceShip(e) {
+      // player ships are set, we dont want to bombard our store with
+      // unnecessary actions and checks
+      if (this.playerShipsAreSet) return;
+
       const shipPosition = parseInt(e.target.id);
 
       const ship = this.drawPossibleShip(
@@ -86,7 +100,7 @@ export default {
         this.$_checkOccupiedCells(this.possibleShip, this.occupiedCells)
       )
         return;
-      else this.drawShip(ship, this.horizontal, this.POSSIBLE_SHIP);
+      else this.drawShip(ship, this.horizontal, this.POSSIBLE_SHIP_CLASS_NAME);
     },
 
     drawShip(ship, horizontal, className) {
@@ -96,13 +110,21 @@ export default {
         this.playerCells.find((cell) => cell.id === id).className += className;
       });
 
-      if (className !== this.POSSIBLE_SHIP) {
+      if (className !== this.POSSIBLE_SHIP_CLASS_NAME) {
         const occupiedCells = [...this.$_occupyCells(ship)];
         this.$store.commit(SET_OCCUPIED_CELLS, occupiedCells);
       }
     },
 
     placeShip() {
+      // no ships left, ready to play
+      if (this.playerShipsAreSet) {
+        this.$_notify(this.$t(`messages.shipsAreSetUp`));
+        // TODO looks like watch is asynchronous
+        // this.$_notify(this.$t(`messages.clickReset`));
+        return;
+      }
+
       if (
         this.cannotPlaceShip ||
         this.$_checkOccupiedCells(this.possibleShip, this.occupiedCells)
@@ -111,9 +133,6 @@ export default {
         return;
       }
 
-      //no ships left, ready to play
-      if (this.currentShip.count === 0) return;
-
       this.$store.commit(CHANGE_SHIP_COUNT, this.currentShip);
       this.drawShip(
         this.possibleShip,
@@ -121,7 +140,7 @@ export default {
         ` ${this.currentShip.name}`
       );
 
-      //save player ship here!
+      // TODO save player ship here!
 
       if (this.currentShip.count === 0 && this.getNextShip) {
         this.$store.commit(SET_CURRENT_SHIP, this.getNextShip);
@@ -132,7 +151,7 @@ export default {
       this.playerCells.forEach((cell) => {
         cell.className = cell.className
           .split(" ")
-          .filter((name) => name !== this.POSSIBLE_SHIP.trim())
+          .filter((name) => name !== this.POSSIBLE_SHIP_CLASS_NAME.trim())
           .join(" ");
       });
     },

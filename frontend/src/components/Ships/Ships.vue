@@ -1,16 +1,21 @@
 <template>
   <div class="ships">
     <app-button @click="playerReady" :disabled="activateReadyButton">
-      {{ $t("game.readyBtn") }}
+      {{ $t("gamePage.readyBtn") }}
     </app-button>
-    <app-button @click="chooseDirection">{{ $t("game.rotateBtn") }}</app-button>
+    <app-button @click="chooseDirection">{{
+      $t("gamePage.rotateBtn")
+    }}</app-button>
+    <app-button @click="resetShips" :disabled="activateResetButton">{{
+      $t("gamePage.resetBtn")
+    }}</app-button>
     <div class="ships-wrapper">
       <div class="direction">
-        {{ $t("game.direction") }}: {{ currentDirection }}
+        {{ $t("gamePage.direction") }}: {{ currentDirection }}
       </div>
       <div v-for="ship in ships" :key="ship.name" class="ship-wrapper">
         <div class="ships-wrapper-left">
-          {{ $t("game.left") }}: {{ ship.count }}
+          {{ $t("gamePage.left") }}: {{ ship.count }}
         </div>
         <div class="ship" :class="ship.name + chosenShip(ship.name)">
           <div
@@ -33,7 +38,8 @@ import {
   SET_DIRECTION,
   SET_NOT_ALLOWED_POSITIONS,
   SET_PLAYER_READY_FLAG,
-  SET_SYSTEM_MESSAGE,
+  SET_PLAYER_SHIPS_ARE_SET,
+  SET_RESET_SHIPS,
 } from "../../store/modules/ship";
 import AppButton from "../Button/AppButton";
 
@@ -47,16 +53,25 @@ export default {
       ships: (state) => state.ship.ships,
       currentShip: (state) => state.ship.currentShip,
       horizontal: (state) => state.ship.horizontal,
+      resetShipsSwitch: (state) => state.ship.resetShipsSwitch,
+      playerReadyFlag: (state) => state.ship.playerReadyFlag,
     }),
 
     currentDirection() {
       return this.horizontal
-        ? this.$t("game.horizontal")
-        : this.$t("game.vertical");
+        ? this.$t("gamePage.horizontal")
+        : this.$t("gamePage.vertical");
     },
 
     activateReadyButton() {
       return !!this.ships.reduce((count, ship) => (count += ship.count), 0);
+    },
+
+    activateResetButton() {
+      return (
+        this.playerReadyFlag ||
+        this.ships.reduce((count, ship) => (count += ship.count), 0) === 10
+      );
     },
   },
   watch: {
@@ -67,6 +82,7 @@ export default {
     ships() {
       if (!this.activateReadyButton) {
         this.$_notify(this.$t("messages.playerReady"));
+        this.$store.commit(SET_PLAYER_SHIPS_ARE_SET, true);
       }
     },
   },
@@ -77,7 +93,7 @@ export default {
 
     playerReady() {
       this.$store.commit(SET_PLAYER_READY_FLAG, true);
-      //send to backend that u're ready to play
+      // TODO send to backend that u're ready to play
     },
 
     chosenShip(ship) {
@@ -87,6 +103,10 @@ export default {
     chooseDirection() {
       this.$store.commit(SET_DIRECTION, !this.horizontal);
       this.reCalculateNotAllowedPositions();
+    },
+
+    resetShips() {
+      this.$store.commit(SET_RESET_SHIPS, !this.resetShipsSwitch);
     },
 
     reCalculateNotAllowedPositions() {
