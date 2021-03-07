@@ -10,6 +10,7 @@ export default new Vuex.Store({
   state: {
     player: {},
     playersOnline: [],
+    systemMessage: "",
   },
   mutations: {
     ...mutations,

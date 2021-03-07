@@ -3,10 +3,10 @@
     <locale-changer />
     <div class="user-info">
       <span
-        >Welcome: <strong>{{ player.name }}</strong></span
+        >{{ $t("header.welcome") }}: <strong>{{ player.name }}</strong></span
       >
       <span class="user-img-circle"></span>
-      <app-button @click="logout">Log Out</app-button>
+      <app-button @click="logout">{{ $t("header.logOut") }}</app-button>
     </div>
   </header>
 </template>

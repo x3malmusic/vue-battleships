@@ -1,4 +1,4 @@
-import { SET_SYSTEM_MESSAGE } from "../store/modules/ship";
+import { SET_SYSTEM_MESSAGE } from "../store/mutations";
 
 export default {
   methods: {

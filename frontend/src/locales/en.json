@@ -2,6 +2,8 @@
   "messages": {
     "namePasswordEmpty": "Name and password required",
     "cannotPlaceShip": "You cannot place your ship here",
+    "shipsAreSetUp": "Your ships are all set up!",
+    "clickReset": "Click \"Reset\" button to replace all ships again",
     "playerNotReady": "You cannot shoot while you have unplaced ships or another player doesnt ready",
     "playerReady": "looks like you ready to play, hit that \"Ready!\" button and wait for another player to join",
     "playerReceivedInvite": "has received your invitation",
@@ -19,12 +21,17 @@
     "password": "Enter your password",
     "title": "Battleships"
   },
-  "game": {
+  "gamePage": {
     "readyBtn": "Ready!",
     "rotateBtn": "Rotate Ships",
     "direction": "Current Direction",
     "horizontal": "Horizontal",
     "vertical": "Vertical",
+    "resetBtn": "Reset",
     "left": "Left"
+  },
+  "header": {
+    "welcome": "Welcome",
+    "logOut": "Log Out"
   }
 }
