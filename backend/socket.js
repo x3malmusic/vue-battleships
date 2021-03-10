@@ -1,14 +1,9 @@
-import express from "express";
-import http from "http";
-import socketio from "socket.io";
 import { register, login } from "./controllers/auth";
 import GameManager from "./GameManager";
-
-export const app = express();
-export const server = http.createServer(app);
-const io = socketio(server);
+import MatchManager from "./MatchManager";
 
 const game = new GameManager();
+const match = new MatchManager();
 
 const createPlayer = (name, id, from, to) => ({
   name,
@@ -22,7 +17,12 @@ const reverseRequest = (request) => ({
   to: request.from,
 });
 
-io.on("connection", (socket) => {
+export default function socketHandler(socket) {
+  // socket.use((packet, next) => {
+  //   console.log("handler");
+  //   next();
+  // });
+
   socket.on("login", async (player, cb) => {
     try {
       const loggedUser = await login(player);
@@ -104,18 +104,28 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("updatePlayers", game.players);
   });
 
-  socket.on("playerLeft", (cb) => {
+  socket.on("findMatch", (player) => {
+    const foundPlayer = match.findReadyToPlayPlayers(player.id);
+    if (foundPlayer) {
+      const gameData = match.createMatch(player, foundPlayer);
+      socket.emit("matchCreated", { gameData, foundPlayer });
+      socket
+        .to(foundPlayer.id)
+        .emit("matchCreated", { gameData, foundPlayer: player });
+    } else {
+      match.addPlayerToReadyToPLayList(player);
+    }
+  });
+
+  socket.on("playerLeft", () => {
     game.removePlayer(socket.id);
+    match.deletePlayerFromReadyToPLayList(socket.id);
     socket.broadcast.emit("updatePlayers", game.players);
   });
 
-  socket.on("disconnect", (cb) => {
+  socket.on("disconnect", () => {
     game.removePlayer(socket.id);
+    match.deletePlayerFromReadyToPLayList(socket.id);
     socket.broadcast.emit("updatePlayers", game.players);
   });
-});
-
-export default {
-  app,
-  server,
-};
+}
