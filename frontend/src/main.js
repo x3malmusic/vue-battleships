@@ -17,6 +17,11 @@ Vue.mixin(systemMessage);
 
 Vue.use(
   new VueSocketIO({
+    // options: {
+    //   query: {
+    //     auth: "token? user?",
+    //   },
+    // },
     debug: false,
     connection: "http://localhost:8000",
     vuex: {

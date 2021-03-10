@@ -12,6 +12,9 @@
         </li>
       </ul>
     </div>
+    <app-button @click="findMatch" :disabled="isLookingForMatch">
+      Find match
+    </app-button>
     <div>
       <div class="list-header">
         players online
@@ -46,6 +49,7 @@
 </template>
 
 <script>
+import { FIND_MATCH } from "../../store/mutations";
 import { mapState, mapMutations, mapGetters } from "vuex";
 import AppButton from "../../components/Button/AppButton";
 
@@ -55,7 +59,7 @@ export default {
     AppButton,
   },
   computed: {
-    ...mapState(["player"]),
+    ...mapState(["player", "isLookingForMatch"]),
     ...mapGetters(["playersOnlineFiltered"]),
   },
   data: () => ({
@@ -71,6 +75,10 @@ export default {
   }),
   methods: {
     ...mapMutations(["SOCKET_updatePlayers"]),
+
+    findMatch() {
+      this.$store.commit(FIND_MATCH, this.$socket);
+    },
 
     hasSentInvitation(user) {
       return !user.from.some((id) => id === this.player.id);

@@ -10,6 +10,8 @@ export default new Vuex.Store({
   state: {
     player: {},
     playersOnline: [],
+    isLookingForMatch: false,
+    pollingInterval: null,
     systemMessage: "",
   },
   mutations: {
