@@ -6,51 +6,52 @@ import {
   USER_EXIST,
   NAME_PASSWORD_WRONG,
   NAME_PASSWORD_EMPTY,
-} from "../errorTypes";
+} from "../helpers/errorTypes";
 
-export const register = async (player) => {
-  if (player.name.trim() && player.password.trim()) {
-    const { name, password } = player;
+export const register = async (req, res, next) => {
+  const { name, password } = req.body;
+  if(!name.trim() || !password.trim()) {
+    return next(NAME_PASSWORD_EMPTY);
+  }
 
-    const candidate = await User.findOne({ name });
+  const candidate = await User.findOne({ name });
+  if (candidate) {
+    return next(USER_EXIST);
+  }
 
-    if (candidate) {
-      throw new Error(USER_EXIST);
-    }
+  const hashedPassword = await bcrypt.hash(password, 12);
+  const user = new User({ name, password: hashedPassword });
+  await user.save();
 
-    const hashedPassword = await bcrypt.hash(password, 12);
-    const user = new User({ name, password: hashedPassword });
-    await user.save();
-
-    const token = jwt.sign({ userId: user.id, name }, process.env.JWT_SECRET, {
-      expiresIn: "24h",
-    });
-    return { userId: user.id, name: user.name, token };
-  } else throw new Error(NAME_PASSWORD_EMPTY);
+  const token = jwt.sign({ userId: user.id, name }, process.env.JWT_SECRET, {
+    expiresIn: "24h",
+  });
+  res.send({ userId: user.id, name: user.name, token });
 };
 
-export const login = async (player) => {
-  if (player.name.trim() && player.password.trim()) {
-    const { name, password } = player;
-    const user = await User.findOne({ name });
+export const login = async (req, res, next) => {
+  const { name, password } = req.body;
 
-    if (!user) {
-      throw new Error(USER_NOT_FOUND);
+  if (!name.trim() || !password.trim()) {
+    return next(NAME_PASSWORD_EMPTY);
+  }
+
+  const user = await User.findOne({ name });
+  if (!user) {
+    return next(USER_NOT_FOUND);
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return next(NAME_PASSWORD_WRONG);
+  }
+
+  const token = jwt.sign(
+    { userId: user.id, name: user.name },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "24h",
     }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      throw new Error(NAME_PASSWORD_WRONG);
-    }
-
-    const token = jwt.sign(
-      { userId: user.id, name: user.name },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "24h",
-      }
-    );
-    return { userId: user.id, name: user.name, token };
-  } else throw new Error(NAME_PASSWORD_EMPTY);
+  );
+  res.send({ userId: user.id, name: user.name, token });
 };

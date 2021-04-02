@@ -12,7 +12,8 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { LOG_OUT } from "../../store/actions";
+import { mapState } from "vuex";
 import LocaleChanger from "../LocaleChanger/LocaleChanger";
 import AppButton from "../Button/AppButton";
 
@@ -26,11 +27,10 @@ export default {
     LocaleChanger,
   },
   methods: {
-    ...mapMutations(["setUser"]),
-
     logout() {
-      this.setUser({});
-      this.$socket.emit("playerLeft");
+      this.$store.dispatch(LOG_OUT);
+      this.$socket.disconnect();
+      // this.$socket.emit("playerLeft");
       this.$router.push("/");
     },
   },

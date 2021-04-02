@@ -18,6 +18,7 @@
 
 <script>
 import { mapMutations } from "vuex";
+import { LOGIN, REGISTER } from "../../store/actions";
 import FormInput from "../FormInput/FormInput";
 import AppButton from "../Button/AppButton";
 
@@ -35,36 +36,19 @@ export default {
     ...mapMutations(["setUser", "SOCKET_updatePlayers"]),
 
     login() {
-      if (this.playerName.trim() && this.password.trim()) {
-        const player = {
-          name: this.playerName,
-          password: this.password,
-        };
-
-        this.$socket.emit("login", player, ({ playersList, user }) => {
-          this.setUser(user);
-          this.SOCKET_updatePlayers(playersList);
-          this.$router.push("/lobby");
-        });
-      } else {
-        this.$_notify(this.$t("messages.namePasswordEmpty"));
-      }
+      const player = {
+        name: this.playerName,
+        password: this.password,
+      };
+      this.$store.dispatch(LOGIN, player);
     },
 
     register() {
-      if (this.playerName.trim() && this.password.trim()) {
-        const player = {
-          name: this.playerName,
-          password: this.password,
-        };
-        this.$socket.emit("register", player, ({ playersList, user }) => {
-          this.setUser(user);
-          this.SOCKET_updatePlayers(playersList);
-          this.$router.push("/lobby");
-        });
-      } else {
-        this.$_notify(this.$t("messages.namePasswordEmpty"));
-      }
+      const player = {
+        name: this.playerName,
+        password: this.password,
+      };
+      this.$store.dispatch(REGISTER, player);
     },
   },
 };

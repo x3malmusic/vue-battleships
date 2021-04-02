@@ -4,6 +4,7 @@ import router from "./router";
 import store from "./store";
 import i18n from "./i18n";
 import VueSocketIO from "vue-socket.io";
+import SocketIO from 'socket.io-client'
 import checkPossibleShip from "./mixins/checkPossibleShip";
 import shipCells from "./mixins/shipCells";
 import systemMessage from "./mixins/systemMessage";
@@ -23,7 +24,7 @@ Vue.use(
     //   },
     // },
     debug: false,
-    connection: "http://localhost:8000",
+    connection: SocketIO(process.env.VUE_APP_URL, { autoConnect: false }),
     vuex: {
       store,
       actionPrefix: "SOCKET_",

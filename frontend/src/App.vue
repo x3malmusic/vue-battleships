@@ -7,19 +7,38 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import AppHeader from "./components/AppHeader/AppHeader";
 import Notification from "./components/Notification/Notification";
 
 export default {
   name: "App",
+  components: {
+    AppHeader,
+    Notification,
+  },
+  methods: {
+    connectToApp() {
+      if(this.player.name) {
+        this.$socket.connect();
+        this.$router.push("/lobby");
+      }
+    },
+  },
   computed: {
+    ...mapState(['player']),
+
     header() {
       if (this.$route.meta.header) return "AppHeader";
     },
   },
-  components: {
-    AppHeader,
-    Notification,
+  watch: {
+    player() {
+      this.connectToApp();
+    }
+  },
+  mounted() {
+    this.connectToApp();
   },
 };
 </script>

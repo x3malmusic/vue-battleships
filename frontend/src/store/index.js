@@ -1,6 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
+
 import mutations from "./mutations";
+import actions from "./actions";
+import { getPlayer } from "../services/player";
 
 import ship from "./modules/ship";
 
@@ -8,7 +11,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    player: {},
+    player: getPlayer() || {},
     playersOnline: [],
     isLookingForMatch: false,
     pollingInterval: null,
@@ -16,6 +19,9 @@ export default new Vuex.Store({
   },
   mutations: {
     ...mutations,
+  },
+  actions: {
+    ...actions
   },
   modules: { ship },
   getters: {

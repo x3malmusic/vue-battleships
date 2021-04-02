@@ -83,9 +83,4 @@ export default {
   SOCKET_ERROR(state, error) {
     state.systemMessage = error;
   },
-
-  SOCKET_error(state, error) {
-    console.log(error);
-    state.systemMessage = error;
-  },
 };
