@@ -30,7 +30,6 @@ export default {
     logout() {
       this.$store.dispatch(LOG_OUT);
       this.$socket.disconnect();
-      // this.$socket.emit("playerLeft");
       this.$router.push("/");
     },
   },

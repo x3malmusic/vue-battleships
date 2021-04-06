@@ -1,17 +1,26 @@
 export default class GameManager {
   constructor() {
     this.players = [];
+    // this.players = {};
+  }
+
+  playersList() {
+    return Object.values(this.players)
   }
 
   addPlayer(player) {
     this.players.push(player);
+    // this.players[player.id] = player;
   }
 
   removePlayer(id) {
+    // delete this.players[id];
     this.players = this.players.filter((player) => player.id !== id);
   }
 
   addInvitation(request) {
+    // this.players[request.to.id] = [...this.players[request.to.id].to, request.to.id]
+    // this.players[request.from.id] = [...this.players[request.from.id].from, request.from.id]
     this.players = this.players.map((player) => {
       if (player.id === request.to.id)
         return {

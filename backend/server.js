@@ -4,6 +4,7 @@ import httpServer from 'http';
 import dotenv from "dotenv";
 import cors from "cors";
 
+import verifyToken from "./helpers/jwtVerify";
 import authRoutes from "./routes/authRoutes";
 import errorHandler from "./middlewares/errorHandler";
 import { connectDB } from "./database";
@@ -31,21 +32,16 @@ const PORT = process.env.PORT || 8000;
 
 const io = socketio(server, { path: '/socket.io' });
 
-// io.use((socket, next) => {
-//   console.log(socket.handshake.query);
-//   next();
-// });
+io.use(async (socket, next) => {
+  const jwtError = await verifyToken(socket.handshake.query.auth)
+  if(jwtError) return next(new Error(jwtError));
+  next()
+});
 
 server.listen(PORT, () => {
   console.log(`Socket server is running on ${PORT}`);
 });
 
 io.on("connection", (socket) => {
-  console.log('conn')
-
-  socket.on("disconnecting", (reason) => {
-    console.log('disconnect');
-  });
-
   socketHandler(socket);
 });

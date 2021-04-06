@@ -1,4 +1,5 @@
 import i18n from "../i18n";
+import router from "../router";
 
 export const SET_SYSTEM_MESSAGE = "SET_SYSTEM_MESSAGE";
 export const FIND_MATCH = "FIND_MATCH";
@@ -29,6 +30,10 @@ export default {
         triesNumber++;
       }
     }, 2000);
+  },
+
+  SOCKET_initUserId(state, userId) {
+    state.player.id = userId
   },
 
   SOCKET_matchCreated(state, { gameData, foundPlayer }) {
@@ -80,7 +85,15 @@ export default {
     state.playersOnline = data.playersList;
   },
 
+  SOCKET_connect(state) {
+    router.push('/lobby')
+  },
+
   SOCKET_ERROR(state, error) {
-    state.systemMessage = error;
+    state.systemMessage = {text: error, id: Date.now().toLocaleString()};
+  },
+
+  SOCKET_error(state, error) {
+    state.systemMessage = {text: error, id: Date.now().toLocaleString()};
   },
 };

@@ -21,7 +21,6 @@ export default {
     connectToApp() {
       if(this.player.name) {
         this.$socket.connect();
-        this.$router.push("/lobby");
       }
     },
   },
@@ -38,7 +37,7 @@ export default {
     }
   },
   mounted() {
-    this.connectToApp();
+    // this.connectToApp();
   },
 };
 </script>

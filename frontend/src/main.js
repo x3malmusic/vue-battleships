@@ -18,13 +18,8 @@ Vue.mixin(systemMessage);
 
 Vue.use(
   new VueSocketIO({
-    // options: {
-    //   query: {
-    //     auth: "token? user?",
-    //   },
-    // },
     debug: false,
-    connection: SocketIO(process.env.VUE_APP_URL, { autoConnect: false }),
+    connection: SocketIO(process.env.VUE_APP_URL, { autoConnect: false, query: { auth: JSON.stringify(store.state.player) }}),
     vuex: {
       store,
       actionPrefix: "SOCKET_",

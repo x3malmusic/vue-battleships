@@ -1,4 +1,3 @@
-import { register, login } from "./controllers/auth";
 import GameManager from "./GameManager";
 import MatchManager from "./MatchManager";
 
@@ -18,54 +17,14 @@ const reverseRequest = (request) => ({
 });
 
 export default function socketHandler(socket) {
-  // socket.use((packet, next) => {
-  //   console.log("handler");
-  //   next();
-  // });
 
-  socket.on("login", async (player, cb) => {
-    try {
-      const loggedUser = await login(player);
-      const user = createPlayer(loggedUser.name, socket.id, [], []);
-      game.addPlayer(user);
-      cb({
-        playersList: game.players,
-        user: {
-          name: player.name,
-          id: socket.id,
-          token: loggedUser.token,
-        },
-      });
-      socket.broadcast.emit("updatePlayers", game.players);
-    } catch (e) {
-      socket.emit("ERROR", {
-        text: e.message,
-        id: Date.now().toLocaleString(),
-      });
-    }
-  });
+  const player = JSON.parse(socket.handshake.query.auth)
+  const user = createPlayer(player.name, socket.id, [], []);
+  game.addPlayer(user);
+  socket.broadcast.emit("updatePlayers", game.players);
+  socket.emit("updatePlayers", game.players);
+  socket.emit('initUserId', socket.id);
 
-  socket.on("register", async (player, cb) => {
-    try {
-      const registeredUser = await register(player);
-      const user = createPlayer(registeredUser.name, socket.id, [], []);
-      game.addPlayer(user);
-      cb({
-        playersList: game.players,
-        user: {
-          name: user.name,
-          id: socket.id,
-          token: registeredUser.token,
-        },
-      });
-      socket.broadcast.emit("updatePlayers", game.players);
-    } catch (e) {
-      socket.emit("ERROR", {
-        text: e.message,
-        id: Date.now().toLocaleString(),
-      });
-    }
-  });
 
   socket.on("sendInvitation", (request, cb) => {
     game.addInvitation(request);
@@ -115,12 +74,6 @@ export default function socketHandler(socket) {
     } else {
       match.addPlayerToReadyToPLayList(player);
     }
-  });
-
-  socket.on("playerLeft", () => {
-    game.removePlayer(socket.id);
-    match.deletePlayerFromReadyToPLayList(socket.id);
-    socket.broadcast.emit("updatePlayers", game.players);
   });
 
   socket.on("disconnect", () => {
