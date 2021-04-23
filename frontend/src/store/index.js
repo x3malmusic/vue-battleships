@@ -16,6 +16,7 @@ export default new Vuex.Store({
     isLookingForMatch: false,
     pollingInterval: null,
     systemMessage: "",
+    game: {},
   },
   mutations: {
     ...mutations,

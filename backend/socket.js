@@ -16,21 +16,20 @@ const reverseRequest = (request) => ({
   to: request.from,
 });
 
-export default function socketHandler(socket) {
+export default function socketHandler(socket, clients) {
 
   const player = JSON.parse(socket.handshake.query.auth)
   const user = createPlayer(player.name, socket.id, [], []);
   game.addPlayer(user);
-  socket.broadcast.emit("updatePlayers", game.players);
-  socket.emit("updatePlayers", game.players);
+
+  clients.emit("updatePlayers", game.players)
   socket.emit('initUserId', socket.id);
 
 
   socket.on("sendInvitation", (request, cb) => {
     game.addInvitation(request);
     socket.to(request.to.id).emit("gameRequest", request.from);
-    cb({ playersList: game.players });
-    socket.broadcast.emit("updatePlayers", game.players);
+    clients.emit("updatePlayers", game.players)
   });
 
   socket.on("cancelInvitation", (request, cb) => {
@@ -39,8 +38,7 @@ export default function socketHandler(socket) {
       from: request.from,
       playersList: game.players,
     });
-    cb({ playersList: game.players });
-    socket.broadcast.emit("updatePlayers", game.players);
+    clients.emit("updatePlayers", game.players)
   });
 
   socket.on("acceptGameRequest", (request, cb) => {
@@ -49,8 +47,7 @@ export default function socketHandler(socket) {
       from: request.from,
       playersList: game.players,
     });
-    cb({ playersList: game.players });
-    socket.broadcast.emit("updatePlayers", game.players);
+    clients.emit("updatePlayers", game.players)
   });
 
   socket.on("declineGameRequest", (request, cb) => {
@@ -59,21 +56,33 @@ export default function socketHandler(socket) {
       from: request.from,
       playersList: game.players,
     });
-    cb({ playersList: game.players });
-    socket.broadcast.emit("updatePlayers", game.players);
+    clients.emit("updatePlayers", game.players)
   });
 
   socket.on("findMatch", (player) => {
     const foundPlayer = match.findReadyToPlayPlayers(player.id);
-    if (foundPlayer) {
-      const gameData = match.createMatch(player, foundPlayer);
-      socket.emit("matchCreated", { gameData, foundPlayer });
-      socket
-        .to(foundPlayer.id)
-        .emit("matchCreated", { gameData, foundPlayer: player });
-    } else {
-      match.addPlayerToReadyToPLayList(player);
-    }
+
+    if (!foundPlayer) return match.addPlayerToReadyToPLayList(player);
+
+    const gameData = match.createMatch(player, foundPlayer);
+    socket.emit("matchCreated", { gameData, foundPlayer });
+    socket
+      .to(foundPlayer.id)
+      .emit("matchCreated", { gameData, foundPlayer: player });
+  });
+
+  socket.on("connectToMatch" ,(gameId) => {
+    socket.join(gameId);
+  });
+
+  socket.on("playerSetShips", ({ gameId, playerId, shipPositions }) => {
+    console.log(match.gameList)
+    console.log(gameId)
+    match.gameList[gameId][playerId].shipPositions = shipPositions;
+  });
+
+  socket.on("playerShot", ({ gameId, playerId, shots }) => {
+    match.gameList[gameId][playerId].shots = shots;
   });
 
   socket.on("disconnect", () => {

@@ -33,7 +33,7 @@ export default {
     AppButton,
   },
   methods: {
-    ...mapMutations(["setUser", "SOCKET_updatePlayers"]),
+    ...mapMutations(["setUser"]),
 
     login() {
       const player = {

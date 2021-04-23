@@ -50,7 +50,7 @@
 
 <script>
 import { FIND_MATCH } from "../../store/mutations";
-import { mapState, mapMutations, mapGetters } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import AppButton from "../../components/Button/AppButton";
 
 export default {
@@ -74,8 +74,6 @@ export default {
     ],
   }),
   methods: {
-    ...mapMutations(["SOCKET_updatePlayers"]),
-
     findMatch() {
       this.$store.commit(FIND_MATCH, this.$socket);
     },
@@ -91,8 +89,7 @@ export default {
     sendInvitation(user) {
       const request = this.makeReqObj(user);
 
-      this.$socket.emit("sendInvitation", request, ({ playersList }) => {
-        this.SOCKET_updatePlayers(playersList);
+      this.$socket.emit("sendInvitation", request, () => {
         this.$_notify(
           user.name + " " + this.$t("messages.playerReceivedInvite")
         );
@@ -103,25 +100,18 @@ export default {
       const request = this.makeReqObj(user);
 
       this.$socket.emit("cancelInvitation", request, ({ playersList }) => {
-        this.SOCKET_updatePlayers(playersList);
         this.$_notify(this.$t("messages.canceled"));
       });
     },
 
     acceptGameRequest(user) {
       const request = this.makeReqObj(user);
-
-      this.$socket.emit("acceptGameRequest", request, ({ playersList }) => {
-        this.SOCKET_updatePlayers(playersList);
-      });
+      this.$socket.emit("acceptGameRequest", request);
     },
 
     declineGameRequest(user) {
       const request = this.makeReqObj(user);
-
-      this.$socket.emit("declineGameRequest", request, ({ playersList }) => {
-        this.SOCKET_updatePlayers(playersList);
-      });
+      this.$socket.emit("declineGameRequest", request);
     },
 
     makeReqObj(user) {

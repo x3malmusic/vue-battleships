@@ -1,7 +1,7 @@
 export default class MatchManager {
   constructor() {
     this.readyToPlayList = {};
-    this.gameList = [];
+    this.gameList = {};
   }
 
   addPlayerToReadyToPLayList(player) {
@@ -28,6 +28,6 @@ export default class MatchManager {
     this.gameList[gameId] = { [player1.id]: player1, [player2.id]: player2 };
     this.deletePlayerFromReadyToPLayList(player1.id);
     this.deletePlayerFromReadyToPLayList(player2.id);
-    return this.gameList[gameId];
+    return { gameId, gameData: this.gameList[gameId] };
   }
 }

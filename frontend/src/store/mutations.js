@@ -3,6 +3,7 @@ import router from "../router";
 
 export const SET_SYSTEM_MESSAGE = "SET_SYSTEM_MESSAGE";
 export const FIND_MATCH = "FIND_MATCH";
+export const BEGIN_MATCH = "BEGIN_MATCH";
 
 export default {
   setUser(state, player) {
@@ -32,6 +33,15 @@ export default {
     }, 2000);
   },
 
+  [BEGIN_MATCH](state, shipPositions) {
+    // const gameData = {
+    //   gameId: this.state.gameData,
+    //   playerId,
+    //   shipPositions
+    // }
+    // this._vm.$socket.emit("playerSetShips", gameData);
+  },
+
   SOCKET_initUserId(state, userId) {
     state.player.id = userId
   },
@@ -43,6 +53,10 @@ export default {
       text: `${foundPlayer.name} is your next enemy!`,
       id: Date.now().toLocaleString(),
     };
+    this._vm.$socket.emit('connectToMatch', gameData.gameId)
+
+    state.game = gameData;
+    router.push('/game');
   },
 
   SOCKET_updatePlayers(state, players) {

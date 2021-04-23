@@ -41,6 +41,7 @@ import {
   SET_PLAYER_SHIPS_ARE_SET,
   SET_RESET_SHIPS,
 } from "../../store/modules/ship";
+import { BEGIN_MATCH } from "../../store/mutations";
 import AppButton from "../Button/AppButton";
 
 export default {
@@ -55,6 +56,8 @@ export default {
       horizontal: (state) => state.ship.horizontal,
       resetShipsSwitch: (state) => state.ship.resetShipsSwitch,
       playerReadyFlag: (state) => state.ship.playerReadyFlag,
+      game: (state) => state.game,
+      playerId: (state) => state.player.id,
     }),
 
     currentDirection() {
@@ -93,6 +96,7 @@ export default {
 
     playerReady() {
       this.$store.commit(SET_PLAYER_READY_FLAG, true);
+      this.$store.commit(BEGIN_MATCH);
       // TODO send to backend that u're ready to play
     },
 

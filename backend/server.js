@@ -32,6 +32,8 @@ const PORT = process.env.PORT || 8000;
 
 const io = socketio(server, { path: '/socket.io' });
 
+const clients = io.sockets;
+
 io.use(async (socket, next) => {
   const jwtError = await verifyToken(socket.handshake.query.auth)
   if(jwtError) return next(new Error(jwtError));
@@ -43,5 +45,5 @@ server.listen(PORT, () => {
 });
 
 io.on("connection", (socket) => {
-  socketHandler(socket);
+  socketHandler(socket, clients);
 });
