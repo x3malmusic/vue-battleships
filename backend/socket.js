@@ -75,14 +75,23 @@ export default function socketHandler(socket, clients) {
     socket.join(gameId);
   });
 
-  socket.on("playerSetShips", ({ gameId, playerId, shipPositions }) => {
-    console.log(match.gameList)
-    console.log(gameId)
+  socket.on("playerSetShips", ({ gameId, playerId, shipPositions, shotPositions }) => {
     match.gameList[gameId][playerId].shipPositions = shipPositions;
+    match.gameList[gameId][playerId].shotPositions = shotPositions;
   });
 
-  socket.on("playerShot", ({ gameId, playerId, shots }) => {
-    match.gameList[gameId][playerId].shots = shots;
+  socket.on("playerShot", ({ gameId, playerId, fieldId, oponentId }) => {
+    if(!!match.gameList[gameId][oponentId].shipPositions[fieldId - 1].className) {
+      match.gameList[gameId][oponentId].shipPositions[fieldId - 1].className += " hit";
+      match.gameList[gameId][playerId].shotPositions[fieldId - 1].className += "hit";
+
+    } else {
+      match.gameList[gameId][oponentId].shipPositions[fieldId - 1].className += " miss";
+      match.gameList[gameId][playerId].shotPositions[fieldId - 1].className += "miss";
+    }
+
+    socket.to(oponentId).emit("showPlayerShot", match.gameList[gameId][oponentId].shipPositions);
+    socket.emit("showMyShot", match.gameList[gameId][playerId].shotPositions);
   });
 
   socket.on("disconnect", () => {

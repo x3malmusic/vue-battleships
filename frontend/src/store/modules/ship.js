@@ -8,6 +8,7 @@ export const SET_NOT_ALLOWED_POSITIONS = "SET_NOT_ALLOWED_POSITIONS";
 export const SET_PLAYER_READY_FLAG = "SET_PLAYER_READY_FLAG";
 export const SET_PLAYER_SHIPS_ARE_SET = "SET_PLAYER_SHIPS_ARE_SET";
 export const SET_RESET_SHIPS = "SET_RESET_SHIPS";
+export const INITIALIZE_BOARD = "INITIALIZE_BOARD";
 
 const initCurrentShip = { name: "deck-4", size: 4, count: 1 };
 const initShips = [
@@ -25,7 +26,8 @@ export default {
     notAllowedPositions: [],
     occupiedCells: [],
     possibleShip: [],
-    playerShips: {},
+    playerShips: [],
+    playerShots: [],
     playerShipsAreSet: false,
     playerReadyFlag: false,
     resetShipsSwitch: false,
@@ -34,6 +36,15 @@ export default {
   mutations: {
     [SET_CURRENT_SHIP](state, ship) {
       state.currentShip = ship;
+    },
+
+    [INITIALIZE_BOARD](state) {
+      state.playerShips = [];
+      state.playerShots = [];
+      for (let i = 1; i < 101; i++) {
+        state.playerShips.push({ className: "", id: i });
+        state.playerShots.push({ className: "", id: i });
+      }
     },
 
     [SET_DIRECTION](state, horizontal) {
@@ -86,6 +97,7 @@ export default {
       state.playerShipsAreSet = false;
       state.currentShip = { ...initCurrentShip };
       state.ships = [...initShips];
+      this.commit(INITIALIZE_BOARD);
     },
   },
 

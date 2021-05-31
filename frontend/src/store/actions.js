@@ -30,13 +30,15 @@ export default {
 
   [REGISTER]: async(ctx, data) => {
     if(!data.name.trim() || !data.password.trim()) {
-      console.log('empty')
+      state.systemMessage = {
+        text: i18n.t("messages.namePasswordEmpty"),
+        id: Date.now().toLocaleString(),
+      };
       return
     }
 
     try {
       const player = await register(data)
-      console.log(player)
     } catch (e) {
       console.log(e)
     }

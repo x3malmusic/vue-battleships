@@ -37,7 +37,7 @@ export default {
     }
   },
   mounted() {
-    // this.connectToApp();
+    this.connectToApp();
   },
 };
 </script>

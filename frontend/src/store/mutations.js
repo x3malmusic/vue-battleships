@@ -5,6 +5,8 @@ export const SET_SYSTEM_MESSAGE = "SET_SYSTEM_MESSAGE";
 export const FIND_MATCH = "FIND_MATCH";
 export const BEGIN_MATCH = "BEGIN_MATCH";
 
+export const MAKE_SHOT = "MAKE_SHOT";
+
 export default {
   setUser(state, player) {
     state.player = player;
@@ -33,13 +35,26 @@ export default {
     }, 2000);
   },
 
-  [BEGIN_MATCH](state, shipPositions) {
-    // const gameData = {
-    //   gameId: this.state.gameData,
-    //   playerId,
-    //   shipPositions
-    // }
-    // this._vm.$socket.emit("playerSetShips", gameData);
+  [MAKE_SHOT](state, fieldId) {
+    const gameData = {
+      gameId: this.state.game.gameId,
+      oponentId: this.state.game.opponent,
+      playerId: this.state.player.id,
+      fieldId
+    }
+
+    this._vm.$socket.emit("playerShot", gameData);
+  },
+
+  [BEGIN_MATCH](state) {
+    const gameData = {
+      gameId: state.game.gameId,
+      playerId: state.player.id,
+      shipPositions: state.ship.playerShips,
+      shotPositions: state.ship.playerShots
+    }
+
+    this._vm.$socket.emit("playerSetShips", gameData);
   },
 
   SOCKET_initUserId(state, userId) {
@@ -55,8 +70,18 @@ export default {
     };
     this._vm.$socket.emit('connectToMatch', gameData.gameId)
 
-    state.game = gameData;
+    state.game = { ...gameData, opponent: foundPlayer.id };
     router.push('/game');
+  },
+
+  SOCKET_showPlayerShot(state, board) {
+    console.log("board", board)
+    state.ship.playerShips = board;
+  },
+
+  SOCKET_showMyShot(state, shots) {
+    console.log("shots", shots)
+    state.ship.playerShots = shots;
   },
 
   SOCKET_updatePlayers(state, players) {
@@ -99,8 +124,8 @@ export default {
     state.playersOnline = data.playersList;
   },
 
-  SOCKET_connect(state) {
-    router.push('/lobby')
+  SOCKET_connect() {
+    if(router.history.current.path !== '/lobby') router.push('/lobby');
   },
 
   SOCKET_ERROR(state, error) {

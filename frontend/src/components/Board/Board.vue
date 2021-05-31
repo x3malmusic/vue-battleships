@@ -2,7 +2,7 @@
   <div class="board">
     <div class="battleship-grid user">
       <div
-        v-for="cell in playerCells"
+        v-for="cell in playerShips"
         :id="cell.id"
         :class="cell.className"
         @mouseover="canPlaceShip"
@@ -10,8 +10,13 @@
         @click="placeShip"
       />
     </div>
-    <div class="battleship-grid enemy" ref="enemyBoard">
-      <div v-for="i in 100" @click="makeShot" />
+    <div class="battleship-grid enemy">
+      <div
+        v-for="cell in playerShots"
+        @click="makeShot"
+        :id="cell.id"
+        :class="cell.className"
+      />
     </div>
   </div>
 </template>
@@ -23,13 +28,14 @@ import {
   SET_CURRENT_SHIP,
   SET_OCCUPIED_CELLS,
   SET_POSSIBLE_SHIP,
+  INITIALIZE_BOARD
 } from "../../store/modules/ship";
+import { MAKE_SHOT } from "../../store/mutations";
 
 export default {
   name: "Board",
   data: () => ({
     POSSIBLE_SHIP_CLASS_NAME: " possible-ship",
-    playerCells: [],
     cannotPlaceShip: true,
   }),
   computed: {
@@ -38,6 +44,8 @@ export default {
       horizontal: (state) => state.ship.horizontal,
       notAllowedPositions: (state) => state.ship.notAllowedPositions,
       possibleShip: (state) => state.ship.possibleShip,
+      playerShips: (state) => state.ship.playerShips,
+      playerShots: (state) => state.ship.playerShots,
       playerReadyFlag: (state) => state.ship.playerReadyFlag,
       playerShipsAreSet: (state) => state.ship.playerShipsAreSet,
       occupiedCells: (state) => state.ship.occupiedCells,
@@ -45,19 +53,13 @@ export default {
     }),
     ...mapGetters(["getNextShip"]),
   },
-  watch: {
-    resetShipsSwitch() {
-      this.playerCells = [];
-      this.drawBoard(this.playerCells);
-    },
-  },
   methods: {
     makeShot(e) {
       if (!this.playerReadyFlag) {
         this.$_notify(this.$t("messages.playerNotReady"));
         return;
       }
-      e.target.className = "hit";
+      this.$store.commit(MAKE_SHOT, e.target.id)
     },
 
     drawPossibleShip(shipPosition, shipSize, horizontal) {
@@ -100,14 +102,14 @@ export default {
         this.$_checkOccupiedCells(this.possibleShip, this.occupiedCells)
       )
         return;
-      else this.drawShip(ship, this.horizontal, this.POSSIBLE_SHIP_CLASS_NAME);
+      this.drawShip(ship, this.horizontal, this.POSSIBLE_SHIP_CLASS_NAME);
     },
 
     drawShip(ship, horizontal, className) {
       this.deletePossibleShip();
 
       ship.forEach((id) => {
-        this.playerCells.find((cell) => cell.id === id).className += className;
+        this.playerShips.find((cell) => cell.id === id).className += className;
       });
 
       if (className !== this.POSSIBLE_SHIP_CLASS_NAME) {
@@ -120,8 +122,6 @@ export default {
       // no ships left, ready to play
       if (this.playerShipsAreSet) {
         this.$_notify(this.$t(`messages.shipsAreSetUp`));
-        // TODO looks like watch is asynchronous
-        // this.$_notify(this.$t(`messages.clickReset`));
         return;
       }
 
@@ -140,15 +140,13 @@ export default {
         ` ${this.currentShip.name}`
       );
 
-      // TODO save player ship here!
-
       if (this.currentShip.count === 0 && this.getNextShip) {
         this.$store.commit(SET_CURRENT_SHIP, this.getNextShip);
       }
     },
 
     deletePossibleShip() {
-      this.playerCells.forEach((cell) => {
+      this.playerShips.forEach((cell) => {
         cell.className = cell.className
           .split(" ")
           .filter((name) => name !== this.POSSIBLE_SHIP_CLASS_NAME.trim())
@@ -156,14 +154,9 @@ export default {
       });
     },
 
-    drawBoard(arr) {
-      for (let i = 1; i < 101; i++) {
-        arr.push({ className: "", id: i });
-      }
-    },
   },
   mounted() {
-    this.drawBoard(this.playerCells);
+    this.$store.commit(INITIALIZE_BOARD);
   },
 };
 </script>

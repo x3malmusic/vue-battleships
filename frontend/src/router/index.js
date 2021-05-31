@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import store from "../store";
 
 Vue.use(VueRouter);
 
@@ -44,12 +43,5 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
-
-//route guards need
-// router.beforeEach((to, from, next) => {
-//   if (to.path === "/" && store.state.player.name) next(from.path);
-//   else if (to.path === "/lobby" && !store.state.player.name) next(from.path);
-//   else next();
-// });
 
 export default router;

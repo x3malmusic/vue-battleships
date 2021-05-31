@@ -85,6 +85,9 @@ export default {
     ships() {
       if (!this.activateReadyButton) {
         this.$_notify(this.$t("messages.playerReady"));
+        setTimeout(() => {
+          this.$_notify(this.$t(`messages.clickReset`));
+        }, 2000)
         this.$store.commit(SET_PLAYER_SHIPS_ARE_SET, true);
       }
     },
@@ -97,7 +100,6 @@ export default {
     playerReady() {
       this.$store.commit(SET_PLAYER_READY_FLAG, true);
       this.$store.commit(BEGIN_MATCH);
-      // TODO send to backend that u're ready to play
     },
 
     chosenShip(ship) {
