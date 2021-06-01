@@ -70,23 +70,27 @@ export default function socketHandler(socket, clients) {
       .emit("matchCreated", { gameData, foundPlayer: player });
   });
 
-  socket.on("connectToMatch" ,(gameId) => {
+  socket.on("connectToMatch", (gameId) => {
     socket.join(gameId);
   });
 
   socket.on("playerSetShips", ({ gameId, playerId, shipPositions, shotPositions }) => {
-    game.gameList[gameId].playerSetShips(playerId, shipPositions, shotPositions);
+    const playersReadyToPlay = game.gameList[gameId].playerSetShips(playerId, shipPositions, shotPositions);
+
+    if (playersReadyToPlay) {
+      clients.to(gameId).emit("playersReadyToPlay", game.gameList[gameId].whosGo)
+    }
   });
 
   socket.on("playerShot", ({ gameId, playerId, fieldId, oponentId }) => {
-    if(!game.gameList[gameId].gameHasBegun) return socket.emit("oponentNotReady");
+    if (!game.gameList[gameId].gameHasBegun) return socket.emit("oponentNotReady");
 
-    if(!game.gameList[gameId].isPlayersTurn(playerId)) return socket.emit("notYourTurn");
+    if (!game.gameList[gameId].isPlayersTurn(playerId)) return socket.emit("notYourTurn");
 
-    game.gameList[gameId].playerShot(oponentId, fieldId, playerId);
+    const whosGo = game.gameList[gameId].playerShot(oponentId, fieldId, playerId);
 
-    socket.to(oponentId).emit("showPlayerShot", game.gameList[gameId].getPlayerShipPosition(oponentId));
-    socket.emit("showMyShot", game.gameList[gameId].getPlayerShotPosition(playerId));
+    socket.to(oponentId).emit("showPlayerShot", { board: game.gameList[gameId].getPlayerShipPosition(oponentId), whosGo });
+    socket.emit("showMyShot", { shots: game.gameList[gameId].getPlayerShotPosition(playerId), whosGo });
   });
 
   socket.on("disconnect", () => {

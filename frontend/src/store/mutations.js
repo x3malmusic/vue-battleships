@@ -74,12 +74,18 @@ export default {
     router.push('/game');
   },
 
-  SOCKET_showPlayerShot(state, board) {
+  SOCKET_showPlayerShot(state, { board, whosGo }) {
     state.ship.playerShips = board;
+    state.game.whosGo = whosGo;
   },
 
-  SOCKET_showMyShot(state, shots) {
+  SOCKET_showMyShot(state, { shots, whosGo }) {
     state.ship.playerShots = shots;
+    state.game.whosGo = whosGo;
+  },
+
+  SOCKET_playersReadyToPlay(state, whosGo) {
+    state.game = { ...state.game, whosGo, gameHasBegun: true };
   },
 
   SOCKET_updatePlayers(state, players) {

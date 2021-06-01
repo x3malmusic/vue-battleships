@@ -2,7 +2,7 @@ export default class MatchManager {
   constructor(player1, player2) {
     this[player1.id] = player1;
     this[player2.id] = player2;
-    this.ids = [player1.id, player2.id]
+    this.ids = [player1.id, player2.id];
     this.switchTurn = this.playerTurnSwitch();
     this.whosGo = this.switchTurn.next().value;
     this.gameHasBegun = false;
@@ -25,7 +25,7 @@ export default class MatchManager {
   playerSetShips(playerId, shipPositions, shotPositions) {
     this[playerId].shipPositions = shipPositions;
     this[playerId].shotPositions = shotPositions;
-    this.gameHasBegun = this.ids.every(id => this[id].shipPositions && this[id].shotPositions);
+    return this.gameHasBegun = this.ids.every(id => this[id].shipPositions && this[id].shotPositions);
   }
 
   playerShot(oponentId, fieldId, playerId) {
@@ -39,6 +39,8 @@ export default class MatchManager {
       this[oponentId].shipPositions[fieldId - 1].className += " miss";
       this[playerId].shotPositions[fieldId - 1].className += "miss";
     }
+
+    return this.whosGo;
   }
 
   getPlayerShipPosition(id){
