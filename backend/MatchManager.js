@@ -3,8 +3,9 @@ export default class MatchManager {
     this[player1.id] = player1;
     this[player2.id] = player2;
     this.ids = [player1.id, player2.id]
-    this.switch = this.playerTurnSwitch();
-    this.whosGo = this.switch.next().value;
+    this.switchTurn = this.playerTurnSwitch();
+    this.whosGo = this.switchTurn.next().value;
+    this.gameHasBegun = false;
   }
 
   *playerTurnSwitch() {
@@ -24,12 +25,11 @@ export default class MatchManager {
   playerSetShips(playerId, shipPositions, shotPositions) {
     this[playerId].shipPositions = shipPositions;
     this[playerId].shotPositions = shotPositions;
+    this.gameHasBegun = this.ids.every(id => this[id].shipPositions && this[id].shotPositions);
   }
 
   playerShot(oponentId, fieldId, playerId) {
-    if(!this.isPlayersTurn(playerId)) return
-
-    this.switch.next();
+    this.switchTurn.next();
 
     if(!!this[oponentId].shipPositions[fieldId - 1].className) {
       this[oponentId].shipPositions[fieldId - 1].className += " hit";

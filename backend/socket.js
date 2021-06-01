@@ -79,6 +79,10 @@ export default function socketHandler(socket, clients) {
   });
 
   socket.on("playerShot", ({ gameId, playerId, fieldId, oponentId }) => {
+    if(!game.gameList[gameId].gameHasBegun) return socket.emit("oponentNotReady");
+
+    if(!game.gameList[gameId].isPlayersTurn(playerId)) return socket.emit("notYourTurn");
+
     game.gameList[gameId].playerShot(oponentId, fieldId, playerId);
 
     socket.to(oponentId).emit("showPlayerShot", game.gameList[gameId].getPlayerShipPosition(oponentId));

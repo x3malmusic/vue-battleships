@@ -1,6 +1,6 @@
 <template>
   <div class="ships">
-    <app-button @click="playerReady" :disabled="activateReadyButton">
+    <app-button @click="playerReady" :disabled="activateReadyButton" :class="{'btn-alive': !activateReadyButton}">
       {{ $t("gamePage.readyBtn") }}
     </app-button>
     <app-button @click="chooseDirection">{{
@@ -41,7 +41,7 @@ import {
   SET_PLAYER_SHIPS_ARE_SET,
   SET_RESET_SHIPS,
 } from "../../store/modules/ship";
-import { BEGIN_MATCH } from "../../store/mutations";
+import { PLAYER_READY_TO_BEGIN_MATCH } from "../../store/mutations";
 import AppButton from "../Button/AppButton";
 
 export default {
@@ -99,7 +99,7 @@ export default {
 
     playerReady() {
       this.$store.commit(SET_PLAYER_READY_FLAG, true);
-      this.$store.commit(BEGIN_MATCH);
+      this.$store.commit(PLAYER_READY_TO_BEGIN_MATCH);
     },
 
     chosenShip(ship) {

@@ -3,7 +3,7 @@ import router from "../router";
 
 export const SET_SYSTEM_MESSAGE = "SET_SYSTEM_MESSAGE";
 export const FIND_MATCH = "FIND_MATCH";
-export const BEGIN_MATCH = "BEGIN_MATCH";
+export const PLAYER_READY_TO_BEGIN_MATCH = "PLAYER_READY_TO_BEGIN_MATCH";
 
 export const MAKE_SHOT = "MAKE_SHOT";
 
@@ -46,7 +46,7 @@ export default {
     this._vm.$socket.emit("playerShot", gameData);
   },
 
-  [BEGIN_MATCH](state) {
+  [PLAYER_READY_TO_BEGIN_MATCH](state) {
     const gameData = {
       gameId: state.game.gameId,
       playerId: state.player.id,
@@ -120,6 +120,20 @@ export default {
     };
 
     state.playersOnline = data.playersList;
+  },
+
+  SOCKET_oponentNotReady(state) {
+    state.systemMessage = {
+      text: i18n.t("messages.oponentNotReady"),
+      id: Date.now().toLocaleString(),
+    };
+  },
+
+  SOCKET_notYourTurn(state) {
+    state.systemMessage = {
+      text: i18n.t("messages.notYourTurn"),
+      id: Date.now().toLocaleString(),
+    };
   },
 
   SOCKET_connect() {
