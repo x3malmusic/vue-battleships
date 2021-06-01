@@ -1,33 +1,37 @@
 export default class MatchManager {
-  constructor() {
-    this.readyToPlayList = {};
-    this.gameList = {};
+  constructor(player1, player2) {
+    this[player1.id] = player1;
+    this[player2.id] = player2;
   }
 
-  addPlayerToReadyToPLayList(player) {
-    if (!player.id) return;
-    this.readyToPlayList[player.id] = player;
+  *nextGo() {
+    while(true){
+      yield this[player1.id];
+      yield this[player2.id];
+    }
   }
 
-  deletePlayerFromReadyToPLayList(id) {
-    delete this.readyToPlayList[id];
+  playerSetShips(playerId, shipPositions, shotPositions) {
+    this[playerId].shipPositions = shipPositions;
+    this[playerId].shotPositions = shotPositions;
   }
 
-  findReadyToPlayPlayers(id) {
-    if (Object.keys(this.readyToPlayList).length) {
-      const players = Object.keys(this.readyToPlayList).filter(
-        (playerId) => playerId !== id
-      );
-      const foundPlayer = players.length ? players[0] : false;
-      return this.readyToPlayList[foundPlayer];
-    } else return false;
+  playerShot(oponentId, fieldId, playerId) {
+    if(!!this[oponentId].shipPositions[fieldId - 1].className) {
+      this[oponentId].shipPositions[fieldId - 1].className += " hit";
+      this[playerId].shotPositions[fieldId - 1].className += " hit";
+
+    } else {
+      this[oponentId].shipPositions[fieldId - 1].className += " miss";
+      this[playerId].shotPositions[fieldId - 1].className += "miss";
+    }
   }
 
-  createMatch(player1, player2) {
-    const gameId = Date.now();
-    this.gameList[gameId] = { [player1.id]: player1, [player2.id]: player2 };
-    this.deletePlayerFromReadyToPLayList(player1.id);
-    this.deletePlayerFromReadyToPLayList(player2.id);
-    return { gameId, gameData: this.gameList[gameId] };
+  getPlayerShipPosition(id){
+    return this[id].shipPositions
+  }
+
+  getPlayerShotPosition(id){
+    return this[id].shotPositions
   }
 }

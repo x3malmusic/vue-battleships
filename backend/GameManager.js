@@ -1,7 +1,10 @@
+import MatchManager from "./MatchManager";
+
 export default class GameManager {
   constructor() {
     this.players = [];
-    // this.players = {};
+    this.readyToPlayList = {};
+    this.gameList = {};
   }
 
   playersList() {
@@ -10,17 +13,13 @@ export default class GameManager {
 
   addPlayer(player) {
     this.players.push(player);
-    // this.players[player.id] = player;
   }
 
   removePlayer(id) {
-    // delete this.players[id];
     this.players = this.players.filter((player) => player.id !== id);
   }
 
   addInvitation(request) {
-    // this.players[request.to.id] = [...this.players[request.to.id].to, request.to.id]
-    // this.players[request.from.id] = [...this.players[request.from.id].from, request.from.id]
     this.players = this.players.map((player) => {
       if (player.id === request.to.id)
         return {
@@ -50,5 +49,33 @@ export default class GameManager {
         };
       else return player;
     });
+  }
+
+  addPlayerToReadyToPLayList(player) {
+    if (!player.id) return;
+    this.readyToPlayList[player.id] = player;
+  }
+
+  deletePlayerFromReadyToPLayList(id) {
+    delete this.readyToPlayList[id];
+  }
+
+  findReadyToPlayPlayers(id) {
+    if (Object.keys(this.readyToPlayList).length) {
+      const players = Object.keys(this.readyToPlayList).filter(
+        (playerId) => playerId !== id
+      );
+      const foundPlayer = players.length ? players[0] : false;
+      return this.readyToPlayList[foundPlayer];
+    } else return false;
+  }
+
+  createMatch(player1, player2) {
+    const gameId = Date.now();
+    // this.gameList[gameId] = { [player1.id]: player1, [player2.id]: player2 };
+    this.gameList[gameId] = new MatchManager(player1, player2);
+    this.deletePlayerFromReadyToPLayList(player1.id);
+    this.deletePlayerFromReadyToPLayList(player2.id);
+    return { gameId, gameData: this.gameList[gameId] };
   }
 }

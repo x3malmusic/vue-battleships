@@ -75,12 +75,10 @@ export default {
   },
 
   SOCKET_showPlayerShot(state, board) {
-    console.log("board", board)
     state.ship.playerShips = board;
   },
 
   SOCKET_showMyShot(state, shots) {
-    console.log("shots", shots)
     state.ship.playerShots = shots;
   },
 
