@@ -23,4 +23,17 @@
       margin-left: 1rem;
     }
   }
+
+  .whos-turn {
+    display: flex;
+    align-items: center;
+  }
+
+  .green {
+    color: green;
+  }
+
+  .red {
+    color: red;
+  }
 }

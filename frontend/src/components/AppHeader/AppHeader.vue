@@ -1,6 +1,7 @@
 <template>
   <header class="header">
     <locale-changer />
+    <div class="whos-turn" :class="{ green: whosGo, red: !whosGo }" v-if="game.gameHasBegun">{{ whosGoText }}</div>
     <div class="user-info">
       <span
         >{{ $t("header.welcome") }}: <strong>{{ player.name }}</strong></span
@@ -20,7 +21,17 @@ import AppButton from "../Button/AppButton";
 export default {
   name: "AppHeader",
   computed: {
-    ...mapState(["player"]),
+    ...mapState(["player", "game"]),
+
+    whosGo() {
+      return this.game.whosGo === this.player.id;
+    },
+
+    whosGoText() {
+      const yourTurnMsg = `${this.player.name}${this.$t("messages.turn")}`;
+      const oponentTurnMsg = `${this.game.gameData[this.game.whosGo].name}${this.$t("messages.turn")}`;
+      return this.whosGo ? yourTurnMsg : oponentTurnMsg;
+    }
   },
   components: {
     AppButton,
