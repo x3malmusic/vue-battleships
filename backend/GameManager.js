@@ -72,10 +72,9 @@ export default class GameManager {
 
   createMatch(player1, player2) {
     const gameId = Date.now();
-    // this.gameList[gameId] = { [player1.id]: player1, [player2.id]: player2 };
     this.gameList[gameId] = new MatchManager(player1, player2);
     this.deletePlayerFromReadyToPLayList(player1.id);
     this.deletePlayerFromReadyToPLayList(player2.id);
-    return { gameId, gameData: this.gameList[gameId] };
+    return { gameId, gameData: { [player1.id]: player1, [player2.id]: player2 } };
   }
 }
