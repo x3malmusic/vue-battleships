@@ -46,4 +46,34 @@
       background-color: $color_button;
     }
   }
+
+  &-alive {
+    animation: 3s linear alternate alive;
+  }
+
+  @keyframes alive {
+    0% {
+      transform: scale(1.2);
+    }
+
+    20% {
+      transform: scale(1);
+    }
+
+    40% {
+      transform: scale(1.2);
+    }
+
+    60% {
+      transform: scale(1);
+    }
+
+    80% {
+      transform: scale(1.2);
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
 }
