@@ -11,7 +11,9 @@
     "playerCancelRequest": "has canceled his invitation",
     "canceled": "Canceled",
     "playerAcceptedYourGameRequest": "accepted your invitation",
-    "playerDeclinedYourGameRequest": "declined your invitation"
+    "playerDeclinedYourGameRequest": "declined your invitation",
+    "oponentNotReady": "Your oponent is not ready yet",
+    "notYourTurn": "It's not your turn"
   },
   "main": {
     "login": "Login",

@@ -11,7 +11,9 @@
     "playerCancelRequest": "отменил свое приглашение",
     "canceled": "Отменено",
     "playerAcceptedYourGameRequest": "принял ваше приглашение",
-    "playerDeclinedYourGameRequest": "отклонил ваше приглашение"
+    "playerDeclinedYourGameRequest": "отклонил ваше приглашение",
+    "oponentNotReady": "Второй игрок еще не готов",
+    "notYourTurn": "Сейчас не ваш ход"
   },
   "main": {
     "login": "Войти",
