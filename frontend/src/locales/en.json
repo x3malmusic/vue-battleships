@@ -13,7 +13,8 @@
     "playerAcceptedYourGameRequest": "accepted your invitation",
     "playerDeclinedYourGameRequest": "declined your invitation",
     "oponentNotReady": "Your oponent is not ready yet",
-    "notYourTurn": "It's not your turn"
+    "notYourTurn": "It's not your turn",
+    "turn": "'s turn"
   },
   "main": {
     "login": "Login",

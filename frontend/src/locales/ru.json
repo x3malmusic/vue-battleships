@@ -13,7 +13,8 @@
     "playerAcceptedYourGameRequest": "принял ваше приглашение",
     "playerDeclinedYourGameRequest": "отклонил ваше приглашение",
     "oponentNotReady": "Второй игрок еще не готов",
-    "notYourTurn": "Сейчас не ваш ход"
+    "notYourTurn": "Сейчас не ваш ход",
+    "turn": " ходит"
   },
   "main": {
     "login": "Войти",
