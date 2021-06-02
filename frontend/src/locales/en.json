@@ -15,7 +15,9 @@
     "oponentNotReady": "Your oponent is not ready yet",
     "notYourTurn": "It's not your turn",
     "turn": "'s turn",
-    "cellAlreadyShot": "You've shot this cell already"
+    "cellAlreadyShot": "You've shot this cell already",
+    "youWin": "Congratulations! You've sunk all opponent's ships and won this match!",
+    "youLose": "had sunk all your ships and won this match!"
   },
   "main": {
     "login": "Login",

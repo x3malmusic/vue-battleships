@@ -149,6 +149,19 @@ export default {
     };
   },
 
+  SOCKET_gameOver(state, { winnerId, gameHasBegun }) {
+    const winMessage = i18n.t("messages.youWin");
+    const loseMessage = `${state.game.gameData[winnerId].name} ${i18n.t("messages.youLose")}`;
+
+    const message = state.player.id === winnerId ? winMessage : loseMessage;
+    state.game.gameHasBegun = gameHasBegun;
+
+    state.systemMessage = {
+      text: message,
+      id: Date.now().toLocaleString(),
+    };
+  },
+
   SOCKET_connect() {
     if(router.history.current.path !== '/lobby') router.push('/lobby');
   },

@@ -8,7 +8,7 @@ export default class GameManager {
   }
 
   playersList() {
-    return Object.values(this.players)
+    return Object.values(this.players);
   }
 
   addPlayer(player) {
