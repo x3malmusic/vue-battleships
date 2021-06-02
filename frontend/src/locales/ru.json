@@ -14,7 +14,8 @@
     "playerDeclinedYourGameRequest": "отклонил ваше приглашение",
     "oponentNotReady": "Второй игрок еще не готов",
     "notYourTurn": "Сейчас не ваш ход",
-    "turn": " ходит"
+    "turn": " ходит",
+    "cellAlreadyShot": "Вы уже стреляли в эту клетку"
   },
   "main": {
     "login": "Войти",

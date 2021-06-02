@@ -14,7 +14,8 @@
     "playerDeclinedYourGameRequest": "declined your invitation",
     "oponentNotReady": "Your oponent is not ready yet",
     "notYourTurn": "It's not your turn",
-    "turn": "'s turn"
+    "turn": "'s turn",
+    "cellAlreadyShot": "You've shot this cell already"
   },
   "main": {
     "login": "Login",
