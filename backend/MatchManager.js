@@ -1,3 +1,5 @@
+import { HIT, MISS } from "./constants";
+
 export default class MatchManager {
   constructor(player1, player2) {
     this[player1.id] = player1;
@@ -22,6 +24,11 @@ export default class MatchManager {
     return this.whosGo === playerId
   }
 
+  hasPreviouslyShot(playerId, fieldId) {
+    const regEx = new RegExp(`(${HIT}|${MISS})`, "gi")
+    return this[playerId].shotPositions[fieldId].className.match(regEx);
+  }
+
   playerSetShips(playerId, shipPositions, shotPositions) {
     this[playerId].shipPositions = shipPositions;
     this[playerId].shotPositions = shotPositions;
@@ -31,13 +38,13 @@ export default class MatchManager {
   playerShot(oponentId, fieldId, playerId) {
     this.switchTurn.next();
 
-    if(!!this[oponentId].shipPositions[fieldId - 1].className) {
-      this[oponentId].shipPositions[fieldId - 1].className += " hit";
-      this[playerId].shotPositions[fieldId - 1].className += " hit";
+    if(!!this[oponentId].shipPositions[fieldId].className) {
+      this[oponentId].shipPositions[fieldId].className += ` ${HIT}`;
+      this[playerId].shotPositions[fieldId].className += ` ${HIT}`;
 
     } else {
-      this[oponentId].shipPositions[fieldId - 1].className += " miss";
-      this[playerId].shotPositions[fieldId - 1].className += "miss";
+      this[oponentId].shipPositions[fieldId].className += ` ${MISS}`;
+      this[playerId].shotPositions[fieldId].className += ` ${MISS}`;
     }
 
     return this.whosGo;

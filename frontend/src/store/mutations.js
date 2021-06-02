@@ -40,7 +40,7 @@ export default {
       gameId: this.state.game.gameId,
       oponentId: this.state.game.opponent,
       playerId: this.state.player.id,
-      fieldId
+      fieldId: fieldId - 1,
     }
 
     this._vm.$socket.emit("playerShot", gameData);
@@ -138,6 +138,13 @@ export default {
   SOCKET_notYourTurn(state) {
     state.systemMessage = {
       text: i18n.t("messages.notYourTurn"),
+      id: Date.now().toLocaleString(),
+    };
+  },
+
+  SOCKET_fieldWasAlreadyShot(state) {
+    state.systemMessage = {
+      text: i18n.t("messages.cellAlreadyShot"),
       id: Date.now().toLocaleString(),
     };
   },

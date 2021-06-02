@@ -23,7 +23,7 @@ export default function socketHandler(socket, clients) {
   clients.emit("updatePlayers", game.players)
   socket.emit('initUserId', socket.id);
 
-  // TODO make invitations http requests
+  // TODO make invitations db requests
 
   socket.on("sendInvitation", (request) => {
     game.addInvitation(request);
@@ -77,15 +77,15 @@ export default function socketHandler(socket, clients) {
   socket.on("playerSetShips", ({ gameId, playerId, shipPositions, shotPositions }) => {
     const playersReadyToPlay = game.gameList[gameId].playerSetShips(playerId, shipPositions, shotPositions);
 
-    if (playersReadyToPlay) {
-      clients.to(gameId).emit("playersReadyToPlay", game.gameList[gameId].whosGo)
-    }
+    if (playersReadyToPlay) clients.to(gameId).emit("playersReadyToPlay", game.gameList[gameId].whosGo);
   });
 
   socket.on("playerShot", ({ gameId, playerId, fieldId, oponentId }) => {
     if (!game.gameList[gameId].gameHasBegun) return socket.emit("oponentNotReady");
 
     if (!game.gameList[gameId].isPlayersTurn(playerId)) return socket.emit("notYourTurn");
+
+    if (game.gameList[gameId].hasPreviouslyShot(playerId, fieldId)) return socket.emit("fieldWasAlreadyShot");
 
     const whosGo = game.gameList[gameId].playerShot(oponentId, fieldId, playerId);
 
