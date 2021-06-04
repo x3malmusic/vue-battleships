@@ -18,12 +18,7 @@ connectDB();
 
 app.use(express.json({ extended: true }));
 
-app.use(
-  cors({
-    origin: true,
-    credentials: true,
-  })
-);
+app.use(cors());
 
 app.use('/api/auth', authRoutes);
 app.use(errorHandler);
