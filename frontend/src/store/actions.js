@@ -4,7 +4,7 @@ import { savePlayer, deletePlayer } from "../services/player";
 
 export const LOGIN = 'LOGIN';
 export const REGISTER = 'REGISTER';
-export const LOG_OUT = 'REGISTER';
+export const LOG_OUT = 'LOG_OUT';
 
 export default {
   [LOGIN]: async({ commit, state }, data) => {
@@ -28,7 +28,7 @@ export default {
     }
   },
 
-  [REGISTER]: async(ctx, data) => {
+  [REGISTER]: async({ state, commit }, data) => {
     if(!data.name.trim() || !data.password.trim()) {
       state.systemMessage = {
         text: i18n.t("messages.namePasswordEmpty"),
@@ -39,8 +39,13 @@ export default {
 
     try {
       const player = await register(data)
+      commit('setUser', player)
+      savePlayer(player)
     } catch (e) {
-      console.log(e)
+      state.systemMessage = {
+        text: e.data,
+        id: Date.now().toLocaleString(),
+      };
     }
   },
 
