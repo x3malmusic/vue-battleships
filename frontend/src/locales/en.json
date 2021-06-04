@@ -34,7 +34,8 @@
     "horizontal": "Horizontal",
     "vertical": "Vertical",
     "resetBtn": "Reset",
-    "left": "Left"
+    "left": "Left",
+    "backToLobby": "Back to Lobby"
   },
   "header": {
     "welcome": "Welcome",

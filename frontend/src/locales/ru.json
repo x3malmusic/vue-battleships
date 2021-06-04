@@ -34,7 +34,8 @@
     "horizontal": "По горизонтали",
     "vertical": "По вертикали",
     "resetBtn": "Сброс",
-    "left": "Кол-во"
+    "left": "Кол-во",
+    "backToLobby": "Назад в лобби"
   },
   "header": {
     "welcome": "Привет",
