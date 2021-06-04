@@ -8,6 +8,11 @@ export default class MatchManager {
     this.switchTurn = this.playerTurnSwitch();
     this.whosGo = this.switchTurn.next().value;
     this.gameHasBegun = false;
+    this.gameIsOver = false;
+  }
+
+  gameOver() {
+    this.gameIsOver = true;
   }
 
   *playerTurnSwitch() {
@@ -53,6 +58,8 @@ export default class MatchManager {
   }
 
   playerShot(oponentId, fieldId, playerId) {
+    if (this.gameIsOver) return;
+
     if(!!this[oponentId].shipPositions[fieldId].className) {
       this.changePlayerShipStatus(oponentId, this[oponentId].shipPositions[fieldId].className.trim(), fieldId + 1);
 

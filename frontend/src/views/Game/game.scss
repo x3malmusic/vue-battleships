@@ -3,4 +3,11 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+
+  & .back-btn {
+    position: fixed;
+    left: 16px;
+    top: 86px;
+    font-size: $fs_h2;
+  }
 }

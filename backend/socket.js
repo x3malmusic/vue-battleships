@@ -74,6 +74,12 @@ export default function socketHandler(socket, clients) {
     socket.join(gameId);
   });
 
+  socket.on("disconnectFromGame", (gameId) => {
+    socket.leave(gameId);
+
+    if (!clients.adapter.rooms[gameId]) delete game.gameList[gameId];
+  });
+
   socket.on("playerSetShips", ({ gameId, playerId, shipPositions, shotPositions }) => {
     const playersReadyToPlay = game.gameList[gameId].playerSetShips(playerId, shipPositions, shotPositions);
 
@@ -90,7 +96,8 @@ export default function socketHandler(socket, clients) {
     game.gameList[gameId].playerShot(oponentId, fieldId, playerId);
 
     if (!game.gameList[gameId].playerHasShipsAlive(oponentId)) {
-      clients.to(gameId).emit("gameOver", { winnerId: playerId, gameHasBegun: false })
+      game.gameList[gameId].gameOver();
+      clients.to(gameId).emit("gameOver", { winnerId: playerId, gameHasBegun: false, gameIsOver: true });
     }
 
     const whosGo = game.gameList[gameId].whosGo;

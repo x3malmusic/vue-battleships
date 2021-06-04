@@ -6,6 +6,8 @@ export const FIND_MATCH = "FIND_MATCH";
 export const PLAYER_READY_TO_BEGIN_MATCH = "PLAYER_READY_TO_BEGIN_MATCH";
 
 export const MAKE_SHOT = "MAKE_SHOT";
+export const DISCONNECT_FROM_GAME = "DISCONNECT_FROM_GAME";
+export const RESET_GAMEDATA = "RESET_GAMEDATA";
 
 export default {
   setUser(state, player) {
@@ -57,6 +59,14 @@ export default {
     this._vm.$socket.emit("playerSetShips", gameData);
   },
 
+  [DISCONNECT_FROM_GAME](state) {
+    this._vm.$socket.emit("disconnectFromGame", state.game.gameId);
+  },
+
+  [RESET_GAMEDATA](state) {
+    state.game = {};
+  },
+
   SOCKET_initUserId(state, userId) {
     state.player.id = userId
   },
@@ -85,7 +95,7 @@ export default {
   },
 
   SOCKET_playersReadyToPlay(state, whosGo) {
-    state.game = { ...state.game, whosGo, gameHasBegun: true };
+    state.game = { ...state.game, whosGo, gameHasBegun: true, gameIsOver: false };
   },
 
   SOCKET_updatePlayers(state, players) {
@@ -149,12 +159,14 @@ export default {
     };
   },
 
-  SOCKET_gameOver(state, { winnerId, gameHasBegun }) {
+  SOCKET_gameOver(state, { winnerId, gameHasBegun, gameIsOver }) {
     const winMessage = i18n.t("messages.youWin");
     const loseMessage = `${state.game.gameData[winnerId].name} ${i18n.t("messages.youLose")}`;
 
     const message = state.player.id === winnerId ? winMessage : loseMessage;
+
     state.game.gameHasBegun = gameHasBegun;
+    state.game.gameIsOver = gameIsOver;
 
     state.systemMessage = {
       text: message,
