@@ -65,13 +65,11 @@ export default class MatchManager {
 
       this[oponentId].shipPositions[fieldId].className += ` ${HIT}`;
       this[playerId].shotPositions[fieldId].className += ` ${HIT}`;
-
+      return true;
     } else {
       this[oponentId].shipPositions[fieldId].className += ` ${MISS}`;
       this[playerId].shotPositions[fieldId].className += ` ${MISS}`;
     }
-
-    this.switchTurn.next();
   }
 
   getPlayerShipPosition(id){

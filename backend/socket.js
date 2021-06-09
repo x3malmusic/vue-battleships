@@ -93,14 +93,14 @@ export default function socketHandler(socket, clients) {
 
     if (game.gameList[gameId].hasPreviouslyShot(playerId, fieldId)) return socket.emit("fieldWasAlreadyShot");
 
-    game.gameList[gameId].playerShot(oponentId, fieldId, playerId);
+    const hit = game.gameList[gameId].playerShot(oponentId, fieldId, playerId);
 
     if (!game.gameList[gameId].playerHasShipsAlive(oponentId)) {
       game.gameList[gameId].gameOver();
       clients.to(gameId).emit("gameOver", { winnerId: playerId, gameHasBegun: false, gameIsOver: true });
-    }
+    };
 
-    const whosGo = game.gameList[gameId].whosGo;
+    const whosGo = hit ? game.gameList[gameId].whosGo : game.gameList[gameId].switchTurn.next().value;
 
     socket.to(oponentId).emit("showPlayerShot", { board: game.gameList[gameId].getPlayerShipPosition(oponentId), whosGo });
     socket.emit("showMyShot", { shots: game.gameList[gameId].getPlayerShotPosition(playerId), whosGo });
