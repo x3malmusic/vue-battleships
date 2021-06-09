@@ -95,6 +95,8 @@ export default function socketHandler(socket, clients) {
 
     const shotResult = game.gameList[gameId].playerShot(oponentId, fieldId, playerId);
 
+    if (shotResult) socket.emit("systemMessage", shotResult);
+
     if (!game.gameList[gameId].playerHasShipsAlive(oponentId)) {
       game.gameList[gameId].gameOver();
       clients.to(gameId).emit("gameOver", { winnerId: playerId, gameHasBegun: false, gameIsOver: true });
@@ -104,7 +106,6 @@ export default function socketHandler(socket, clients) {
 
     socket.to(oponentId).emit("showPlayerShot", { board: game.gameList[gameId].getPlayerShipPosition(oponentId), whosGo });
     socket.emit("showMyShot", { shots: game.gameList[gameId].getPlayerShotPosition(playerId), whosGo });
-    if (shotResult) socket.emit("systemMessage", shotResult);
   });
 
   socket.on("disconnect", () => {
