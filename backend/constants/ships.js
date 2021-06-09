@@ -1,0 +1,10 @@
+export const deck_1_0 = "deck-1-0";
+export const deck_1_1 = "deck-1-1";
+export const deck_1_2 = "deck-1-2";
+export const deck_1_3 = "deck-1-3";
+export const deck_2_0 = "deck-2-0";
+export const deck_2_1 = "deck-2-1";
+export const deck_2_2 = "deck-2-2";
+export const deck_3_0 = "deck-3-0";
+export const deck_3_1 = "deck-3-1";
+export const deck_4_0 = "deck-4-0";

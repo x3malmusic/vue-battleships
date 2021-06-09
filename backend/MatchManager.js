@@ -1,4 +1,4 @@
-import { HIT, MISS, shipsLeftTemplate } from "./constants";
+import { HIT, MISS, SUNK, shipsLeftTemplate } from "./constants";
 
 export default class MatchManager {
   constructor(player1, player2) {
@@ -39,7 +39,9 @@ export default class MatchManager {
   }
 
   changePlayerShipStatus(playerId, shipName, cellId) {
-    this[playerId].shipsLeft[shipName] = this[playerId].shipsLeft[shipName].filter(pos => pos !== cellId);
+    const filterdPositions = this[playerId].shipsLeft[shipName].filter(pos => pos !== cellId)
+    this[playerId].shipsLeft[shipName] = filterdPositions;
+    return filterdPositions.length;
   }
 
   playerSetShips(playerId, shipPositions, shotPositions) {
@@ -61,11 +63,12 @@ export default class MatchManager {
     if (this.gameIsOver) return;
 
     if(!!this[oponentId].shipPositions[fieldId].className) {
-      this.changePlayerShipStatus(oponentId, this[oponentId].shipPositions[fieldId].className.trim(), fieldId + 1);
+      const shipName = this[oponentId].shipPositions[fieldId].className.trim();
+      const enemyShipStatus = this.changePlayerShipStatus(oponentId, shipName, fieldId + 1);
 
       this[oponentId].shipPositions[fieldId].className += ` ${HIT}`;
       this[playerId].shotPositions[fieldId].className += ` ${HIT}`;
-      return true;
+      return enemyShipStatus !== 0 ? HIT : SUNK;
     } else {
       this[oponentId].shipPositions[fieldId].className += ` ${MISS}`;
       this[playerId].shotPositions[fieldId].className += ` ${MISS}`;

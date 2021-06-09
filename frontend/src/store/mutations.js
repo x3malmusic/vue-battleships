@@ -89,6 +89,13 @@ export default {
     state.game.whosGo = whosGo;
   },
 
+  SOCKET_enemyShipStatus(state, enemyShip) {
+    state.systemMessage = {
+      text: enemyShip,
+      id: Date.now().toLocaleString(),
+    };
+  },
+
   SOCKET_showMyShot(state, { shots, whosGo }) {
     state.ship.playerShots = shots;
     state.game.whosGo = whosGo;
@@ -138,23 +145,9 @@ export default {
     state.playersOnline = data.playersList;
   },
 
-  SOCKET_oponentNotReady(state) {
+  SOCKET_systemMessage(state, messageType) {
     state.systemMessage = {
-      text: i18n.t("messages.oponentNotReady"),
-      id: Date.now().toLocaleString(),
-    };
-  },
-
-  SOCKET_notYourTurn(state) {
-    state.systemMessage = {
-      text: i18n.t("messages.notYourTurn"),
-      id: Date.now().toLocaleString(),
-    };
-  },
-
-  SOCKET_fieldWasAlreadyShot(state) {
-    state.systemMessage = {
-      text: i18n.t("messages.cellAlreadyShot"),
+      text: i18n.t(`messages.${messageType}`),
       id: Date.now().toLocaleString(),
     };
   },

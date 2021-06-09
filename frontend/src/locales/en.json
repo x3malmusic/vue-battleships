@@ -17,7 +17,9 @@
     "turn": "'s turn",
     "cellAlreadyShot": "You've shot this cell already",
     "youWin": "Congratulations! You've sunk all opponent's ships and won this match!",
-    "youLose": "had sunk all your ships and won this match!"
+    "youLose": "had sunk all your ships and won this match!",
+    "hit": "hit",
+    "sunk": "sunk"
   },
   "main": {
     "login": "Login",

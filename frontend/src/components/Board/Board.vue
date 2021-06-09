@@ -137,7 +137,7 @@ export default {
       this.drawShip(
         this.possibleShip,
         this.horizontal,
-        ` ${this.currentShip.name}`
+        `${this.currentShip.name}-${this.currentShip.count}`
       );
 
       if (this.currentShip.count === 0 && this.getNextShip) {
