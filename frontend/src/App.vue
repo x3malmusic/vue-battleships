@@ -20,6 +20,7 @@ export default {
   methods: {
     connectToApp() {
       if(this.player.name) {
+        this.$socket.io.opts.query = { auth: JSON.stringify(this.player) };
         this.$socket.connect();
       }
     },

@@ -19,7 +19,7 @@ Vue.mixin(systemMessage);
 Vue.use(
   new VueSocketIO({
     debug: false,
-    connection: SocketIO(process.env.VUE_APP_URL, { autoConnect: false, query: { auth: JSON.stringify(store.state.player) }}),
+    connection: SocketIO(process.env.VUE_APP_URL, { autoConnect: false }),
     vuex: {
       store,
       actionPrefix: "SOCKET_",
