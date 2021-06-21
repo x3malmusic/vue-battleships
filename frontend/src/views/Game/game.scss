@@ -10,4 +10,19 @@
     top: 86px;
     font-size: $fs_h2;
   }
+
+  @media screen and (max-width: $md) {
+    flex-direction: column;
+
+    & .back-btn {
+      z-index: 100;
+      position: fixed;
+      top: initial;
+      left: initial;
+      right: 8px;
+      bottom: 8px;
+      font-size: $fs_small;
+      padding: 8px 10px;
+    }
+  }
 }

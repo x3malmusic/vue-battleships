@@ -101,4 +101,29 @@
       background: $color_board_cell_hover;
     }
   }
+
+  @media screen and (max-width: $md) {
+    flex-direction: column;
+
+    .battleship-grid {
+      grid-template-rows: repeat(10, $cell_size_mobile);
+      grid-template-columns: repeat(10, $cell_size_mobile);
+
+      &.enemy div {
+        &:not(.hit):not(.miss):hover::after {
+          width: $dot_size_mobile;
+          height: $dot_size_mobile;
+        }
+      }
+
+      .hit,
+      .miss {
+        &:after,
+        &:before {
+          width: $dot_size_mobile;
+          height: $dot_size_mobile;
+        }
+      }
+    }
+  }
 }

@@ -2,6 +2,8 @@
   padding: 10px;
   box-sizing: border-box;
   display: flex;
+  align-items: center;
+  gap: 8px;
   justify-content: space-between;
   border-bottom: 1px solid #c7d1e2;
   box-shadow: 1px 1px 10px #7b7b7b;
@@ -18,15 +20,20 @@
       margin-left: 10px;
     }
 
-    button {
+    .locale-changer-wrapper button {
       font-size: $fs_h2;
-      margin-left: 1rem;
+      margin-left: 8px;
+    }
+
+    .btn {
+      margin-left: 8px;
     }
   }
 
   .whos-turn {
     display: flex;
     align-items: center;
+    text-align: center;
   }
 
   .green {
@@ -35,5 +42,18 @@
 
   .red {
     color: red;
+  }
+
+  @media screen and (max-width: $md) {
+    font-size: $fs_xs_small;
+
+    .btn {
+      font-size: $fs_xs_small;
+      padding: 5px 10px;
+    }
+
+    .user-img-circle {
+      display: none;
+    }
   }
 }

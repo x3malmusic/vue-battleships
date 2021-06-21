@@ -65,4 +65,38 @@
     }
   }
 
+  @media screen and (max-width: $md) {
+    padding: 8px;
+    font-size: $fs_xs_small;
+
+    .btn {
+      font-size: $fs_xs_small;
+      padding: 5px 10px;
+    }
+
+    button {
+      margin-bottom: 8px;
+      margin-right: 8px;
+      font-size: $fs_h2;
+    }
+
+    &-wrapper {
+      &-left {
+        flex-basis: 4rem;
+      }
+
+      .cell {
+        width: $cell_size_mobile;
+        height: $cell_size_mobile;
+      }
+
+      .ship-wrapper {
+        margin-bottom: 8px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
 }

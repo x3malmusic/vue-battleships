@@ -1,6 +1,6 @@
 <template>
   <div class="lobby">
-    <div>
+    <div class="list-block">
       <div class="list-header">statistics</div>
       <ul class="players-online-list">
         <li
@@ -15,7 +15,7 @@
     <app-button @click="findMatch" :disabled="isLookingForMatch">
       Find match
     </app-button>
-    <div>
+    <div class="list-block">
       <div class="list-header">
         players online
       </div>

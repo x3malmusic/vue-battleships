@@ -16,6 +16,16 @@
     color: #fff;
     margin-bottom: 1rem;
   }
+
+  @media screen and (max-width: $md) {
+    top: 8px;
+    right: 8px;
+    font-size: $fs_small;
+
+    &-content {
+      padding: 8px;
+    }
+  }
 }
 
 .notification-animation {

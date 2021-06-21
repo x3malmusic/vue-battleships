@@ -1,11 +1,12 @@
 <template>
   <header class="header">
     <locale-changer />
-    <div class="whos-turn" :class="{ green: whosGo, red: !whosGo }" v-if="game.gameHasBegun">{{ whosGoText }}</div>
+    <span class="whos-turn" :class="{ green: whosGo, red: !whosGo }" v-if="game.gameHasBegun">{{ whosGoText }}</span>
     <div class="user-info">
       <span
-        >{{ $t("header.welcome") }}: <strong>{{ player.name }}</strong></span
+        >{{ $t("header.welcome") }}:&nbsp;</span
       >
+      <span><strong>{{ player.name }}</strong></span>
       <span class="user-img-circle"></span>
       <app-button @click="logout">{{ $t("header.logOut") }}</app-button>
     </div>
