@@ -2,7 +2,7 @@ import MatchManager from "./MatchManager";
 
 export default class GameManager {
   constructor() {
-    this.players = [];
+    this.players = {};
     this.readyToPlayList = {};
     this.gameList = {};
   }
@@ -12,43 +12,21 @@ export default class GameManager {
   }
 
   addPlayer(player) {
-    this.players.push(player);
+    this.players[player.id] = player;
   }
 
   removePlayer(id) {
-    this.players = this.players.filter((player) => player.id !== id);
+    delete this.players[id];
   }
 
   addInvitation(request) {
-    this.players = this.players.map((player) => {
-      if (player.id === request.to.id)
-        return {
-          ...player,
-          from: [...player.from, request.from.id],
-        };
-      else if (player.id === request.from.id)
-        return {
-          ...player,
-          to: [...player.to, request.to.id],
-        };
-      else return player;
-    });
+    this.players[request.to.id].from.push(request.from.id);
+    this.players[request.from.id].to.push(request.to.id);
   }
 
   removeInvitation(request) {
-    this.players = this.players.map((player) => {
-      if (player.id === request.to.id)
-        return {
-          ...player,
-          from: player.from.filter((id) => id !== request.from.id),
-        };
-      else if (player.id === request.from.id)
-        return {
-          ...player,
-          to: player.to.filter((id) => id !== request.to.id),
-        };
-      else return player;
-    });
+    this.players[request.from.id].to = this.players[request.from.id].to.filter((id) => id !== request.to.id);
+    this.players[request.to.id].from = this.players[request.to.id].from.filter((id) => id !== request.from.id);
   }
 
   addPlayerToReadyToPLayList(player) {

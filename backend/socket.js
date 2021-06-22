@@ -16,46 +16,54 @@ const reverseRequest = (request) => ({
 
 export default function socketHandler(socket, clients) {
 
-  const player = JSON.parse(socket.handshake.query.auth)
+  const player = JSON.parse(socket.handshake.query.auth);
   const user = createPlayer(player.name, socket.id, [], []);
   game.addPlayer(user);
 
-  clients.emit("updatePlayers", game.players)
+  clients.emit("updatePlayers", game.playersList());
   socket.emit('initUserId', socket.id);
 
-  // TODO make invitations db requests
 
   socket.on("sendInvitation", (request) => {
     game.addInvitation(request);
     socket.to(request.to.id).emit("gameRequest", request.from);
-    clients.emit("updatePlayers", game.players)
+
+    const playersList = game.playersList();
+    socket.to(request.to.id).emit("updatePlayers", playersList);
+    socket.emit("updatePlayers", playersList);
   });
 
   socket.on("cancelInvitation", (request) => {
     game.removeInvitation(request);
     socket.to(request.to.id).emit("gameRequestCanceled", {
       from: request.from,
-      playersList: game.players,
     });
-    clients.emit("updatePlayers", game.players)
+
+    const playersList = game.playersList();
+    socket.to(request.to.id).emit("updatePlayers", playersList);
+    socket.emit("updatePlayers", playersList);
   });
 
   socket.on("acceptGameRequest", (request) => {
     game.removeInvitation(reverseRequest(request));
     socket.to(request.to.id).emit("gameRequestAccepted", {
       from: request.from,
-      playersList: game.players,
     });
-    clients.emit("updatePlayers", game.players)
+
+    const playersList = game.playersList();
+    socket.to(request.to.id).emit("updatePlayers", playersList);
+    socket.emit("updatePlayers", playersList);
   });
 
   socket.on("declineGameRequest", (request) => {
     game.removeInvitation(reverseRequest(request));
     socket.to(request.to.id).emit("gameRequestDeclined", {
       from: request.from,
-      playersList: game.players,
     });
-    clients.emit("updatePlayers", game.players)
+
+    const playersList = game.playersList();
+    socket.to(request.to.id).emit("updatePlayers", playersList);
+    socket.emit("updatePlayers", playersList);
   });
 
   socket.on("findMatch", (player) => {
@@ -111,6 +119,6 @@ export default function socketHandler(socket, clients) {
   socket.on("disconnect", () => {
     game.removePlayer(socket.id);
     game.deletePlayerFromReadyToPLayList(socket.id);
-    socket.broadcast.emit("updatePlayers", game.players);
+    socket.broadcast.emit("updatePlayers", game.playersList());
   });
 }

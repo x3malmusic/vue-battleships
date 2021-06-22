@@ -121,8 +121,6 @@ export default {
       text: data.from.name + " " + i18n.t("messages.playerCancelRequest"),
       id: Date.now().toLocaleString(),
     };
-
-    state.playersOnline = data.playersList;
   },
 
   SOCKET_gameRequestAccepted(state, data) {
@@ -131,8 +129,6 @@ export default {
         data.from.name + " " + i18n.t("messages.playerAcceptedYourGameRequest"),
       id: Date.now().toLocaleString(),
     };
-
-    state.playersOnline = data.playersList;
   },
 
   SOCKET_gameRequestDeclined(state, data) {
@@ -141,8 +137,6 @@ export default {
         data.from.name + " " + i18n.t("messages.playerDeclinedYourGameRequest"),
       id: Date.now().toLocaleString(),
     };
-
-    state.playersOnline = data.playersList;
   },
 
   SOCKET_systemMessage(state, messageType) {
