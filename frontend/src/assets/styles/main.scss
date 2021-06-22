@@ -18,7 +18,3 @@ h1 {
   letter-spacing: 8px;
   @include adaptive-font($fs_h1, $fs_h1_mob);
 }
-
-button {
-  @include adaptive-font($fs_button, $fs_button_mob);
-}

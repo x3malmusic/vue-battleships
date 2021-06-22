@@ -24,6 +24,11 @@
     background-color: #757c8d;
     border-radius: 4px;
     overflow-y: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     &-item {
       display: flex;
@@ -43,11 +48,15 @@
 
       .inviteButtons {
         display: flex;
-        gap: 10px;
         height: auto;
+
         .btn {
           padding: 5px 10px;
           font-size: $fs_small;
+
+          &:last-child {
+            margin-left: 8px;
+          }
         }
       }
 
@@ -69,7 +78,7 @@
       width: 100%;
       font-size: $fs_main;
       order: -1;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
       margin-top: 8px;
     }
 

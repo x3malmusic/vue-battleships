@@ -14,14 +14,14 @@
   }
 
   &-control:focus {
-    border: 1px solid #ccc;
+    box-shadow: 0 0 0 1px #ccc;
   }
 
   &-txt {
     position: absolute;
     top: 8px;
     left: 10px;
-    font-size: 20px;
+    font-size: $fs_main;
     color: #7b7b7b;
     transition: all .3s ease-out;
     pointer-events: none;

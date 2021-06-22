@@ -26,6 +26,7 @@
     }
 
     .btn {
+      font-size: $fs_main;
       margin-left: 8px;
     }
   }
@@ -47,10 +48,13 @@
   @media screen and (max-width: $md) {
     font-size: $fs_xs_small;
 
-    .btn {
-      font-size: $fs_xs_small;
-      padding: 5px 10px;
+    .user-info {
+      .btn {
+        font-size: $fs_xs_small;
+        padding: 5px 10px;
+      }
     }
+
 
     .user-img-circle {
       display: none;
