@@ -53,6 +53,15 @@ export default function socketHandler(socket, clients) {
     const playersList = game.playersList();
     socket.to(request.to.id).emit("updatePlayers", playersList);
     socket.emit("updatePlayers", playersList);
+
+    const player1 = game.getPlayerById(request.from.id);
+    const player2 = game.getPlayerById(request.to.id);
+
+    const gameData = game.createMatch(player1, player2);
+    socket.emit("matchCreated", { gameData, foundPlayer: player2 });
+    socket
+      .to(player2.id)
+      .emit("matchCreated", { gameData, foundPlayer: player1 });
   });
 
   socket.on("declineGameRequest", (request) => {

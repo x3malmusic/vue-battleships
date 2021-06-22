@@ -7,6 +7,10 @@ export default class GameManager {
     this.gameList = {};
   }
 
+  getPlayerById(id) {
+    return this.players[id];
+  }
+
   playersList() {
     return Object.values(this.players);
   }
