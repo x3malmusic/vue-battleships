@@ -15,6 +15,10 @@ export default class MatchManager {
     this.gameIsOver = true;
   }
 
+  getSecondPlayer(playerId) {
+    return this.ids.filter(id => id !== playerId)[0];
+  }
+
   *playerTurnSwitch() {
     let i = 0;
 

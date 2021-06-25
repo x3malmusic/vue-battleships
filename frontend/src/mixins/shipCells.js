@@ -9,7 +9,7 @@ export default {
       rest.forEach((c) => {
         const condition = this.$_conditions(atLeftEdge, c);
         if (c <= 0 || condition || c > 100) return;
-        else newOccupiedCells.push(c);
+        newOccupiedCells.push(c);
       });
 
       return newOccupiedCells;

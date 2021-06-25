@@ -78,9 +78,8 @@ export default {
       text: `${foundPlayer.name} is your next enemy!`,
       id: Date.now().toLocaleString(),
     };
-    this._vm.$socket.emit('connectToMatch', gameData.gameId)
-
-    state.game = { ...gameData, opponent: foundPlayer.id };
+    this._vm.$socket.emit('connectToMatch', gameData.gameId);
+    state.game = { ...gameData, opponent: foundPlayer.id, gameHasBegun: false, gameIsOver: false };
     router.push('/game');
   },
 
@@ -155,10 +154,12 @@ export default {
     state.game.gameHasBegun = gameHasBegun;
     state.game.gameIsOver = gameIsOver;
 
-    state.systemMessage = {
-      text: message,
-      id: Date.now().toLocaleString(),
-    };
+    state.systemMessage = { text: message, id: Date.now().toLocaleString() };
+  },
+
+  SOCKET_gameOverByDisconnect(state, { gameHasBegun, gameIsOver }) {
+    state.game.gameHasBegun = gameHasBegun;
+    state.game.gameIsOver = gameIsOver;
   },
 
   SOCKET_connect() {
@@ -166,10 +167,10 @@ export default {
   },
 
   SOCKET_ERROR(state, error) {
-    state.systemMessage = {text: error, id: Date.now().toLocaleString()};
+    state.systemMessage = { text: error, id: Date.now().toLocaleString() };
   },
 
   SOCKET_error(state, error) {
-    state.systemMessage = {text: error, id: Date.now().toLocaleString()};
+    state.systemMessage = { text: error, id: Date.now().toLocaleString() };
   },
 };

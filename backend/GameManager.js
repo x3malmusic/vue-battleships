@@ -7,6 +7,10 @@ export default class GameManager {
     this.gameList = {};
   }
 
+  isPlayerInGame(id) {
+    return !!this.players[id].gameId;
+  }
+
   getPlayerById(id) {
     return this.players[id];
   }
@@ -55,8 +59,14 @@ export default class GameManager {
   createMatch(player1, player2) {
     const gameId = Date.now();
     this.gameList[gameId] = new MatchManager(player1, player2);
+
+    this.players[player1.id].gameId = gameId;
+    this.players[player2.id].gameId = gameId;
+
     this.deletePlayerFromReadyToPLayList(player1.id);
     this.deletePlayerFromReadyToPLayList(player2.id);
+
+
     return { gameId, gameData: { [player1.id]: player1, [player2.id]: player2 } };
   }
 }

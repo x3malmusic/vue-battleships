@@ -2,11 +2,12 @@ import GameManager from "./GameManager";
 
 const game = new GameManager();
 
-const createPlayer = (name, id, from, to) => ({
+const createPlayer = (name, id) => ({
   name,
   id,
-  from,
-  to,
+  from: [],
+  to: [],
+  gameId: "",
 });
 
 const reverseRequest = (request) => ({
@@ -17,7 +18,7 @@ const reverseRequest = (request) => ({
 export default function socketHandler(socket, clients) {
 
   const player = JSON.parse(socket.handshake.query.auth);
-  const user = createPlayer(player.name, socket.id, [], []);
+  const user = createPlayer(player.name, socket.id);
   game.addPlayer(user);
 
   clients.emit("updatePlayers", game.playersList());
@@ -93,6 +94,7 @@ export default function socketHandler(socket, clients) {
 
   socket.on("disconnectFromGame", (gameId) => {
     socket.leave(gameId);
+    game.players[socket.id].gameId = "";
 
     if (!clients.adapter.rooms[gameId]) delete game.gameList[gameId];
   });
@@ -126,8 +128,21 @@ export default function socketHandler(socket, clients) {
   });
 
   socket.on("disconnect", () => {
+    if (game.isPlayerInGame(socket.id)) {
+      const gameId = game.players[socket.id].gameId;
+      game.gameList[gameId].gameOver();
+
+      const secondPlayerId = game.gameList[gameId].getSecondPlayer(socket.id);
+      socket.to(secondPlayerId).emit("systemMessage", "winByDisconnect");
+      socket.to(secondPlayerId).emit("gameOverByDisconnect", { gameHasBegun: false, gameIsOver: true });
+
+      socket.leave(gameId);
+      if (!clients.adapter.rooms[gameId]) delete game.gameList[gameId];
+    }
+
     game.removePlayer(socket.id);
     game.deletePlayerFromReadyToPLayList(socket.id);
+
     socket.broadcast.emit("updatePlayers", game.playersList());
   });
 }

@@ -19,7 +19,8 @@
     "youWin": "Congratulations! You've sunk all opponent's ships and won this match!",
     "youLose": "had sunk all your ships and won this match!",
     "hit": "hit",
-    "sunk": "sunk"
+    "sunk": "sunk",
+    "winByDisconnect": "You won the game due to opponent was disconnected from server"
   },
   "main": {
     "login": "Login",
