@@ -4,7 +4,7 @@
       <div
         v-for="cell in playerShips"
         :id="cell.id"
-        :class="cell.className"
+        :class="{[cell.className]: cell.className, occupied: showOccupied(cell.id)}"
         @mouseover="canPlaceShip"
         @mouseleave="deletePossibleShip"
         @click="placeShip"
@@ -60,6 +60,10 @@ export default {
         return;
       }
       this.$store.commit(MAKE_SHOT, e.target.id)
+    },
+
+    showOccupied(id) {
+      return !!this.occupiedCells.find(cell => cell === id);
     },
 
     drawPossibleShip(shipPosition, shipSize, horizontal) {

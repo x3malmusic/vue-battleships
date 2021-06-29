@@ -13,8 +13,12 @@
       position: relative;
     }
 
+    .occupied {
+      background: $color_cell_occupied;
+    }
+
     &.user div {
-      &:not(.deck-4-0):not(.deck-3-1):not(.deck-3-0):not(.deck-2-2):not(.deck-2-1):not(.deck-2-0):not(.deck-1-3):not(.deck-1-2):not(.deck-1-1):not(.deck-1-0):hover {
+      &:not(.deck-4-0):not(.deck-3-1):not(.deck-3-0):not(.deck-2-2):not(.deck-2-1):not(.deck-2-0):not(.deck-1-3):not(.deck-1-2):not(.deck-1-1):not(.deck-1-0):not(.occupied):hover {
         cursor: pointer;
       }
 
@@ -71,22 +75,22 @@
 
     .miss {
       &:after {
-        background-color: white;
+        background-color: $color_cell_miss;
       }
 
       &:before {
-        border-color: white;
+        border-color: $color_cell_miss;
       }
     }
 
     .hit {
-        background: gray;
+        background: $color_cell;
       &:after {
-        background-color: red;
+        background-color: $color_cell_hit;
       }
 
       &:before {
-        border-color: red;
+        border-color: $color_cell_hit;
       }
     }
 
@@ -94,7 +98,7 @@
     .deck-2-2, .deck-2-1, .deck-2-0,
     .deck-3-1, .deck-3-0,
     .deck-4-0 {
-      background: gray;
+      background: $color_cell;
     }
 
     .possible-ship {
