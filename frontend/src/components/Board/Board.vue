@@ -113,7 +113,7 @@ export default {
       });
 
       if (className !== this.POSSIBLE_SHIP_CLASS_NAME) {
-        const occupiedCells = [...this.$_occupyCells(ship)];
+        const occupiedCells = this.$_occupyCells(ship, horizontal);
         this.$store.commit(SET_OCCUPIED_CELLS, occupiedCells);
       }
     },
