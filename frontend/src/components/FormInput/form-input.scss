@@ -14,7 +14,7 @@
   }
 
   &-control:focus {
-    box-shadow: 0 0 0 1px #ccc;
+    @include outline-focus(#ccc);
   }
 
   &-txt {

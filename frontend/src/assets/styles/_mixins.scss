@@ -9,3 +9,7 @@
     font-size: calc(#{$mobSize + px} + #{$addSize} * (100vw / #{$maxWidth}));
   }
 }
+
+@mixin outline-focus($color) {
+  box-shadow: 0 0 0 1px $color;
+}
