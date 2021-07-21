@@ -43,5 +43,11 @@
   "header": {
     "welcome": "Welcome",
     "logOut": "Log Out"
+  },
+  "profile": {
+    "name": "player name",
+    "avatar": "upload an avatar",
+    "file": "choose file",
+    "upload": "upload"
   }
 }
