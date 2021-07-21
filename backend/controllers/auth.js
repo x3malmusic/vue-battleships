@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
+import { asyncHandler } from "../middlewares/async";
 import {
   USER_NOT_FOUND,
   USER_EXIST,
@@ -8,7 +9,7 @@ import {
   NAME_PASSWORD_EMPTY,
 } from "../helpers/errorTypes";
 
-export const register = async (req, res, next) => {
+export const register = asyncHandler(async (req, res, next) => {
   const { name, password } = req.body;
   if(!name.trim() || !password.trim()) {
     return next(NAME_PASSWORD_EMPTY);
@@ -27,9 +28,9 @@ export const register = async (req, res, next) => {
     expiresIn: "24h",
   });
   res.send({ userId: user.id, name: user.name, token });
-};
+});
 
-export const login = async (req, res, next) => {
+export const login = asyncHandler( async (req, res, next) => {
   const { name, password } = req.body;
 
   if (!name.trim() || !password.trim()) {
@@ -54,4 +55,4 @@ export const login = async (req, res, next) => {
     }
   );
   res.send({ userId: user.id, name: user.name, token });
-};
+});

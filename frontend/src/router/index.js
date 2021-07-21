@@ -29,6 +29,14 @@ const routes = [
     },
   },
   {
+    path: "/profile",
+    name: "Profile",
+    component: () => import("../views/Profile/Profile.vue"),
+    meta: {
+      header: true,
+    },
+  },
+  {
     path: "/",
     name: "Main",
     component: () => import("../views/Main/Main.vue"),

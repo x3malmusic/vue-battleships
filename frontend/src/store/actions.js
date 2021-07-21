@@ -1,10 +1,11 @@
 import i18n from "../i18n";
-import { login, register } from "../services/http";
+import { login, register, uploadAvatar } from "../services/http";
 import { savePlayer, deletePlayer } from "../services/player";
 
 export const LOGIN = 'LOGIN';
 export const REGISTER = 'REGISTER';
 export const LOG_OUT = 'LOG_OUT';
+export const UPLOAD_AVATAR = 'UPLOAD_AVATAR';
 
 export default {
   [LOGIN]: async({ commit, state }, data) => {
@@ -52,5 +53,22 @@ export default {
   [LOG_OUT]({ commit }) {
     deletePlayer();
     commit('setUser', {});
+  },
+
+  [UPLOAD_AVATAR]: async ({ state, commit }, avatar) => {
+    const data = new FormData();
+    await data.append('image', avatar);
+
+    console.log(data)
+    try {
+      const img = await uploadAvatar(data);
+      // URL.createObjectURL(img)
+      console.log(img)
+    } catch (e) {
+      state.systemMessage = {
+        text: e.data,
+        id: Date.now().toLocaleString(),
+      };
+    }
   },
 }
