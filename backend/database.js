@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+const { createModel } = require('mongoose-gridfs');
+
+export let Avatar;
 
 export const connectDB = async () => {
   try {
@@ -8,6 +11,12 @@ export const connectDB = async () => {
       useFindAndModify: false,
       useUnifiedTopology: true,
     });
+
+    Avatar = createModel({
+      modelName: 'Avatar',
+      connection: conn.connection
+    });
+
     console.log(`connected: ${conn.connection.host}`);
   } catch (e) {
     console.log(e);
