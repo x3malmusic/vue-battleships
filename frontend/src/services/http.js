@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getPlayer } from "./player";
 
 const http = axios.create({
   baseURL: process.env.VUE_APP_URL,
@@ -9,6 +10,12 @@ http.interceptors.response.use(
   (res) => res.data,
   (err) => Promise.reject(err.response)
 );
+
+http.interceptors.request.use((config) => {
+    config.headers.authorization = `Bearer ${getPlayer().token}`
+    return config
+  }
+)
 
 export const login = (creds) => http.post('/api/auth/login', {name: creds.name, password: creds.password})
 
