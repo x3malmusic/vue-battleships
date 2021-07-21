@@ -6,7 +6,7 @@
       <span
         >{{ $t("header.welcome") }}:&nbsp;</span
       >
-      <span><strong>{{ player.name }}</strong></span>
+      <span class="cursor" @click="$router.push('/profile')"><strong>{{ player.name }}</strong></span>
       <span class="user-img-circle"></span>
       <app-button @click="logout">{{ $t("header.logOut") }}</app-button>
     </div>

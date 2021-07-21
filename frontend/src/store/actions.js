@@ -59,11 +59,13 @@ export default {
     const data = new FormData();
     await data.append('image', avatar);
 
-    console.log(data)
     try {
-      const img = await uploadAvatar(data);
-      // URL.createObjectURL(img)
-      console.log(img)
+      state.player.avatar = await uploadAvatar(data);
+
+      state.systemMessage = {
+        text: i18n.t("profile.uploadSuccess"),
+        id: Date.now().toLocaleString(),
+      };
     } catch (e) {
       state.systemMessage = {
         text: e.data,

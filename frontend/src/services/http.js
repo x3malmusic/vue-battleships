@@ -12,14 +12,14 @@ http.interceptors.response.use(
 );
 
 http.interceptors.request.use((config) => {
-    config.headers.authorization = `Bearer ${getPlayer().token}`
+    config.headers.authorization = `Bearer ${getPlayer()?.token}`
     return config
   }
-)
+);
 
-export const login = (creds) => http.post('/api/auth/login', {name: creds.name, password: creds.password})
+export const login = (creds) => http.post('/api/auth/login', { name: creds.name, password: creds.password })
 
-export const register = (creds) => http.post('/api/auth/register', {name: creds.name, password: creds.password})
+export const register = (creds) => http.post('/api/auth/register', { name: creds.name, password: creds.password })
 
-export const uploadAvatar = (img) => http.post('/api/upload/avatar', img, { headers: { "Content-Type": "multipart/form-data" }})
+export const uploadAvatar = (img) => http.post('/api/avatar/upload', img, { headers: { "Content-Type": "multipart/form-data" }})
 

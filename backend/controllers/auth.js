@@ -27,7 +27,7 @@ export const register = asyncHandler(async (req, res, next) => {
   const token = jwt.sign({ userId: user.id, name }, process.env.JWT_SECRET, {
     expiresIn: "24h",
   });
-  res.send({ userId: user.id, name: user.name, token });
+  res.send({ userId: user.id, name: user.name, avatar: user.avatar, token });
 });
 
 export const login = asyncHandler( async (req, res, next) => {
@@ -54,5 +54,5 @@ export const login = asyncHandler( async (req, res, next) => {
       expiresIn: "24h",
     }
   );
-  res.send({ userId: user.id, name: user.name, token });
+  res.send({ userId: user.id, name: user.name, avatar: user.avatar, token });
 });

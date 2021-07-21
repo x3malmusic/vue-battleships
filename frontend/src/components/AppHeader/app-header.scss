@@ -45,6 +45,10 @@
     color: red;
   }
 
+  .cursor {
+    cursor: pointer;
+  }
+
   @media screen and (max-width: $md) {
     font-size: $fs_xs_small;
 

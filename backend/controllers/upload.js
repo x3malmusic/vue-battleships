@@ -13,7 +13,7 @@ export const uploadAvatar = asyncHandler( async (req, res, next) => {
   const data = await sharp(image.data).resize(20).png({ compressionLevel: 3 }).toBuffer()
   const img = Buffer.from(data).toString('base64');
 
-  const options = ({ filename: image.name, contentType: image.mimetype });
+  const options = ({ filename: 'img.png', contentType: 'image/png' });
   const stream = Readable.from(img);
 
   Avatar.write(options, stream, async (err, file) => {
@@ -24,6 +24,6 @@ export const uploadAvatar = asyncHandler( async (req, res, next) => {
     user.avatar = file._id;
     await user.save();
 
-    res.send(img)
+    res.json(file._id);
   });
 });
