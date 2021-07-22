@@ -3,11 +3,14 @@
     <locale-changer />
     <span class="whos-turn" :class="{ green: whosGo, red: !whosGo }" v-if="game.gameHasBegun">{{ whosGoText }}</span>
     <div class="user-info">
-      <span
-        >{{ $t("header.welcome") }}:&nbsp;</span
-      >
+      <span>{{ $t("header.welcome") }}:&nbsp;</span>
       <span class="cursor" @click="$router.push('/profile')"><strong>{{ player.name }}</strong></span>
-      <span class="user-img-circle"></span>
+
+      <div class="avatar-container">
+        <img v-if="player.avatar" :src="avatarPath" alt="img">
+        <span v-else class="user-img-circle"></span>
+      </div>
+
       <app-button @click="logout">{{ $t("header.logOut") }}</app-button>
     </div>
   </header>
@@ -32,6 +35,10 @@ export default {
       const yourTurnMsg = `${this.player.name}${this.$t("messages.turn")}`;
       const oponentTurnMsg = `${this.game.gameData[this.game.whosGo].name}${this.$t("messages.turn")}`;
       return this.whosGo ? yourTurnMsg : oponentTurnMsg;
+    },
+
+    avatarPath() {
+      return this.player.avatar && `${process.env.VUE_APP_URL}/api/avatar/${this.player.avatar}`;
     }
   },
   components: {
