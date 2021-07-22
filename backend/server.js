@@ -1,6 +1,7 @@
 import express from "express";
 import socketio from "socket.io";
 import httpServer from 'http';
+import fs from "fs";
 import dotenv from "dotenv";
 import cors from "cors";
 
@@ -8,8 +9,13 @@ import verifyToken from "./helpers/jwtVerify";
 import authRoutes from "./routes/authRoutes";
 import uploadRoutes from "./routes/uploadRoutes";
 import errorHandler from "./middlewares/errorHandler";
+import { avatarTempPath } from "./constants";
 import { connectDB } from "./database";
 import socketHandler from "./socket";
+
+if (!fs.existsSync(avatarTempPath)) {
+  fs.mkdirSync(avatarTempPath);
+}
 
 const app = express();
 const server = httpServer.createServer(app);
@@ -22,7 +28,7 @@ app.use(express.json({ extended: true }));
 app.use(cors());
 
 app.use('/api/auth', authRoutes);
-app.use('/api/upload', uploadRoutes);
+app.use('/api/avatar', uploadRoutes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 8000;
