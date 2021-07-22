@@ -38,7 +38,7 @@ export const getAvatar = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
   Avatar.findById({_id: id}, (err, file) => {
-    if (err) return next(FILE_NOT_FOUND)
+    if (err || !file) return next(FILE_NOT_FOUND)
 
     const stream = file.read();
     stream.pipe(res)
