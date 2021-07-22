@@ -48,6 +48,7 @@
     "name": "player name",
     "avatar": "upload an avatar",
     "file": "choose file",
-    "upload": "upload"
+    "upload": "upload",
+    "uploadSuccess": "image uploaded"
   }
 }
