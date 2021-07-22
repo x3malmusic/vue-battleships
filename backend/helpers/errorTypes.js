@@ -12,17 +12,17 @@ export const UPLOAD_FAILED = 'UPLOAD_FAILED'
 export const FILE_NOT_FOUND = 'FILE_NOT_FOUND'
 
 export default {
-  USER_NOT_FOUND: { message: 'User is not found', status: 404 },
-  USER_EXIST: { message: 'User already exist', status: 400 },
-  EMAIL_NOT_VALID: { message: 'Email is not valid', status: 400},
-  NAME_PASSWORD_WRONG: { message: 'Name or password is wrong', status: 400 },
-  NAME_PASSWORD_EMPTY: { message: 'Name and password are required', status: 400 },
-  PASSWORD_SHORT:  { message: 'Password is too short', status: 400 },
-  NOT_AUTHORIZED:  { message: 'Not authorized', status: 403 },
-  AUTHORIZATION_DENIED:  { message: 'Authorization denied', status: 403 },
-  NO_FILE_TO_UPLOAD:  { message: 'No file to upload', status: 400 },
-  UPLOAD_FAILED:  { message: 'Something went wrong while uploading image', status: 400 },
-  FILE_NOT_FOUND:  { message: 'File not found', status: 404 },
-  UNKNOWN_ERROR:  { message: 'Something went wrong', status: 500 },
+  [USER_NOT_FOUND]: { message: 'User is not found', status: 404 },
+  [USER_EXIST]: { message: 'User already exist', status: 400 },
+  [EMAIL_NOT_VALID]: { message: 'Email is not valid', status: 400},
+  [NAME_PASSWORD_WRONG]: { message: 'Name or password is wrong', status: 400 },
+  [NAME_PASSWORD_EMPTY]: { message: 'Name and password are required', status: 400 },
+  [PASSWORD_SHORT]:  { message: 'Password is too short', status: 400 },
+  [NOT_AUTHORIZED]:  { message: 'Not authorized', status: 403 },
+  [AUTHORIZATION_DENIED]:  { message: 'Authorization denied', status: 403 },
+  [NO_FILE_TO_UPLOAD]:  { message: 'No file to upload', status: 400 },
+  [UPLOAD_FAILED]:  { message: 'Something went wrong while uploading image', status: 400 },
+  [FILE_NOT_FOUND]:  { message: 'File not found', status: 404 },
+  [UNKNOWN_ERROR]:  { message: 'Something went wrong', status: 500 },
 }
 

@@ -1,6 +1,7 @@
 import i18n from "../i18n";
 import router from "../router";
 
+export const SET_USER = "SET_USER";
 export const SET_SYSTEM_MESSAGE = "SET_SYSTEM_MESSAGE";
 export const FIND_MATCH = "FIND_MATCH";
 export const PLAYER_READY_TO_BEGIN_MATCH = "PLAYER_READY_TO_BEGIN_MATCH";
@@ -10,7 +11,7 @@ export const DISCONNECT_FROM_GAME = "DISCONNECT_FROM_GAME";
 export const RESET_GAMEDATA = "RESET_GAMEDATA";
 
 export default {
-  setUser(state, player) {
+  [SET_USER](state, player) {
     state.player = player;
   },
 

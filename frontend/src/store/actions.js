@@ -1,6 +1,7 @@
 import i18n from "../i18n";
 import { login, register, uploadAvatar } from "../services/http";
 import { savePlayer, deletePlayer } from "../services/player";
+import { SET_USER, SET_SYSTEM_MESSAGE } from "./mutations";
 
 export const LOGIN = 'LOGIN';
 export const REGISTER = 'REGISTER';
@@ -10,32 +11,30 @@ export const UPLOAD_AVATAR = 'UPLOAD_AVATAR';
 export default {
   [LOGIN]: async({ commit, state }, data) => {
     if(!data.name.trim() || !data.password.trim()) {
-      state.systemMessage = {
+      return commit(SET_SYSTEM_MESSAGE, {
         text: i18n.t("messages.namePasswordEmpty"),
         id: Date.now().toLocaleString(),
-      };
-      return
+      })
     }
 
     try {
       const player = await login(data)
-      commit('setUser', player)
+      commit(SET_USER, player)
       savePlayer(player)
     } catch (e) {
-      state.systemMessage = {
+      commit(SET_SYSTEM_MESSAGE, {
         text: e.data,
         id: Date.now().toLocaleString(),
-      };
+      });
     }
   },
 
   [REGISTER]: async({ state, commit }, data) => {
     if(!data.name.trim() || !data.password.trim()) {
-      state.systemMessage = {
+      return commit(SET_SYSTEM_MESSAGE, {
         text: i18n.t("messages.namePasswordEmpty"),
         id: Date.now().toLocaleString(),
-      };
-      return
+      });
     }
 
     try {
@@ -43,16 +42,16 @@ export default {
       commit('setUser', player)
       savePlayer(player)
     } catch (e) {
-      state.systemMessage = {
+      commit(SET_SYSTEM_MESSAGE, {
         text: e.data,
         id: Date.now().toLocaleString(),
-      };
+      });
     }
   },
 
   [LOG_OUT]({ commit }) {
     deletePlayer();
-    commit('setUser', {});
+    commit(SET_USER, {});
   },
 
   [UPLOAD_AVATAR]: async ({ state, commit }, avatar) => {
@@ -62,15 +61,15 @@ export default {
     try {
       state.player.avatar = await uploadAvatar(data);
 
-      state.systemMessage = {
+      commit(SET_SYSTEM_MESSAGE, {
         text: i18n.t("profile.uploadSuccess"),
         id: Date.now().toLocaleString(),
-      };
+      });
     } catch (e) {
-      state.systemMessage = {
+      commit(SET_SYSTEM_MESSAGE, {
         text: e.data,
         id: Date.now().toLocaleString(),
-      };
+      });
     }
   },
 }
