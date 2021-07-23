@@ -65,6 +65,8 @@ export default {
         text: i18n.t("profile.uploadSuccess"),
         id: Date.now().toLocaleString(),
       });
+
+      savePlayer(state.player)
     } catch (e) {
       commit(SET_SYSTEM_MESSAGE, {
         text: e.data,
