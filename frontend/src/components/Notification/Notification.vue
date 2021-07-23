@@ -1,15 +1,13 @@
 <template>
   <div class="notification">
-    <transition-group name="notification-animation" class="notification-list">
-      <div
+    <transition-group name="notification-animation">
+      <span
         class="notification-content"
         v-for="message in messages"
         :key="message.id"
       >
-        <span class="notification-content-text">
-          {{ message.text }}
-        </span>
-      </div>
+        {{ message.text }}
+      </span>
     </transition-group>
   </div>
 </template>
