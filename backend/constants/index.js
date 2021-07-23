@@ -12,5 +12,4 @@ export const shipsLeftTemplate = () => {
   }, {})
 }
 
-export const avatarTempPath = "tmp";
 export const avatarImgName = "img.png";

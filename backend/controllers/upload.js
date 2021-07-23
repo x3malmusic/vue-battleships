@@ -1,10 +1,9 @@
 import sharp from "sharp";
-import fs from "fs";
-import rimraf from "rimraf";
+import Stream from "stream";
 import { Avatar } from "../database";
 import { User } from "../models/User";
 import { asyncHandler } from "../middlewares/async";
-import { avatarImgName, avatarTempPath } from "../constants";
+import { avatarImgName } from "../constants";
 import { NO_FILE_TO_UPLOAD, UPLOAD_FAILED, USER_NOT_FOUND, FILE_NOT_FOUND } from "../helpers/errorTypes";
 
 export const uploadAvatar = asyncHandler( async (req, res, next) => {
@@ -12,14 +11,14 @@ export const uploadAvatar = asyncHandler( async (req, res, next) => {
 
   const { userId } = req.user;
   const { image } = req.files;
-  const path = `${avatarTempPath}/${avatarImgName}`;
 
-  await sharp(image.data).resize({ width: 40, height: 40 }).png({ compressionLevel: 6 }).toFile(path)
-  const stream = fs.createReadStream(path)
+  const data = await sharp(image.data).resize({ width: 40, height: 40 }).png({ compressionLevel: 6 }).toBuffer();
+  const stream = new Stream.PassThrough()
+  stream.end(data)
+
   const options = ({ filename: avatarImgName, contentType: 'image/png' });
 
   Avatar.write(options, stream, async (err, file) => {
-    rimraf(path, {}, () => {});
     if (err) return next(UPLOAD_FAILED)
 
     const user = await User.findOne({_id: userId})
