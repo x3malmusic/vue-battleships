@@ -43,6 +43,7 @@ import {
 } from "../../store/modules/ship";
 import { PLAYER_READY_TO_BEGIN_MATCH } from "../../store/mutations";
 import AppButton from "../Button/AppButton";
+import { CLICK_RESET, PLAYER_READY } from "../../constants/messages";
 
 export default {
   name: "Ships",
@@ -84,9 +85,9 @@ export default {
 
     ships() {
       if (!this.activateReadyButton) {
-        this.$_notify(this.$t("messages.playerReady"));
+        this.$_notify(PLAYER_READY);
         setTimeout(() => {
-          this.$_notify(this.$t(`messages.clickReset`));
+          this.$_notify(CLICK_RESET);
         }, 2000)
         this.$store.commit(SET_PLAYER_SHIPS_ARE_SET, true);
       }

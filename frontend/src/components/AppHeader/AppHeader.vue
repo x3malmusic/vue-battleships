@@ -32,8 +32,8 @@ export default {
     },
 
     whosGoText() {
-      const yourTurnMsg = `${this.player.name}${this.$t("messages.turn")}`;
-      const oponentTurnMsg = `${this.game.gameData[this.game.whosGo].name}${this.$t("messages.turn")}`;
+      const yourTurnMsg = `${this.player.name}${this.$t("messages.TURN")}`;
+      const oponentTurnMsg = `${this.game.gameData[this.game.whosGo].name}${this.$t("messages.TURN")}`;
       return this.whosGo ? yourTurnMsg : oponentTurnMsg;
     },
 

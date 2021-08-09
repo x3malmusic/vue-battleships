@@ -1,7 +1,7 @@
 <template>
   <div class="lobby">
     <div class="list-block">
-      <div class="list-header">statistics</div>
+      <div class="list-header">{{$t('lobby.statistics')}}</div>
       <ul class="players-online-list">
         <li
           class="players-online-list-item"
@@ -13,11 +13,11 @@
       </ul>
     </div>
     <app-button @click="findMatch" :disabled="isLookingForMatch">
-      Find match
+      {{$t('lobby.findMatch')}}
     </app-button>
     <div class="list-block">
       <div class="list-header">
-        players online
+        {{$t('lobby.playersOnline')}}
       </div>
       <ul class="players-online-list">
         <li
@@ -30,17 +30,17 @@
             <app-button
               @click="sendInvitation(player)"
               v-if="hasSentInvitation(player)"
-              >Invite</app-button
+              >{{$t('lobby.invite')}}</app-button
             >
             <app-button
               @click="cancelInvite(player)"
               v-else-if="!hasSentInvitation(player)"
-              >Cancel</app-button
+              >{{$t('lobby.cancel')}}</app-button
             >
           </div>
           <div class="inviteButtons" v-else-if="hasReceivedInvitation(player)">
-            <app-button @click="acceptGameRequest(player)">Accept</app-button>
-            <app-button @click="declineGameRequest(player)">Decline</app-button>
+            <app-button @click="acceptGameRequest(player)">{{$t('lobby.accept')}}</app-button>
+            <app-button @click="declineGameRequest(player)">{{$t('lobby.decline')}}</app-button>
           </div>
         </li>
       </ul>
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { FIND_MATCH } from "../../store/mutations";
+import { FIND_MATCH } from "../../store/actions";
 import { mapState, mapGetters } from "vuex";
 import AppButton from "../../components/Button/AppButton";
 
@@ -75,7 +75,7 @@ export default {
   }),
   methods: {
     findMatch() {
-      this.$store.commit(FIND_MATCH, this.$socket);
+      this.$store.dispatch(FIND_MATCH, this.$socket);
     },
 
     hasSentInvitation(user) {
@@ -88,30 +88,22 @@ export default {
 
     sendInvitation(user) {
       const request = this.makeReqObj(user);
-
-      this.$socket.emit("sendInvitation", request, () => {
-        this.$_notify(
-          user.name + " " + this.$t("messages.playerReceivedInvite")
-        );
-      });
+      this.$socket.emit("SEND_INVITATION", request)
     },
 
     cancelInvite(user) {
       const request = this.makeReqObj(user);
-
-      this.$socket.emit("cancelInvitation", request, ({ playersList }) => {
-        this.$_notify(this.$t("messages.canceled"));
-      });
+      this.$socket.emit("CANCEL_INVITATION", request)
     },
 
     acceptGameRequest(user) {
       const request = this.makeReqObj(user);
-      this.$socket.emit("acceptGameRequest", request);
+      this.$socket.emit("ACCEPT_GAME_REQUEST", request);
     },
 
     declineGameRequest(user) {
       const request = this.makeReqObj(user);
-      this.$socket.emit("declineGameRequest", request);
+      this.$socket.emit("DECLINE_GAME_REQUEST", request);
     },
 
     makeReqObj(user) {

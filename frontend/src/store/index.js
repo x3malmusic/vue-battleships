@@ -3,6 +3,7 @@ import Vuex from "vuex";
 
 import mutations from "./mutations";
 import actions from "./actions";
+import socketActions from "./socket_actions";
 import { getPlayer } from "../services/player";
 
 import ship from "./modules/ship";
@@ -22,7 +23,8 @@ export default new Vuex.Store({
     ...mutations,
   },
   actions: {
-    ...actions
+    ...actions,
+    ...socketActions
   },
   modules: { ship },
   getters: {

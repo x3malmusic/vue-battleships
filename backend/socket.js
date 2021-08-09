@@ -1,4 +1,35 @@
 import GameManager from "./GameManager";
+import {
+  PLAYER_SEND_REQUEST,
+  PLAYER_CANCEL_REQUEST,
+  PLAYER_ACCEPTED_GAME_REQUEST,
+  PLAYER_DECLINED_GAME_REQUEST,
+  YOUR_NEXT_ENEMY,
+  OPPONENT_NOT_READY,
+  NOT_YOUR_TURN,
+  CELL_ALREADY_SHOT,
+  WIN_BY_DISCONNECT
+} from "./constants/messages";
+import {
+  UPDATE_PLAYERS,
+  INIT_USER_ID,
+  SEND_INVITATION,
+  CANCEL_INVITATION,
+  ACCEPT_GAME_REQUEST,
+  DECLINE_GAME_REQUEST,
+  SYSTEM_MESSAGE,
+  FIND_MATCH,
+  MATCH_CREATED,
+  CONNECT_TO_MATCH,
+  DISCONNECT_FROM_GAME,
+  GAME_OVER,
+  GAME_OVER_BY_DISCONNECT,
+  SHOW_PLAYER_SHOT,
+  SHOW_MY_SHOT,
+  PLAYER_SHOT,
+  PLAYER_SET_SHIPS,
+  PLAYERS_READY_TO_PLAY
+} from "./constants/socket_events";
 
 const game = new GameManager();
 
@@ -21,110 +52,112 @@ export default function socketHandler(socket, clients) {
   const user = createPlayer(player.name, socket.id);
   game.addPlayer(user);
 
-  clients.emit("updatePlayers", game.playersList());
-  socket.emit('initUserId', socket.id);
+  clients.emit(UPDATE_PLAYERS, game.playersList());
+  socket.emit(INIT_USER_ID, socket.id);
 
 
-  socket.on("sendInvitation", (request) => {
+  socket.on(SEND_INVITATION, (request) => {
     game.addInvitation(request);
-    socket.to(request.to.id).emit("gameRequest", request.from);
+    socket.to(request.to.id).emit(SYSTEM_MESSAGE, { name: request.from.name, type: PLAYER_SEND_REQUEST });
 
     const playersList = game.playersList();
-    socket.to(request.to.id).emit("updatePlayers", playersList);
-    socket.emit("updatePlayers", playersList);
+    socket.to(request.to.id).emit(UPDATE_PLAYERS, playersList);
+    socket.emit(UPDATE_PLAYERS, playersList);
   });
 
-  socket.on("cancelInvitation", (request) => {
+  socket.on(CANCEL_INVITATION, (request) => {
     game.removeInvitation(request);
-    socket.to(request.to.id).emit("gameRequestCanceled", {
-      from: request.from,
-    });
+    socket.to(request.to.id).emit(SYSTEM_MESSAGE, { name: request.from.name, type: PLAYER_CANCEL_REQUEST });
 
     const playersList = game.playersList();
-    socket.to(request.to.id).emit("updatePlayers", playersList);
-    socket.emit("updatePlayers", playersList);
+    socket.to(request.to.id).emit(UPDATE_PLAYERS, playersList);
+    socket.emit(UPDATE_PLAYERS, playersList);
   });
 
-  socket.on("acceptGameRequest", (request) => {
+  socket.on(ACCEPT_GAME_REQUEST, (request) => {
     game.removeInvitation(reverseRequest(request));
-    socket.to(request.to.id).emit("gameRequestAccepted", {
-      from: request.from,
-    });
+    socket.to(request.to.id).emit(SYSTEM_MESSAGE, { name: request.from.name, type: PLAYER_ACCEPTED_GAME_REQUEST });
 
     const playersList = game.playersList();
-    socket.to(request.to.id).emit("updatePlayers", playersList);
-    socket.emit("updatePlayers", playersList);
+    socket.to(request.to.id).emit(UPDATE_PLAYERS, playersList);
+    socket.emit(UPDATE_PLAYERS, playersList);
 
     const player1 = game.getPlayerById(request.from.id);
     const player2 = game.getPlayerById(request.to.id);
 
     const gameData = game.createMatch(player1, player2);
-    socket.emit("matchCreated", { gameData, foundPlayer: player2 });
+
+    socket.to(request.to.id).emit(SYSTEM_MESSAGE, { name: request.from.name, type: YOUR_NEXT_ENEMY });
+    socket.emit(SYSTEM_MESSAGE, { name: request.to.name, type: YOUR_NEXT_ENEMY });
+
+    socket.emit(MATCH_CREATED, { gameData, foundPlayer: player2 });
     socket
       .to(player2.id)
-      .emit("matchCreated", { gameData, foundPlayer: player1 });
+      .emit(MATCH_CREATED, { gameData, foundPlayer: player1 });
   });
 
-  socket.on("declineGameRequest", (request) => {
+  socket.on(DECLINE_GAME_REQUEST, (request) => {
     game.removeInvitation(reverseRequest(request));
-    socket.to(request.to.id).emit("gameRequestDeclined", {
-      from: request.from,
-    });
+    socket.to(request.to.id).emit(SYSTEM_MESSAGE, { name: request.from.name, type: PLAYER_DECLINED_GAME_REQUEST });
 
     const playersList = game.playersList();
-    socket.to(request.to.id).emit("updatePlayers", playersList);
-    socket.emit("updatePlayers", playersList);
+    socket.to(request.to.id).emit(UPDATE_PLAYERS, playersList);
+    socket.emit(UPDATE_PLAYERS, playersList);
   });
 
-  socket.on("findMatch", (player) => {
+  socket.on(FIND_MATCH, (player) => {
     const foundPlayer = game.findReadyToPlayPlayers(player.id);
 
     if (!foundPlayer) return game.addPlayerToReadyToPLayList(player);
 
     const gameData = game.createMatch(player, foundPlayer);
-    socket.emit("matchCreated", { gameData, foundPlayer });
+
+    socket.to(foundPlayer.id).emit(SYSTEM_MESSAGE, { name: player.name, type: YOUR_NEXT_ENEMY });
+    socket.emit(SYSTEM_MESSAGE, { name: foundPlayer.name, type: YOUR_NEXT_ENEMY });
+
+    socket.emit(MATCH_CREATED, { gameData, foundPlayer });
     socket
       .to(foundPlayer.id)
-      .emit("matchCreated", { gameData, foundPlayer: player });
+      .emit(MATCH_CREATED, { gameData, foundPlayer: player });
   });
 
-  socket.on("connectToMatch", (gameId) => {
+  socket.on(CONNECT_TO_MATCH, (gameId) => {
     socket.join(gameId);
   });
 
-  socket.on("disconnectFromGame", (gameId) => {
+  socket.on(DISCONNECT_FROM_GAME, (gameId) => {
     socket.leave(gameId);
     game.players[socket.id].gameId = "";
 
     if (!clients.adapter.rooms[gameId]) delete game.gameList[gameId];
   });
 
-  socket.on("playerSetShips", ({ gameId, playerId, shipPositions, shotPositions }) => {
+  socket.on(PLAYER_SET_SHIPS, ({ gameId, playerId, shipPositions, shotPositions }) => {
     const playersReadyToPlay = game.gameList[gameId].playerSetShips(playerId, shipPositions, shotPositions);
 
-    if (playersReadyToPlay) clients.to(gameId).emit("playersReadyToPlay", game.gameList[gameId].whosGo);
+    if (playersReadyToPlay) clients.to(gameId).emit(PLAYERS_READY_TO_PLAY, game.gameList[gameId].whosGo);
   });
 
-  socket.on("playerShot", ({ gameId, playerId, fieldId, oponentId }) => {
-    if (!game.gameList[gameId].gameHasBegun) return socket.emit("systemMessage", "oponentNotReady");
+  socket.on(PLAYER_SHOT, ({ gameId, playerId, fieldId, oponentId }) => {
+    if (!game.gameList[gameId].gameHasBegun) return socket.emit(SYSTEM_MESSAGE, { type: OPPONENT_NOT_READY });
 
-    if (!game.gameList[gameId].isPlayersTurn(playerId)) return socket.emit("systemMessage", "notYourTurn");
+    if (!game.gameList[gameId].isPlayersTurn(playerId)) return socket.emit(SYSTEM_MESSAGE, { type: NOT_YOUR_TURN });
 
-    if (game.gameList[gameId].hasPreviouslyShot(playerId, fieldId)) return socket.emit("systemMessage", "cellAlreadyShot");
+    if (game.gameList[gameId].hasPreviouslyShot(playerId, fieldId)) return socket.emit(SYSTEM_MESSAGE, { type: CELL_ALREADY_SHOT });
 
     const shotResult = game.gameList[gameId].playerShot(oponentId, fieldId, playerId);
 
-    if (shotResult) socket.emit("systemMessage", shotResult);
+    if (shotResult) socket.emit(SYSTEM_MESSAGE, { type: shotResult });
 
     if (!game.gameList[gameId].playerHasShipsAlive(oponentId)) {
       game.gameList[gameId].gameOver();
-      clients.to(gameId).emit("gameOver", { winnerId: playerId, gameHasBegun: false, gameIsOver: true });
+      clients.to(gameId).emit(GAME_OVER, { winnerId: playerId, gameHasBegun: false, gameIsOver: true });
     };
 
     const whosGo = shotResult ? game.gameList[gameId].whosGo : game.gameList[gameId].switchTurn.next().value;
 
-    socket.to(oponentId).emit("showPlayerShot", { board: game.gameList[gameId].getPlayerShipPosition(oponentId), whosGo });
-    socket.emit("showMyShot", { shots: game.gameList[gameId].getPlayerShotPosition(playerId), whosGo });
+    socket.to(oponentId).emit(SHOW_PLAYER_SHOT, { board: game.gameList[gameId].getPlayerShipPosition(oponentId), whosGo });
+    socket.emit(SHOW_MY_SHOT, { shots: game.gameList[gameId].getPlayerShotPosition(playerId), whosGo });
   });
 
   socket.on("disconnect", () => {
@@ -133,8 +166,8 @@ export default function socketHandler(socket, clients) {
       game.gameList[gameId].gameOver();
 
       const secondPlayerId = game.gameList[gameId].getSecondPlayer(socket.id);
-      socket.to(secondPlayerId).emit("systemMessage", "winByDisconnect");
-      socket.to(secondPlayerId).emit("gameOverByDisconnect", { gameHasBegun: false, gameIsOver: true });
+      socket.to(secondPlayerId).emit(SYSTEM_MESSAGE, { type: WIN_BY_DISCONNECT });
+      socket.to(secondPlayerId).emit(GAME_OVER_BY_DISCONNECT, { gameHasBegun: false, gameIsOver: true });
 
       socket.leave(gameId);
       if (!clients.adapter.rooms[gameId]) delete game.gameList[gameId];
@@ -143,6 +176,6 @@ export default function socketHandler(socket, clients) {
     game.removePlayer(socket.id);
     game.deletePlayerFromReadyToPLayList(socket.id);
 
-    socket.broadcast.emit("updatePlayers", game.playersList());
+    socket.broadcast.emit(UPDATE_PLAYERS, game.playersList());
   });
 }

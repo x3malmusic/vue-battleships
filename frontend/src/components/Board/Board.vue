@@ -30,6 +30,7 @@ import {
   SET_POSSIBLE_SHIP,
   INITIALIZE_BOARD
 } from "../../store/modules/ship";
+import { CANNOT_PLACE_SHIP, PLAYER_NOT_READY, SHIPS_ARE_SET_UP } from "../../constants/messages";
 import { MAKE_SHOT } from "../../store/mutations";
 
 export default {
@@ -56,7 +57,7 @@ export default {
   methods: {
     makeShot(e) {
       if (!this.playerReadyFlag) {
-        this.$_notify(this.$t("messages.playerNotReady"));
+        this.$_notify(PLAYER_NOT_READY);
         return;
       }
       this.$store.commit(MAKE_SHOT, e.target.id)
@@ -125,7 +126,7 @@ export default {
     placeShip() {
       // no ships left, ready to play
       if (this.playerShipsAreSet) {
-        this.$_notify(this.$t(`messages.shipsAreSetUp`));
+        this.$_notify(SHIPS_ARE_SET_UP);
         return;
       }
 
@@ -133,7 +134,7 @@ export default {
         this.cannotPlaceShip ||
         this.$_checkOccupiedCells(this.possibleShip, this.occupiedCells)
       ) {
-        this.$_notify(this.$t(`messages.cannotPlaceShip`));
+        this.$_notify(CANNOT_PLACE_SHIP);
         return;
       }
 
