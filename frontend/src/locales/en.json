@@ -12,6 +12,7 @@
     "NO_FILE_TO_UPLOAD": "No file to upload",
     "UPLOAD_FAILED": "Something went wrong while uploading image",
     "FILE_NOT_FOUND": "File not found",
+    "DATABASE_ERROR": "Database error",
     "CANNOT_PLACE_SHIP": "You cannot place your ship here",
     "SHIPS_ARE_SET_UP": "Your ships are all set up!",
     "CLICK_RESET": "Click \"Reset\" button to replace all ships again",
