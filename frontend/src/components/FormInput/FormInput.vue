@@ -27,8 +27,8 @@ export default {
     input: "",
   }),
   methods: {
-    handleInput() {
-      this.$emit("input", this.input);
+    handleInput(e) {
+      this.$emit("input", e.target.value);
     },
   },
 };
