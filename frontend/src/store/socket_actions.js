@@ -55,7 +55,7 @@ export default {
   },
 
   SOCKET_connect() {
-    if(router.history.current.path !== '/lobby') router.push('/lobby');
+    if (router.history.current.path !== '/lobby') router.push('/lobby');
   },
 
   SOCKET_ERROR({ state }, error) {
