@@ -1,13 +1,13 @@
 const appName = 'vue-battleships';
 
-export const savePlayer = (player) => {
+export const saveToken = (player) => {
   localStorage.setItem(appName, JSON.stringify(player));
 }
 
-export const getPlayer = () => {
+export const getToken = () => {
   return JSON.parse(localStorage.getItem(appName));
 }
 
-export const deletePlayer = () => {
+export const deleteToken = () => {
   localStorage.removeItem(appName);
 }
