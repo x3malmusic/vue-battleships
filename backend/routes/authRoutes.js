@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { check } from 'express-validator'
-import { login, register } from "../controllers/auth";
+import { login, register, silentLogin } from "../controllers/auth";
+import { verifyToken } from "../middlewares/verifyTokenMiddleware";
 
 import {
   NAME_PASSWORD_EMPTY,
@@ -17,5 +18,7 @@ router.post('/register',
     check('password', PASSWORD_SHORT).isLength({min: 6})
   ],
   register)
+
+router.post('/silent-login', verifyToken, silentLogin)
 
 export default router
