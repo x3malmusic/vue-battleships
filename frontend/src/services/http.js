@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getPlayer } from "./player";
+import { getToken } from "./token";
 
 const http = axios.create({
   baseURL: process.env.VUE_APP_URL,
@@ -12,12 +12,14 @@ http.interceptors.response.use(
 );
 
 http.interceptors.request.use((config) => {
-    config.headers.authorization = `Bearer ${getPlayer()?.token}`
+    config.headers.authorization = `Bearer ${getToken()}`
     return config
   }
 );
 
 export const login = (creds) => http.post('/api/auth/login', { name: creds.name, password: creds.password })
+
+export const silentLogin = () => http.post('/api/auth/silent-login', {})
 
 export const register = (creds) => http.post('/api/auth/register', { name: creds.name, password: creds.password })
 
