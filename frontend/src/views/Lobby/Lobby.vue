@@ -13,7 +13,10 @@
       </ul>
     </div>
     <app-button @click="findMatch" :disabled="isLookingForMatch">
-      {{$t('lobby.findMatch')}}
+      <span v-if="isLookingForMatch" :class="loading">
+        <loader />
+      </span>
+      <span :class="{'no-text': isLookingForMatch}">{{$t('lobby.findMatch')}}</span>
     </app-button>
     <div class="list-block">
       <div class="list-header">
@@ -52,15 +55,21 @@
 import { FIND_MATCH } from "../../store/actions";
 import { mapState, mapGetters } from "vuex";
 import AppButton from "../../components/Button/AppButton";
+import Loader from "../../components/Loader/Loader";
 
 export default {
   name: "Lobby",
   components: {
     AppButton,
+    Loader
   },
   computed: {
     ...mapState(["player", "isLookingForMatch"]),
     ...mapGetters(["playersOnlineFiltered"]),
+
+    loading() {
+      return this.isLookingForMatch && "loading"
+    }
   },
   data: () => ({
     stats: [
