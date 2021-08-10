@@ -19,31 +19,33 @@
       <div class="list-header">
         {{$t('lobby.playersOnline')}}
       </div>
-      <ul class="players-online-list">
-        <li
-          v-for="player in playersOnlineFiltered"
-          class="players-online-list-item"
-          :key="player.id"
-        >
-          <p>{{ player.name }}</p>
-          <div class="inviteButtons" v-if="!hasReceivedInvitation(player)">
-            <app-button
-              @click="sendInvitation(player)"
-              v-if="hasSentInvitation(player)"
-              >{{$t('lobby.invite')}}</app-button
-            >
-            <app-button
-              @click="cancelInvite(player)"
-              v-else-if="!hasSentInvitation(player)"
-              >{{$t('lobby.cancel')}}</app-button
-            >
-          </div>
-          <div class="inviteButtons" v-else-if="hasReceivedInvitation(player)">
-            <app-button @click="acceptGameRequest(player)">{{$t('lobby.accept')}}</app-button>
-            <app-button @click="declineGameRequest(player)">{{$t('lobby.decline')}}</app-button>
-          </div>
-        </li>
-      </ul>
+<!--      <ul class="players-online-list">-->
+        <transition-group name="list-animation" tag="ul" class="players-online-list">
+          <li
+            v-for="player in playersOnlineFiltered"
+            class="players-online-list-item"
+            :key="player.id"
+          >
+            <p>{{ player.name }}</p>
+            <div class="inviteButtons" v-if="!hasReceivedInvitation(player)">
+              <app-button
+                @click="sendInvitation(player)"
+                v-if="hasSentInvitation(player)"
+                >{{$t('lobby.invite')}}</app-button
+              >
+              <app-button
+                @click="cancelInvite(player)"
+                v-else-if="!hasSentInvitation(player)"
+                >{{$t('lobby.cancel')}}</app-button
+              >
+            </div>
+            <div class="inviteButtons" v-else-if="hasReceivedInvitation(player)">
+              <app-button @click="acceptGameRequest(player)">{{$t('lobby.accept')}}</app-button>
+              <app-button @click="declineGameRequest(player)">{{$t('lobby.decline')}}</app-button>
+            </div>
+          </li>
+        </transition-group>
+<!--      </ul>-->
     </div>
   </div>
 </template>
