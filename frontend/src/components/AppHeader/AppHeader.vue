@@ -4,7 +4,9 @@
     <span class="whos-turn" :class="{ green: whosGo, red: !whosGo }" v-if="game.gameHasBegun">{{ whosGoText }}</span>
     <div class="user-info">
       <span>{{ $t("header.welcome") }}:&nbsp;</span>
-      <span class="cursor" @click="$router.push('/profile')"><strong>{{ player.name }}</strong></span>
+      <router-link to="/profile" class="link">
+        <strong>{{ player.name }}</strong>
+      </router-link>
 
       <div class="avatar-container">
         <img v-if="player.avatar" :src="avatarPath" alt="img">

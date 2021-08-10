@@ -52,8 +52,9 @@
     color: red;
   }
 
-  .cursor {
-    cursor: pointer;
+  .link {
+    text-decoration: none;
+    color: black;
   }
 
   @media screen and (max-width: $md) {
