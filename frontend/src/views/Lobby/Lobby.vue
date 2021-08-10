@@ -19,7 +19,6 @@
       <div class="list-header">
         {{$t('lobby.playersOnline')}}
       </div>
-<!--      <ul class="players-online-list">-->
         <transition-group name="list-animation" tag="ul" class="players-online-list">
           <li
             v-for="player in playersOnlineFiltered"
@@ -45,7 +44,6 @@
             </div>
           </li>
         </transition-group>
-<!--      </ul>-->
     </div>
   </div>
 </template>

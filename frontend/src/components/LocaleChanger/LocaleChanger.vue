@@ -1,18 +1,19 @@
 <template>
-  <div class="locale-changer" @click="showAvailableLangs">
-    <div class="locale-changer-wrapper">
+  <div class="parent-locale-changer">
+    <div class="locale-changer" @click="showAvailableLangs">
       {{ this.chosenLang }}
-      <button
+    </div>
+    <button
         class="change-btn"
         :class="{ btn_active: show }"
         v-for="lang in languages"
-        @click.stop.prevent="changeLocale"
+        @click.stop="changeLocale"
         :value="lang"
-      >
-        {{ lang }}
-      </button>
-    </div>
+    >
+      {{ lang }}
+    </button>
   </div>
+
 </template>
 
 <script>
@@ -24,8 +25,7 @@ export default {
     currentLang: "",
   }),
   methods: {
-    showAvailableLangs(e) {
-      e.preventDefault();
+    showAvailableLangs() {
       this.show = !this.show;
     },
     changeLocale(e) {
