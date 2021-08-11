@@ -1,18 +1,19 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { validationResult } from 'express-validator'
 import { asyncHandler } from "../middlewares/async";
 import { getUserByName, createUser } from "../services/dbService"
 import {
   USER_NOT_FOUND,
   USER_EXIST,
   NAME_PASSWORD_WRONG,
-  NAME_PASSWORD_EMPTY,
 } from "../helpers/errorTypes";
 
 export const register = asyncHandler(async (req, res, next) => {
   const { name, password } = req.body;
 
-  if(!name.trim() || !password.trim()) return next(NAME_PASSWORD_EMPTY);
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return next(errors.array()[0].msg)
 
   const candidate = await getUserByName(name);
   if (candidate) return next(USER_EXIST);
@@ -26,8 +27,6 @@ export const register = asyncHandler(async (req, res, next) => {
 
 export const login = asyncHandler( async (req, res, next) => {
   const { name, password } = req.body;
-
-  if (!name.trim() || !password.trim()) return next(NAME_PASSWORD_EMPTY);
 
   const user = await getUserByName(name);
   if (!user) return next(USER_NOT_FOUND);

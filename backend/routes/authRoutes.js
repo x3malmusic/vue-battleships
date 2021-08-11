@@ -10,7 +10,10 @@ import {
 
 const router = Router();
 
-router.post('/login', login)
+router.post('/login',
+  [check('name', NAME_PASSWORD_EMPTY).exists(),
+  check('password', NAME_PASSWORD_EMPTY).exists()],
+  login)
 
 router.post('/register',
   [check('name', NAME_PASSWORD_EMPTY).exists(),
