@@ -5,7 +5,7 @@ const gameSchema = new Schema({
   miss: { type: Number, default: 0 },
   win: { type: Boolean, default: false },
   bullseye: { type: Boolean, default: false },
-  user: [{ type: mongoose.Types.ObjectId, ref: "User" }],
+  user: { type: mongoose.Types.ObjectId, ref: "User" },
 });
 
-export const User = model("Game", gameSchema);
+export const Game = model("Game", gameSchema);
