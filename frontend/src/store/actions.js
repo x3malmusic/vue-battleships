@@ -51,11 +51,12 @@ export default {
       const player = await silentLogin()
       player.token = token
       commit(SET_USER, player)
-      cb()
     } catch (e) {
       commit(SET_SYSTEM_MESSAGE, { type: e.data.type });
+      deleteToken()
     } finally {
       commit(SET_IS_LOADING, false)
+      cb()
     }
   },
 

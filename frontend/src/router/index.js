@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import store from '../store'
+import { getToken } from "../services/token";
 import { SILENT_LOGIN } from "../store/actions";
 
 Vue.use(VueRouter);
@@ -57,19 +58,19 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  if (!store.state.player.name && !store.state.isLoading) {
-    store.dispatch(SILENT_LOGIN, () => {
+router.beforeEach(async (to, from, next) => {
+  if (!store.state.player.name && !store.state.isLoading && getToken()) {
+    await store.dispatch(SILENT_LOGIN, () => {
       if (!to.meta.authRequired) return next()
-      if (to.meta.authRequired && store.state.player) return next()
-      router.push('/')
+      if (to.meta.authRequired && store.state.player.name) return next()
+      return router.push('/')
     });
   }
 
   if (store.state.isLoading) return
   if (!to.meta.authRequired) return next()
-  if (to.meta.authRequired && store.state.player) return next()
-  router.push('/')
+  if (to.meta.authRequired && store.state.player.name) return next()
+  return router.push('/')
 })
 
 export default router;
