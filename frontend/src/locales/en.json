@@ -10,6 +10,7 @@
     "NOT_AUTHORIZED": "Not authorized",
     "AUTHORIZATION_DENIED": "Authorization denied",
     "NO_FILE_TO_UPLOAD": "No file to upload",
+    "UPLOAD_SUCCESS": "Image uploaded",
     "UPLOAD_FAILED": "Something went wrong while uploading image",
     "FILE_NOT_FOUND": "File not found",
     "DATABASE_ERROR": "Database error",
