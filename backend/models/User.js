@@ -4,7 +4,7 @@ const userSchema = new Schema({
   name: { type: String, required: [true, "name is required"], unique: true },
   password: { type: String, required: [true, "password is required"] },
   avatar: { type: String, default: "" },
-  gameHistory: [{ type: mongoose.Types.ObjectId, ref: "GameHistory" }],
+  gameHistory: [{ type: mongoose.Types.ObjectId, ref: "Game" }],
 });
 
 export const User = model("User", userSchema);
