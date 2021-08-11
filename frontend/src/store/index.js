@@ -10,8 +10,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    player: null,
+    player: {},
     playersOnline: [],
+    isLoading: false,
     isLookingForMatch: false,
     pollingInterval: null,
     systemMessage: "",

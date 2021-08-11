@@ -1,6 +1,6 @@
 import { login, register, uploadAvatar, silentLogin } from "../services/http";
 import { getToken, saveToken, deleteToken } from "../services/token";
-import { SET_USER, SET_SYSTEM_MESSAGE } from "./mutations";
+import { SET_USER, SET_SYSTEM_MESSAGE, SET_IS_LOADING } from "./mutations";
 import { NAME_PASSWORD_EMPTY, PLAYERS_NOT_FOUND, UPLOAD_SUCCESS } from "../constants/messages";
 
 export const LOGIN = 'LOGIN';
@@ -13,49 +13,55 @@ export const FIND_MATCH = "FIND_MATCH";
 
 export default {
   [LOGIN]: async({ commit, state }, data) => {
-    if(!data.name.trim() || !data.password.trim()) {
-      return commit(SET_SYSTEM_MESSAGE, { type: NAME_PASSWORD_EMPTY })
-    }
+    if (!data.name.trim() || !data.password.trim()) return commit(SET_SYSTEM_MESSAGE, { type: NAME_PASSWORD_EMPTY })
 
     try {
+      commit(SET_IS_LOADING, true)
       const player = await login(data)
       commit(SET_USER, player)
       saveToken(player.token)
     } catch (e) {
       commit(SET_SYSTEM_MESSAGE, { type: e.data.type });
+    } finally {
+      commit(SET_IS_LOADING, false)
     }
   },
 
   [REGISTER]: async({ state, commit }, data) => {
-    if(!data.name.trim() || !data.password.trim()) {
-      return commit(SET_SYSTEM_MESSAGE, { type: NAME_PASSWORD_EMPTY });
-    }
+    if (!data.name.trim() || !data.password.trim()) return commit(SET_SYSTEM_MESSAGE, { type: NAME_PASSWORD_EMPTY });
 
     try {
+      commit(SET_IS_LOADING, true)
       const player = await register(data)
       commit(SET_USER, player)
       saveToken(player.token)
     } catch (e) {
       commit(SET_SYSTEM_MESSAGE, { type: e.data.type });
+    } finally {
+      commit(SET_IS_LOADING, false)
     }
   },
 
-  [SILENT_LOGIN]: async ({ commit }) => {
+  [SILENT_LOGIN]: async ({ commit }, cb = () => {}) => {
     const token = getToken();
     if (!token) return
 
     try {
+      commit(SET_IS_LOADING, true)
       const player = await silentLogin()
       player.token = token
       commit(SET_USER, player)
+      cb()
     } catch (e) {
       commit(SET_SYSTEM_MESSAGE, { type: e.data.type });
+    } finally {
+      commit(SET_IS_LOADING, false)
     }
   },
 
   [LOG_OUT]({ commit }) {
     deleteToken();
-    commit(SET_USER, null);
+    commit(SET_USER, {});
   },
 
   [UPLOAD_AVATAR]: async ({ state, commit }, avatar) => {

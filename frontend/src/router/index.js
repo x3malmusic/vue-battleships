@@ -1,5 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from '../store'
+import { SILENT_LOGIN } from "../store/actions";
 
 Vue.use(VueRouter);
 
@@ -18,6 +20,7 @@ const routes = [
     component: () => import("../views/Game/Game.vue"),
     meta: {
       header: true,
+      authRequired: true
     },
   },
   {
@@ -26,6 +29,7 @@ const routes = [
     component: () => import("../views/Lobby/Lobby.vue"),
     meta: {
       header: true,
+      authRequired: true
     },
   },
   {
@@ -34,6 +38,7 @@ const routes = [
     component: () => import("../views/Profile/Profile.vue"),
     meta: {
       header: true,
+      authRequired: true
     },
   },
   {
@@ -51,5 +56,20 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
+
+router.beforeEach((to, from, next) => {
+  if (!store.state.player.name && !store.state.isLoading) {
+    store.dispatch(SILENT_LOGIN, () => {
+      if (!to.meta.authRequired) return next()
+      if (to.meta.authRequired && store.state.player) return next()
+      router.push('/')
+    });
+  }
+
+  if (store.state.isLoading) return
+  if (!to.meta.authRequired) return next()
+  if (to.meta.authRequired && store.state.player) return next()
+  router.push('/')
+})
 
 export default router;
