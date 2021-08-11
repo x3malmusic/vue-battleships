@@ -1,4 +1,5 @@
 import { User } from "../models/User";
+import { Game } from "../models/Game";
 import Stream from "stream";
 import { avatarImgName } from "../constants";
 import { Avatar } from "../database";
@@ -49,4 +50,19 @@ export const getImg = (id) => {
       resolve(stream)
     })
   })
+}
+
+export const saveGameResult = async ({ shots, miss, win, bullseye, userId }) => {
+  const game = new Game({ shots, miss, win, bullseye, user: userId });
+  await game.save();
+
+  const user = await getUserById(userId);
+  await user.gameHistory.push(game._id);
+  await user.save();
+  return game
+}
+
+export const getGameHistory = async (userId) => {
+  const user = await User.findOne({ _id: userId }).populate('gameHistory')
+  return user.gameHistory
 }
