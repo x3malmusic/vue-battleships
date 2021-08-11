@@ -7,6 +7,7 @@ import cors from "cors";
 import verifyToken from "./helpers/jwtVerify";
 import authRoutes from "./routes/authRoutes";
 import uploadRoutes from "./routes/uploadRoutes";
+import userRoutes from "./routes/userRoutes";
 import errorHandler from "./middlewares/errorHandler";
 import { connectDB } from "./database";
 import socketHandler from "./socket";
@@ -23,6 +24,7 @@ app.use(cors());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/avatar', uploadRoutes);
+app.use('/api/user', userRoutes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 8000;
