@@ -6,7 +6,7 @@ export default class MatchManager {
     this[player2.id] = player2;
     this.ids = [player1.id, player2.id];
     this.switchTurn = this.playerTurnSwitch();
-    this.whosGo = this.switchTurn.next().value;
+    this.whosGo = this.nextTurn();
     this.gameHasBegun = false;
     this.gameIsOver = false;
   }
@@ -27,6 +27,10 @@ export default class MatchManager {
       yield this.whosGo = this.ids[i];
       i++;
     }
+  }
+
+  nextTurn() {
+    return this.switchTurn.next().value;
   }
 
   isPlayersTurn(playerId) {

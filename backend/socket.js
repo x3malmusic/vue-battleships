@@ -116,9 +116,7 @@ export default function socketHandler(socket, clients) {
     socket.emit(SYSTEM_MESSAGE, { name: foundPlayer.name, type: YOUR_NEXT_ENEMY });
 
     socket.emit(MATCH_CREATED, { gameData, foundPlayer });
-    socket
-      .to(foundPlayer.id)
-      .emit(MATCH_CREATED, { gameData, foundPlayer: player });
+    socket.to(foundPlayer.id).emit(MATCH_CREATED, { gameData, foundPlayer: player });
   });
 
   socket.on(CONNECT_TO_MATCH, (gameId) => {
@@ -139,33 +137,37 @@ export default function socketHandler(socket, clients) {
   });
 
   socket.on(PLAYER_SHOT, ({ gameId, playerId, fieldId, oponentId }) => {
-    if (!game.gameList[gameId].gameHasBegun) return socket.emit(SYSTEM_MESSAGE, { type: OPPONENT_NOT_READY });
+    const currentGame = game.gameList[gameId];
 
-    if (!game.gameList[gameId].isPlayersTurn(playerId)) return socket.emit(SYSTEM_MESSAGE, { type: NOT_YOUR_TURN });
+    if (!currentGame.gameHasBegun) return socket.emit(SYSTEM_MESSAGE, { type: OPPONENT_NOT_READY });
 
-    if (game.gameList[gameId].hasPreviouslyShot(playerId, fieldId)) return socket.emit(SYSTEM_MESSAGE, { type: CELL_ALREADY_SHOT });
+    if (!currentGame.isPlayersTurn(playerId)) return socket.emit(SYSTEM_MESSAGE, { type: NOT_YOUR_TURN });
 
-    const shotResult = game.gameList[gameId].playerShot(oponentId, fieldId, playerId);
+    if (currentGame.hasPreviouslyShot(playerId, fieldId)) return socket.emit(SYSTEM_MESSAGE, { type: CELL_ALREADY_SHOT });
+
+    const shotResult = currentGame.playerShot(oponentId, fieldId, playerId);
 
     if (shotResult) socket.emit(SYSTEM_MESSAGE, { type: shotResult });
 
-    if (!game.gameList[gameId].playerHasShipsAlive(oponentId)) {
-      game.gameList[gameId].gameOver();
+    if (!currentGame.playerHasShipsAlive(oponentId)) {
+      currentGame.gameOver();
       clients.to(gameId).emit(GAME_OVER, { winnerId: playerId, gameHasBegun: false, gameIsOver: true });
     };
 
-    const whosGo = shotResult ? game.gameList[gameId].whosGo : game.gameList[gameId].switchTurn.next().value;
+    const whosGo = shotResult ? currentGame.whosGo : currentGame.nextTurn();
 
-    socket.to(oponentId).emit(SHOW_PLAYER_SHOT, { board: game.gameList[gameId].getPlayerShipPosition(oponentId), whosGo });
-    socket.emit(SHOW_MY_SHOT, { shots: game.gameList[gameId].getPlayerShotPosition(playerId), whosGo });
+    socket.to(oponentId).emit(SHOW_PLAYER_SHOT, { board: currentGame.getPlayerShipPosition(oponentId), whosGo });
+    socket.emit(SHOW_MY_SHOT, { shots: currentGame.getPlayerShotPosition(playerId), whosGo });
   });
 
   socket.on("disconnect", () => {
     if (game.isPlayerInGame(socket.id)) {
       const gameId = game.players[socket.id].gameId;
-      game.gameList[gameId].gameOver();
 
-      const secondPlayerId = game.gameList[gameId].getSecondPlayer(socket.id);
+      const currentGame = game.gameList[gameId];
+      currentGame.gameOver();
+
+      const secondPlayerId = currentGame.getSecondPlayer(socket.id);
       socket.to(secondPlayerId).emit(SYSTEM_MESSAGE, { type: WIN_BY_DISCONNECT });
       socket.to(secondPlayerId).emit(GAME_OVER_BY_DISCONNECT, { gameHasBegun: false, gameIsOver: true });
 
