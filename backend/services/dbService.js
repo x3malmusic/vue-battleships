@@ -52,12 +52,12 @@ export const getImg = (id) => {
   })
 }
 
-export const saveGameResult = async ({ shots, miss, win, bullseye, userId }) => {
-  const game = new Game({ shots, miss, win, bullseye, user: userId });
+export const saveGameResult = async ({ shots, hit, miss, win, bullseye, userId }) => {
+  const game = new Game({ shots, hit, miss, win, bullseye, user: userId });
   await game.save();
 
   const user = await getUserById(userId);
-  await user.gameHistory.push(game._id);
+  user.gameHistory.push(game._id);
   await user.save();
   return game
 }

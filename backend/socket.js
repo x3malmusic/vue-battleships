@@ -33,12 +33,13 @@ import {
 
 const game = new GameManager();
 
-const createPlayer = (name, id) => ({
+const createPlayer = (name, id, dbId) => ({
   name,
   id,
   from: [],
   to: [],
   gameId: "",
+  dbId,
 });
 
 const reverseRequest = (request) => ({
@@ -49,7 +50,7 @@ const reverseRequest = (request) => ({
 export default function socketHandler(socket, clients) {
 
   const player = JSON.parse(socket.handshake.query.auth);
-  const user = createPlayer(player.name, socket.id);
+  const user = createPlayer(player.name, socket.id, player.userId);
   game.addPlayer(user);
 
   clients.emit(UPDATE_PLAYERS, game.playersList());
