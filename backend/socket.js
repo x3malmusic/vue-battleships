@@ -1,4 +1,5 @@
-import GameManager from "./GameManager";
+import Emitter from "./utils/Emitter";
+import GameManager from "./utils/GameManager";
 import {
   PLAYER_SEND_REQUEST,
   PLAYER_CANCEL_REQUEST,
@@ -28,7 +29,9 @@ import {
   SHOW_MY_SHOT,
   PLAYER_SHOT,
   PLAYER_SET_SHIPS,
-  PLAYERS_READY_TO_PLAY
+  PLAYERS_READY_TO_PLAY,
+  EMITTER_SAVE_DATABASE,
+  SEND_GAME_RESULT
 } from "./constants/socket_events";
 
 const game = new GameManager();
@@ -48,6 +51,10 @@ const reverseRequest = (request) => ({
 });
 
 export default function socketHandler(socket, clients) {
+  Emitter.on(`${EMITTER_SAVE_DATABASE}${socket.id}`, (data) => {
+    if (data.error) return socket.emit(SYSTEM_MESSAGE, { type: data.error })
+    socket.emit(SEND_GAME_RESULT, data)
+  })
 
   const player = JSON.parse(socket.handshake.query.auth);
   const user = createPlayer(player.name, socket.id, player.userId);
