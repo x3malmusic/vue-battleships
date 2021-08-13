@@ -1,6 +1,7 @@
-import { SET_SYSTEM_MESSAGE, UPDATE_PLAYERS, INIT_USER_ID, SET_GAMEDATA } from "./mutations";
+import {SET_SYSTEM_MESSAGE, UPDATE_PLAYERS, INIT_USER_ID, SET_GAMEDATA, SET_PLAYER_STATS} from "./mutations";
 import router from "../router";
 import { YOU_WIN, YOU_LOSE } from "../constants/messages";
+import {SEND_GAME_RESULT} from "../../../backend/constants/socket_events";
 
 export default {
   SOCKET_SYSTEM_MESSAGE({ commit }, { name, type }) {
@@ -54,12 +55,12 @@ export default {
     state.game.gameIsOver = gameIsOver;
   },
 
-  SOCKET_connect() {
-    if (router.history.current.path !== '/lobby') router.push('/lobby');
+  SOCKET_SEND_GAME_RESULT({ commit }, data) {
+    commit(SET_PLAYER_STATS, data)
   },
 
-  SOCKET_ERROR({ state }, error) {
-    state.systemMessage = { text: error, id: Date.now().toLocaleString() };
+  SOCKET_connect() {
+    if (router.history.current.path !== '/lobby') router.push('/lobby');
   },
 
   SOCKET_error({ state }, error) {

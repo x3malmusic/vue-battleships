@@ -6,6 +6,7 @@ export const PLAYER_READY_TO_BEGIN_MATCH = "PLAYER_READY_TO_BEGIN_MATCH";
 export const UPDATE_PLAYERS = "UPDATE_PLAYERS";
 export const INIT_USER_ID = "INIT_USER_ID";
 export const SET_IS_LOADING = "SET_IS_LOADING";
+export const SET_PLAYER_STATS = "SET_PLAYER_STATS";
 
 export const MAKE_SHOT = "MAKE_SHOT";
 export const DISCONNECT_FROM_GAME = "DISCONNECT_FROM_GAME";
@@ -19,6 +20,10 @@ export default {
 
   [SET_IS_LOADING](state, isLoading) {
     state.isLoading = isLoading;
+  },
+
+  [SET_PLAYER_STATS](state, data) {
+    state.playerStats = [ ...state.playerStats, data ];
   },
 
   [SET_SYSTEM_MESSAGE](state, { name, type }) {

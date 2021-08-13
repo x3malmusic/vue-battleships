@@ -11,6 +11,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     player: {},
+    playerStats: [],
     playersOnline: [],
     isLoading: false,
     isLookingForMatch: false,
