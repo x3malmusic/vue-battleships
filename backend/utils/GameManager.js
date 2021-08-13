@@ -1,4 +1,4 @@
-import MatchManager from "./MatchManager";
+import ProxyfiedMatch from "./ProxyfiedMatch";
 
 export default class GameManager {
   constructor() {
@@ -12,7 +12,8 @@ export default class GameManager {
   }
 
   getPlayerById(id) {
-    return this.players[id];
+    if (this.players[id]) return { ...this.players[id] };
+    return {}
   }
 
   playersList() {
@@ -58,14 +59,13 @@ export default class GameManager {
 
   createMatch(player1, player2) {
     const gameId = Date.now();
-    this.gameList[gameId] = new MatchManager(player1, player2);
+    this.gameList[gameId] = new ProxyfiedMatch(player1, player2);
 
     this.players[player1.id].gameId = gameId;
     this.players[player2.id].gameId = gameId;
 
     this.deletePlayerFromReadyToPLayList(player1.id);
     this.deletePlayerFromReadyToPLayList(player2.id);
-
 
     return { gameId, gameData: { [player1.id]: player1, [player2.id]: player2 } };
   }
