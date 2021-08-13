@@ -1,4 +1,4 @@
-import { HIT, MISS, SUNK, shipsLeftTemplate } from "./constants";
+import { HIT, MISS, SUNK, shipsLeftTemplate } from "../constants";
 
 export default class MatchManager {
   constructor(player1, player2) {
@@ -53,6 +53,8 @@ export default class MatchManager {
   }
 
   playerSetShips(playerId, shipPositions, shotPositions) {
+    if (this[playerId].shipPositions || this[playerId].shotPositions) return
+
     this[playerId].shipPositions = shipPositions;
     this[playerId].shotPositions = shotPositions;
 
