@@ -4,6 +4,7 @@ const totalStatsSchema = new Schema({
   shots: { type: Number, default: 0 },
   hit: { type: Number, default: 0 },
   miss: { type: Number, default: 0 },
+  totalMatches: { type: Number, default: 0 },
   wins: { type: Number, default: 0 },
   losses: { type: Number, default: 0 },
   bullseye: { type: Number, default: 0 },
