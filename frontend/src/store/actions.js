@@ -1,6 +1,6 @@
-import { login, register, uploadAvatar, silentLogin, getUserTotalStats } from "../services/http";
+import { login, register, uploadAvatar, silentLogin, getUserTotalStats, getUserLastGame } from "../services/http";
 import { getToken, saveToken, deleteToken } from "../services/token";
-import { SET_USER, SET_SYSTEM_MESSAGE, SET_IS_LOADING, SET_PLAYER_STATS } from "./mutations";
+import { SET_USER, SET_SYSTEM_MESSAGE, SET_IS_LOADING, SET_PLAYER_STATS, SET_LAST_GAME } from "./mutations";
 import { NAME_PASSWORD_EMPTY, PLAYERS_NOT_FOUND, UPLOAD_SUCCESS } from "../constants/messages";
 
 export const LOGIN = 'LOGIN';
@@ -9,6 +9,7 @@ export const REGISTER = 'REGISTER';
 export const LOG_OUT = 'LOG_OUT';
 export const UPLOAD_AVATAR = 'UPLOAD_AVATAR';
 export const GET_PLAYER_STATS = 'GET_PLAYER_STATS';
+export const GET_LAST_GAME = 'GET_LAST_GAME';
 
 export const FIND_MATCH = "FIND_MATCH";
 
@@ -98,6 +99,15 @@ export default {
     try {
       const data = await getUserTotalStats();
       commit(SET_PLAYER_STATS, data)
+    } catch (e) {
+      commit(SET_SYSTEM_MESSAGE, { type: e.data.type });
+    }
+  },
+
+  [GET_LAST_GAME]: async({ commit }) => {
+    try {
+      const data = await getUserLastGame();
+      commit(SET_LAST_GAME, data)
     } catch (e) {
       commit(SET_SYSTEM_MESSAGE, { type: e.data.type });
     }
