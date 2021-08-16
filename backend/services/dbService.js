@@ -1,5 +1,6 @@
 import { User } from "../models/User";
-import { Game } from "../models/Game";
+import { LastGame } from "../models/LastGame";
+import { TotalStats } from "../models/TotalStats";
 import Stream from "stream";
 import { avatarImgName } from "../constants";
 import { Avatar } from "../database";
@@ -16,6 +17,13 @@ export const getUserById = (id) => {
 export const createUser = async (name, password) => {
   const user = new User({ name, password });
   await user.save();
+
+  const lastGame = await createGameResult(user._id)
+  const totalStats = await createTotalStats(user._id)
+  user.lastGame = lastGame._id
+  user.totalStats = totalStats._id
+  await user.save()
+
   return user
 }
 
@@ -52,17 +60,45 @@ export const getImg = (id) => {
   })
 }
 
-export const saveGameResult = async ({ shots, hit, miss, win, bullseye, userId }) => {
-  const game = new Game({ shots, hit, miss, win, bullseye, user: userId });
+export const createGameResult = async (userId) => {
+  const game = new LastGame({ user: userId });
   await game.save();
-
-  const user = await getUserById(userId);
-  user.gameHistory.push(game._id);
-  await user.save();
   return game
 }
 
-export const getGameHistory = async (userId) => {
-  const user = await User.findOne({ _id: userId }).populate('gameHistory')
-  return user.gameHistory
+export const createTotalStats = async (userId) => {
+  const stats = new TotalStats({ user: userId });
+  await stats.save();
+  return stats
+}
+
+export const updateGameResult = async ({ shots, hit, miss, win, bullseye, userId, opponent }) => {
+  return LastGame.findOne({ user: userId }).updateOne({ shots, hit, miss, win, bullseye, opponent })
+}
+
+export const updateTotalStats = async ({ shots, hit, miss, win, bullseye, userId }) => {
+  const stats = await TotalStats.findOne({ user: userId })
+  stats.totalMatches += 1;
+  stats.shots += shots;
+  stats.hit += hit;
+  stats.miss += miss;
+
+  if (win) stats.wins += 1;
+  else stats.losses += 1;
+
+  if (bullseye) stats.bullseye += 1;
+  stats.winrate = `${Math.floor((stats.wins / stats.totalMatches) * 100)}%`
+
+  await stats.save()
+  return stats
+}
+
+export const getLastGame = async (userId) => {
+  const user = await User.findOne({ _id: userId }).populate('lastGame')
+  return user.lastGame
+}
+
+export const getTotalStats = async (userId) => {
+  const user = await User.findOne({ _id: userId }).populate('totalStats')
+  return user.totalStats
 }
