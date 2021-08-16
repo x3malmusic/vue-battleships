@@ -28,6 +28,13 @@ const routes = [
     path: "/lobby",
     name: "Lobby",
     component: () => import("../views/Lobby/Lobby.vue"),
+    children: [{
+      path: "last-game",
+      component: () => import("../components/LastGame/LastGame.vue"),
+      meta: {
+        header: true,
+      },
+    }],
     meta: {
       header: true,
       authRequired: true
