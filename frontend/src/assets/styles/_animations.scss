@@ -73,3 +73,19 @@
     opacity: 0;
   }
 }
+
+.stats-animation {
+  &-enter {
+    transform: translate(-120px);
+    opacity: 0;
+  }
+
+  &-enter-active {
+    transition: all .6s ease;
+    transition-delay: calc( 0.1s * var(--i) );
+  }
+
+  //&-leave-active {
+  //  transition-delay: calc( 0.1s * (var(--total) - var(--i)));
+  //}
+}
