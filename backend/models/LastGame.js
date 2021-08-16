@@ -6,7 +6,8 @@ const gameSchema = new Schema({
   miss: { type: Number, default: 0 },
   win: { type: Boolean, default: false },
   bullseye: { type: Boolean, default: false },
+  opponent: { type: String, default: "" },
   user: { type: mongoose.Types.ObjectId, ref: "User" },
 });
 
-export const Game = model("Game", gameSchema);
+export const LastGame = model("LastGame", gameSchema);

@@ -52,8 +52,8 @@ export default new Proxy(MatchManager, {
         obj[key] = value
 
         if (key === "gameIsOver") {
-          createDBWorker({ ...match[loserId].gameResult, userId: match[loserId].dbId }, loserId)
-          createDBWorker({ ...match[winnerId].gameResult, userId: match[winnerId].dbId }, winnerId)
+          createDBWorker({ ...match[loserId].gameResult, userId: match[loserId].dbId, opponent: match[winnerId].name }, loserId)
+          createDBWorker({ ...match[winnerId].gameResult, userId: match[winnerId].dbId, opponent: match[loserId].name }, winnerId)
         }
 
         return true
