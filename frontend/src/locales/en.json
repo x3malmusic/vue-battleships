@@ -50,7 +50,15 @@
     "decline": "Decline",
     "cancel": "Cancel",
     "playersOnline": "Players online",
-    "statistics": "Statistics"
+    "statistics": "Statistics",
+    "shots": "Shots fired",
+    "hit": "Hits",
+    "miss": "Missed",
+    "bullseye": "Bullseye",
+    "losses": "Games lost",
+    "wins": "Games Won",
+    "totalMatches": "Games played",
+    "winrate": "Win Rate"
   },
   "gamePage": {
     "readyBtn": "Ready!",

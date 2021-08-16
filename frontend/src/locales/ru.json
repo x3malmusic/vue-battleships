@@ -50,7 +50,15 @@
     "decline": "Отклонить",
     "cancel": "Отмена",
     "playersOnline": "Игроки в сети",
-    "statistics": "Статистика"
+    "statistics": "Статистика",
+    "shots": "Выстрелов",
+    "hit": "Попаданий",
+    "miss": "Промахов",
+    "bullseye": "В яблочко",
+    "losses": "Игр проиграно",
+    "wins": "Игр выиграно",
+    "totalMatches": "Всего игр",
+    "winrate": "Процент побед"
 },
   "gamePage": {
     "readyBtn": "Готов!",
