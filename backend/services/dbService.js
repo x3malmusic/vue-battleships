@@ -95,10 +95,12 @@ export const updateTotalStats = async ({ shots, hit, miss, win, bullseye, userId
 
 export const getLastGame = async (userId) => {
   const user = await User.findOne({ _id: userId }).populate('lastGame')
-  return user.lastGame
+  const { shots, hit, miss, bullseye, win, opponent } = user.lastGame
+  return { shots, hit, miss, bullseye, win, opponent }
 }
 
 export const getTotalStats = async (userId) => {
   const user = await User.findOne({ _id: userId }).populate('totalStats')
-  return user.totalStats
+  const { shots, hit, miss, winrate, bullseye, totalMatches, wins, losses } = user.totalStats
+  return { shots, hit, miss, winrate, bullseye, totalMatches, wins, losses }
 }
