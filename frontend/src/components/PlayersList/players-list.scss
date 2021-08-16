@@ -12,10 +12,10 @@
     height: $list_height;
     list-style-type: none;
     box-sizing: border-box;
+    scrollbar-width: none;
     background-color: $color_list_bg;
     border-radius: 4px;
     overflow-y: auto;
-    scrollbar-width: none;
     position: relative;
 
     &::-webkit-scrollbar {
@@ -63,8 +63,10 @@
   }
 
   @media screen and (max-width: $md) {
-    max-width: initial;
-    height: $list_height_mob;
+    .players-online-list {
+      height: $list_height_mob;
+      scrollbar-width: initial;
+    }
 
     .list-block:last-child {
       order: -1;

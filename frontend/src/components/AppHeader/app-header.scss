@@ -53,6 +53,8 @@
   }
 
   .link {
+    font-family: Bangers, sans-serif;
+    font-size: $fs_h3;
     text-decoration: none;
     color: black;
   }
@@ -60,13 +62,16 @@
   @media screen and (max-width: $md) {
     font-size: $fs_xs_small;
 
+    .link {
+      font-size: $fs_main;
+    }
+
     .user-info {
       .btn {
         font-size: $fs_xs_small;
         padding: 5px 10px;
       }
     }
-
 
     .user-img-circle {
       display: none;

@@ -5,7 +5,7 @@
     <div class="user-info">
       <span>{{ $t("header.welcome") }}:&nbsp;</span>
       <router-link to="/profile" class="link">
-        <strong>{{ player.name }}</strong>
+        {{ player.name }}
       </router-link>
 
       <div class="avatar-container">

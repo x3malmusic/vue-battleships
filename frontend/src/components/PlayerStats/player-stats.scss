@@ -13,9 +13,9 @@
     list-style-type: none;
     box-sizing: border-box;
     background-color: $color_list_bg;
+    scrollbar-width: none;
     border-radius: 4px;
     overflow-y: auto;
-    scrollbar-width: none;
     position: relative;
 
     &::-webkit-scrollbar {
@@ -49,8 +49,9 @@
   }
 
   @media screen and (max-width: $md) {
-    max-width: initial;
-    height: $list_height_mob;
+    .players-stats-list {
+      height: $list_height_mob;
+    }
 
     .list-block:last-child {
       order: -1;
