@@ -1,7 +1,7 @@
 <template>
   <div class="error-page">
-    <h2>{{ $t("message") }}</h2>
-    <router-link to="/">&#8592; {{ $t("action") }}</router-link>
+    <h2>{{ $t("error.message") }}</h2>
+    <router-link to="/lobby">&#8592; {{ $t("error.goBack") }}</router-link>
   </div>
 </template>
 

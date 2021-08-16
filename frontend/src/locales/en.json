@@ -51,6 +51,7 @@
     "cancel": "Cancel",
     "playersOnline": "Players online",
     "statistics": "Statistics",
+    "lastGame": "Show last game result",
     "shots": "Shots fired",
     "hit": "Hits",
     "miss": "Missed",
@@ -80,5 +81,9 @@
     "file": "choose file",
     "upload": "upload",
     "uploadSuccess": "image uploaded"
+  },
+  "error": {
+    "goBack": "Go back",
+    "message": "This page doesn't exist"
   }
 }
