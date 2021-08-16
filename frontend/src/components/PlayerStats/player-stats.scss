@@ -1,0 +1,60 @@
+.list-block {
+  max-width: $list_max_width;
+  width: 100%;
+
+  .list-header {
+    margin-bottom: 10px;
+  }
+
+  .players-stats-list {
+    margin: 0;
+    padding: 10px;
+    height: $list_height;
+    list-style-type: none;
+    box-sizing: border-box;
+    background-color: $color_list_bg;
+    border-radius: 4px;
+    overflow-y: auto;
+    scrollbar-width: none;
+    position: relative;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    &-item {
+      overflow: hidden;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding: 14px 10px;
+      box-sizing: border-box;
+      background-color: $color_list_item_bg;
+      border-radius: 4px;
+      margin-bottom: 10px;
+
+      p {
+        margin: 0;
+      }
+
+      &:hover {
+        background-color: $color_list_item_bg_hover;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  @media screen and (max-width: $md) {
+    max-width: initial;
+    height: $list_height_mob;
+
+    .list-block:last-child {
+      order: -1;
+      margin-bottom: 16px;
+    }
+  }
+}

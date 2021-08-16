@@ -13,6 +13,9 @@ $color_board_cell_hover: hsl(200, 100%, 70%);
 $color_board_cell_border: hsla(0, 0%, 100%, .2);
 $color_avatar_bg: #c7d1e2;
 $color_loader: #3498db;
+$color_list_bg: #757c8d;
+$color_list_item_bg: #c7d1e2;
+$color_list_item_bg_hover: #d2ddef;
 
 //font size
 $fs_h1: 160;
@@ -37,6 +40,9 @@ $dot_size: 2vmin;
 $dot_size_mobile: 3vmin;
 $loader_radius: 25px;
 $loader_border: 4px;
+$list_max_width: 400px;
+$list_height: 410px;
+$list_height_mob: 250px;
 
 //padding
 $pa_main: 19px;
