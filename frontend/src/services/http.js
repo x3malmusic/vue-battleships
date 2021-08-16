@@ -25,3 +25,6 @@ export const register = (creds) => http.post('/api/auth/register', { name: creds
 
 export const uploadAvatar = (img) => http.post('/api/avatar/upload', img, { headers: { "Content-Type": "multipart/form-data" }})
 
+export const getUserTotalStats = () => http.get('/api/user/totalStats')
+
+export const getUserLastGame = () => http.get('/api/user/lastGame')

@@ -7,6 +7,7 @@ export const UPDATE_PLAYERS = "UPDATE_PLAYERS";
 export const INIT_USER_ID = "INIT_USER_ID";
 export const SET_IS_LOADING = "SET_IS_LOADING";
 export const SET_PLAYER_STATS = "SET_PLAYER_STATS";
+export const SET_LAST_GAME = "SET_LAST_GAME";
 
 export const MAKE_SHOT = "MAKE_SHOT";
 export const DISCONNECT_FROM_GAME = "DISCONNECT_FROM_GAME";
@@ -23,7 +24,11 @@ export default {
   },
 
   [SET_PLAYER_STATS](state, data) {
-    state.playerStats = [ ...state.playerStats, data ];
+    state.playerStats = data;
+  },
+
+  [SET_LAST_GAME](state, lastGame) {
+    state.lastGame = lastGame;
   },
 
   [SET_SYSTEM_MESSAGE](state, { name, type }) {

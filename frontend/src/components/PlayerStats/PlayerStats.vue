@@ -1,11 +1,11 @@
 <template>
   <div class="list-block">
     <div class="list-header">{{$t('lobby.statistics')}}</div>
-      <transition-group name="stats-animation" tag="ul" class="players-stats-list" :style="{ '--total': stats.length }">
+      <transition-group name="stats-animation" tag="ul" class="players-stats-list" :style="{ '--total': getStats.length }">
         <li
           v-if="showItems"
           class="players-stats-list-item"
-          v-for="(stat, i) in stats"
+          v-for="(stat, i) in getStats"
           :key="stat.name"
           :style="{'--i': i}"
         >
@@ -16,21 +16,25 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import { GET_PLAYER_STATS } from "../../store/actions";
+
 export default {
   name: "PlayerStats",
   data: () => ({
     showItems: false,
-    stats: [
-      { name: "Shots fired", value: 140 },
-      { name: "Bullseye", value: 12 },
-      { name: "Shots Missed", value: 128 },
-      { name: "Games Played", value: 12 },
-      { name: "Wins", value: 1 },
-      { name: "Losses", value: 11 },
-      { name: "Win Rate", value: "10%" },
-    ],
   }),
+  computed: {
+    ...mapState(['playerStats']),
+
+    getStats() {
+      const stats = Object.entries(this.playerStats)
+      if (!stats.length) return [];
+      return stats.map(([key, value]) => ({ name: `${this.$t(`lobby.${key}`)}`, value }))
+    }
+  },
   mounted() {
+    if (!Object.keys(this.playerStats).length) this.$store.dispatch(GET_PLAYER_STATS)
     this.$nextTick(() => this.showItems = true)
   }
 }
