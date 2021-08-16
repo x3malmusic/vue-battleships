@@ -1,6 +1,9 @@
 <template>
   <div class="list-block">
-    <div class="list-header">{{$t('lobby.statistics')}}</div>
+    <div class="list-block-text">
+      <div class="list-header">{{$t('lobby.statistics')}}</div>
+      <router-link to="/lobby/last-game">{{ $t('lobby.lastGame') }} &#8594;</router-link>
+    </div>
       <transition-group name="stats-animation" tag="ul" class="players-stats-list" :style="{ '--total': getStats.length }">
         <li
           v-if="showItems"
