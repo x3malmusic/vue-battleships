@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { verifyToken } from "../middlewares/verifyTokenMiddleware";
-import { getUserGameHistory, saveUserGameResult } from "../controllers/user";
+import { getUserLastGame, getUserTotalStats } from "../controllers/user";
 
 const router = Router();
 
-router.get('/gameHistory', verifyToken, getUserGameHistory);
+router.get('/lastGame', verifyToken, getUserLastGame);
 
-router.post('/gameHistory', verifyToken, saveUserGameResult);
+router.get('/totalStats', verifyToken, getUserTotalStats);
 
 export default router

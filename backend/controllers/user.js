@@ -1,15 +1,14 @@
 import { asyncHandler } from "../middlewares/async";
-import { getGameHistory, saveGameResult } from "../services/dbService";
+import { getLastGame, getTotalStats } from "../services/dbService";
 
-export const getUserGameHistory = asyncHandler(async (req, res, next) => {
+export const getUserLastGame = asyncHandler(async (req, res, next) => {
   const { userId } = req.user
-  const gameHistory = await getGameHistory(userId)
-  res.json(gameHistory)
+  const lastGame = await getLastGame(userId)
+  res.json(lastGame)
 })
 
-export const saveUserGameResult = asyncHandler(async (req, res, next) => {
+export const getUserTotalStats = asyncHandler(async (req, res, next) => {
   const { userId } = req.user
-  const game = req.body
-  const gameResult = await saveGameResult({ ...game, userId });
-  res.json(gameResult)
+  const totalStats = await getTotalStats(userId);
+  res.json(totalStats)
 })
