@@ -2,9 +2,11 @@
   <transition name="modal-animation" appear>
     <div class="modal" @click="backToLobby">
       <div class="modal-body" @click.stop="">
-        <router-link to="/lobby" class="link">
-          <span>{{ $t('error.goBack') }} &#8594;</span>
-        </router-link>
+        <div class="link">
+          <router-link to="/lobby">
+            {{ $t('error.goBack') }} &#8594;
+          </router-link>
+        </div>
 
         <transition-group name="stats-animation" tag="ul" class="modal-body-list" :style="{ '--total': getLastGameResult.length }">
           <li

@@ -50,17 +50,17 @@
       }
     }
 
-    a {
+    .link {
       display: flex;
       justify-content: flex-end;
-      text-decoration: none;
 
-      span {
+      a {
         margin-bottom: 10px;
-      }
+        text-decoration: none;
 
-      &:hover {
-        color: $color_board_bg;
+        &:hover {
+          color: $color_board_bg;
+        }
       }
     }
   }
