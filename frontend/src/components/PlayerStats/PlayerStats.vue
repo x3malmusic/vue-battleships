@@ -1,5 +1,6 @@
 <template>
   <div class="list-block">
+    <router-view></router-view>
     <div class="list-block-text">
       <div class="list-header">{{$t('lobby.statistics')}}</div>
       <router-link to="/lobby/last-game">{{ $t('lobby.lastGame') }} &#8594;</router-link>
