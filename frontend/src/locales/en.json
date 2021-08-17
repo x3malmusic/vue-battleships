@@ -59,7 +59,9 @@
     "losses": "Games lost",
     "wins": "Games Won",
     "totalMatches": "Games played",
-    "winrate": "Win Rate"
+    "winrate": "Win Rate",
+    "win": "Win",
+    "opponent": "Opponent"
   },
   "gamePage": {
     "readyBtn": "Ready!",
