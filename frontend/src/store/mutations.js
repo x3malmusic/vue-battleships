@@ -24,11 +24,13 @@ export default {
   },
 
   [SET_PLAYER_STATS](state, data) {
-    state.playerStats = data;
+    const { _id, __v, user, ...rest } = data;
+    state.playerStats = rest;
   },
 
   [SET_LAST_GAME](state, lastGame) {
-    state.lastGame = lastGame;
+    const { _id, __v, user, ...rest } = lastGame;
+    state.lastGame = rest;
   },
 
   [SET_SYSTEM_MESSAGE](state, { name, type }) {

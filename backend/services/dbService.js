@@ -73,7 +73,17 @@ export const createTotalStats = async (userId) => {
 }
 
 export const updateGameResult = async ({ shots, hit, miss, win, bullseye, userId, opponent }) => {
-  return LastGame.findOne({ user: userId }).updateOne({ shots, hit, miss, win, bullseye, opponent })
+  const lastGame = await LastGame.findOne({ user: userId })
+
+  lastGame.shots = shots;
+  lastGame.hit = hit;
+  lastGame.miss = miss;
+  lastGame.win = win;
+  lastGame.bullseye = bullseye;
+  lastGame.opponent = opponent;
+
+  await lastGame.save();
+  return lastGame
 }
 
 export const updateTotalStats = async ({ shots, hit, miss, win, bullseye, userId }) => {
