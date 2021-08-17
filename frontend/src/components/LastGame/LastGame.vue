@@ -35,6 +35,11 @@ export default {
   methods: {
     backToLobby() {
       this.$router.push('/lobby')
+    },
+
+    getValue(val) {
+      if (typeof val === "boolean") return val ? this.$t('lobby.yes') : this.$t('lobby.no')
+      return val
     }
   },
   computed: {
@@ -43,7 +48,7 @@ export default {
     getLastGameResult() {
       const result = Object.entries(this.lastGame)
       if (!result.length) return [];
-      return result.map(([key, value]) => ({ name: `${this.$t(`lobby.${key}`)}`, value }))
+      return result.map(([key, value]) => ({ name: `${this.$t(`lobby.${key}`)}`, value: this.getValue(value) }))
     }
   },
   mounted() {
