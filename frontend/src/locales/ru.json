@@ -61,7 +61,9 @@
     "totalMatches": "Всего игр",
     "winrate": "Процент побед",
     "win": "Победа",
-    "opponent": "Противник"
+    "opponent": "Противник",
+    "yes": "Да",
+    "no": "Нет"
 },
   "gamePage": {
     "readyBtn": "Готов!",
