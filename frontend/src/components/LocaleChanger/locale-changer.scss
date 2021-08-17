@@ -1,6 +1,31 @@
 .parent-locale-changer {
   position: relative;
 
+  .locale-changer {
+    width: 50px;
+    height: 50px;
+    background: $color_button;
+    cursor: pointer;
+    font-size: $fs_main;
+    font-weight: bolder;
+    display: flex;
+    position: relative;
+    z-index: 2;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    box-sizing: border-box;
+    border: 1px solid black;
+
+    &:active {
+      border: 1px solid white;
+    }
+
+    &:hover {
+      background-color: $color_button_hover;
+    }
+  }
+
   .change-btn {
     position: absolute;
     top: 50%;
@@ -43,43 +68,18 @@
     z-index: 1;
     transform: translate(180%, -50%);
   }
-}
-
-.locale-changer {
-  width: 50px;
-  height: 50px;
-  background: $color_button;
-  cursor: pointer;
-  font-size: $fs_main;
-  font-weight: bolder;
-  display: flex;
-  position: relative;
-  z-index: 2;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  box-sizing: border-box;
-  border: 1px solid black;
-
-  &:active {
-    border: 1px solid white;
-  }
-
-  &:hover {
-    background-color: $color_button_hover;
-  }
 
   @media screen and (max-width: $md) {
-    font-size: $fs_small;
-    width: 40px;
-    height: 40px;
+    .locale-changer {
+      font-size: $fs_small;
+      width: 40px;
+      height: 40px;
+    }
 
-    &-wrapper {
-      .change-btn {
-        font-size: $fs_small;
-        width: 30px;
-        height: 30px;
-      }
+    .change-btn {
+      font-size: $fs_small;
+      width: 30px;
+      height: 30px;
     }
   }
 }
