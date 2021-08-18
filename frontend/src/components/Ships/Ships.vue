@@ -3,7 +3,7 @@
     <app-button @click="playerReady" :disabled="activateReadyButton" :class="{'btn-alive': !activateReadyButton}">
       {{ $t("gamePage.readyBtn") }}
     </app-button>
-    <app-button @click="chooseDirection">{{
+    <app-button :disabled="playerReadyFlag" @click="chooseDirection">{{
       $t("gamePage.rotateBtn")
     }}</app-button>
     <app-button @click="resetShips" :disabled="activateResetButton">{{
@@ -68,7 +68,7 @@ export default {
     },
 
     activateReadyButton() {
-      return !!this.ships.reduce((count, ship) => (count += ship.count), 0);
+      return this.playerReadyFlag || !!this.ships.reduce((count, ship) => (count += ship.count), 0);
     },
 
     activateResetButton() {
