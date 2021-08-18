@@ -97,7 +97,7 @@ export const updateTotalStats = async ({ shots, hit, miss, win, bullseye, userId
   else stats.losses += 1;
 
   if (bullseye) stats.bullseye += 1;
-  stats.winrate = `${Math.floor((stats.wins / stats.totalMatches) * 100)}%`
+  stats.winrate = `${Math.ceil((stats.wins / stats.totalMatches) * 100)}%`
 
   await stats.save()
   return stats
